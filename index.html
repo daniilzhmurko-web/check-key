@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ru" data-artifact-state="done">
 <head><script>
 (function() {
@@ -2479,6 +2479,44 @@ function downloadBatchCSV() {
       console.warn('Не удалось автоматически загрузить отчёт из ссылки:', e);
     }
   });
+})();
+
+/* ── АВТОВСТАВКА ПРИВАТНОГО КЛЮЧА ИЗ БУФЕРА ОБМЕНА ──
+   По клику/фокусу на поле #privKeyJwk сразу читаем буфер обмена и
+   подставляем его содержимое — без Ctrl+V и лишних действий.
+   Срабатывает только если поле сейчас пустое (чтобы случайным кликом
+   не затереть уже вставленный вручную ключ), и только если браузер
+   разрешает чтение буфера (secure context — HTTPS или localhost;
+   на file:// или без разрешения просто молча ничего не делаем —
+   можно вставить как обычно, через Ctrl+V). */
+(function autoPastePrivateKeyOnClick() {
+  const el = document.getElementById('privKeyJwk');
+  if (!el) return;
+
+  let busy = false;
+  async function tryAutoPaste() {
+    if (busy) return;
+    if (el.value.trim()) return; // уже что-то есть — не перетираем
+    if (!navigator.clipboard || !navigator.clipboard.readText) return;
+    busy = true;
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text && text.trim() && !el.value.trim()) {
+        el.value = text.trim();
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.style.transition = 'background-color .3s';
+        el.style.backgroundColor = 'rgba(24,165,88,.18)';
+        setTimeout(() => { el.style.backgroundColor = ''; }, 900);
+      }
+    } catch (e) {
+      // Нет разрешения на чтение буфера обмена или небезопасный контекст — тихо игнорируем
+    } finally {
+      busy = false;
+    }
+  }
+
+  el.addEventListener('focus', tryAutoPaste);
+  el.addEventListener('click', tryAutoPaste);
 })();
 
 /* ── INTERSECTION OBSERVER (wow animations) ── */
