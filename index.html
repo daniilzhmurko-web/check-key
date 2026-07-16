@@ -1,0 +1,2496 @@
+<!DOCTYPE html>
+<html lang="ru" data-artifact-state="done">
+<head><script>
+(function() {
+  try {
+    var t = localStorage.getItem('pz_platform_theme');
+    if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+})();
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Платформа контроля ПЗ | Преподаватель</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #00D4FF;
+    --primary-glow: rgba(0,212,255,0.25);
+    --accent: #7C3AED;
+    --accent-glow: rgba(124,58,237,0.25);
+    --bg: #0A0E1A;
+    --surface: rgba(255,255,255,0.045);
+    --surface-solid: #0d1424;
+    --surface-hover: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.1);
+    --border-glow: rgba(0,212,255,0.3);
+    --ink: #E2E8F0;
+    --ink-muted: rgba(226,232,240,0.55);
+    --ink-strong: #ffffff;
+    --success: #00FFB3;
+    --warn: #FFD700;
+    --danger: #FF6B6B;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --shadow-card: 0 8px 32px rgba(0,212,255,.12), 0 2px 8px rgba(124,58,237,.10);
+    --shadow-modal: 0 24px 64px rgba(0,212,255,.20), 0 8px 24px rgba(124,58,237,.18);
+    --font: 'Inter', sans-serif;
+  }
+
+  /* ══ СВЕТЛАЯ ТЕМА ══ */
+  [data-theme="light"] {
+    --bg: #F1F4F9;
+    --surface: rgba(20,30,55,0.04);
+    --surface-solid: #EEF1F7;
+    --surface-hover: rgba(20,30,55,0.075);
+    --border: rgba(20,30,55,0.13);
+    --border-glow: rgba(0,144,216,0.35);
+    --ink: #1E2436;
+    --ink-muted: rgba(30,36,54,0.62);
+    --ink-strong: #0B1220;
+    --shadow-card: 0 8px 28px rgba(30,41,59,.08), 0 2px 8px rgba(30,41,59,.05);
+    --shadow-modal: 0 24px 60px rgba(30,41,59,.14), 0 8px 24px rgba(30,41,59,.10);
+  }
+  [data-theme="light"] .blob { opacity: 0.10; }
+  [data-theme="light"] body { background: var(--bg); }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--ink);
+    
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── BLOB BACKGROUND ── */
+  .blob-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.18;
+    animation: blobFloat linear infinite;
+  }
+  .blob-1 { width: 520px; height: 520px; background: radial-gradient(circle, #00D4FF 0%, #0066FF 60%, transparent 100%); top: -120px; left: -80px; animation-duration: 18s; animation-delay: 0s; }
+  .blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, #7C3AED 0%, #4F1DB5 60%, transparent 100%); top: 30%; right: -100px; animation-duration: 22s; animation-delay: -6s; }
+  .blob-3 { width: 350px; height: 350px; background: radial-gradient(circle, #00FFB3 0%, #00A88F 60%, transparent 100%); bottom: 10%; left: 20%; animation-duration: 26s; animation-delay: -12s; }
+  .blob-4 { width: 280px; height: 280px; background: radial-gradient(circle, #FF6B9D 0%, #C91B6E 60%, transparent 100%); bottom: 30%; right: 25%; animation-duration: 20s; animation-delay: -4s; }
+  .blob-5 { width: 200px; height: 200px; background: radial-gradient(circle, #FFD700 0%, #FF8C00 60%, transparent 100%); top: 55%; left: 5%; animation-duration: 16s; animation-delay: -9s; }
+  @keyframes blobFloat {
+    0%   { transform: translate(0,0) scale(1); }
+    25%  { transform: translate(30px,-40px) scale(1.05); }
+    50%  { transform: translate(-20px,30px) scale(0.97); }
+    75%  { transform: translate(40px,20px) scale(1.03); }
+    100% { transform: translate(0,0) scale(1); }
+  }
+
+  /* Grid noise overlay */
+  .grid-noise {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* ── LAYOUT ── */
+  .page-wrap {
+    position: relative; z-index: 1;
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeUp .7s ease both;
+  }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,212,255,0.12);
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 9999px;
+    padding: 6px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 20px;
+  }
+  .header-badge svg { width:14px; height:14px; flex-shrink:0; }
+  .page-title {
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff 0%, #00D4FF 50%, #7C3AED 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .page-sub {
+    color: var(--ink-muted);
+    font-size: 16px;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ── GLASS CARD ── */
+  .glass-card {
+    background: var(--surface);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 28px;
+    animation: fadeUp .7s ease both;
+  }
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .glass-card:nth-child(2) { animation-delay: .1s; }
+  .glass-card:nth-child(3) { animation-delay: .2s; }
+
+  /* ── DOODLE DECORATIONS ── */
+  .doodle {
+    position: absolute;
+    opacity: 0.07;
+    pointer-events: none;
+  }
+  .doodle-tl { top: 16px; left: 16px; }
+  .doodle-tr { top: 16px; right: 16px; }
+  .doodle-br { bottom: 16px; right: 16px; }
+
+  /* ── CARD HEADER ── */
+  .card-heading {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+  }
+  .card-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px var(--primary-glow);
+    flex-shrink: 0;
+  }
+  .card-icon svg { width:22px; height:22px; color: var(--ink-strong); }
+  .card-heading h2, .card-heading h3 {
+    font-size: 20px; font-weight: 700; color: var(--ink-strong);
+  }
+  .card-heading p { font-size: 13px; color: var(--ink-muted); margin-top: 2px; }
+
+  /* ── FORM GRID ── */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+
+  /* ── FIELD ── */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--ink-muted);
+  }
+  .field-hint { font-size: 11px; color: rgba(226,232,240,0.35); margin-top: 4px; }
+  .field-hint.warn { color: rgba(255,107,107,0.8); }
+
+  /* Drag-and-drop зона пакетной загрузки */
+  #batchDropZone { transition: background .2s, border-color .2s, box-shadow .2s; border-radius: var(--radius-md); }
+  #batchDropZone.dropzone-active {
+    background: rgba(0,255,179,0.06);
+    box-shadow: 0 0 0 2px rgba(0,255,179,0.4) inset, 0 0 24px rgba(0,255,179,0.15);
+  }
+
+  /* Панель фильтров пакетного дашборда */
+  .filters-bar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 24px;
+  }
+  .filters-bar input, .filters-bar select {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--ink);
+    padding: 8px 12px; border-radius: 8px; font-family: var(--font); font-size: 13px; outline: none;
+  }
+  .filters-bar input:focus, .filters-bar select:focus { border-color: var(--primary); }
+  .filters-bar input[type="text"] { min-width: 180px; }
+
+  input[type="text"], input[type="password"], input[type="number"], textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s, background .2s;
+    resize: vertical;
+  }
+  input:focus, textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+    background: rgba(0,212,255,0.06);
+  }
+  input::placeholder, textarea::placeholder { color: rgba(226,232,240,0.25); }
+
+  /* number input: hide spinners */
+  input[type=number]::-webkit-inner-spin-button { opacity: .4; }
+
+  /* ── BUTTONS ── */
+  .btn-row {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-top: 28px;
+  }
+  .btn {
+    position: relative; overflow: hidden;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px;
+    border: none; border-radius: var(--radius-md);
+    font-family: var(--font); font-size: 14px; font-weight: 700;
+    letter-spacing: .02em;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .2s, filter .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn svg { width:18px; height:18px; flex-shrink:0; }
+
+  /* Ripple */
+  .ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: rippleAnim .6s linear;
+    background: rgba(255,255,255,0.35);
+    pointer-events: none;
+  }
+  @keyframes rippleAnim {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  .btn-primary-neo {
+    background: linear-gradient(135deg, #00D4FF 0%, #0099CC 100%);
+    color: #0A0E1A;
+    box-shadow: 0 4px 20px rgba(0,212,255,0.45);
+  }
+  .btn-primary-neo:hover { filter: brightness(1.1); box-shadow: 0 6px 28px rgba(0,212,255,0.6); }
+
+  .btn-success-neo {
+    background: linear-gradient(135deg, #00FFB3 0%, #00A88F 100%);
+    color: #0A0E1A;
+    box-shadow: 0 4px 16px rgba(0,255,179,0.35);
+  }
+  .btn-success-neo:hover { filter: brightness(1.08); }
+
+  .btn-accent-neo {
+    background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+    color: var(--ink-strong);
+    box-shadow: 0 4px 16px rgba(124,58,237,0.4);
+  }
+  .btn-accent-neo:hover { filter: brightness(1.1); }
+
+  /* Pulse on primary btn */
+  .btn-pulse::after {
+    content: '';
+    position: absolute; inset: -3px;
+    border-radius: calc(var(--radius-md) + 3px);
+    border: 2px solid var(--primary);
+    opacity: 0;
+    animation: btnPulse 2s infinite;
+  }
+  @keyframes btnPulse {
+    0%   { opacity: .7; transform: scale(1); }
+    70%  { opacity: 0; transform: scale(1.12); }
+    100% { opacity: 0; }
+  }
+
+  /* ── RESULT CARD ── */
+  #resultCard { display: none; }
+  #resultCard.visible {
+    display: block;
+    animation: fadeUp .6s ease both;
+  }
+
+  .result-header {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+    margin-bottom: 24px;
+  }
+  .count-pill {
+    background: linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(124,58,237,0.2) 100%);
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 9999px;
+    padding: 4px 14px;
+    font-size: 13px; font-weight: 700; color: var(--primary);
+  }
+
+  .result-meta {
+    font-size: 13px; color: var(--ink-muted); margin-bottom: 20px;
+    padding: 12px 16px;
+    background: rgba(0,212,255,0.05);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    background: rgba(0,212,255,0.08);
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0,212,255,0.15);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .2s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr.row-in {
+    animation: rowSlideIn .35s ease both;
+  }
+  @keyframes rowSlideIn {
+    from { opacity: 0; transform: translateX(-16px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  tbody tr:hover td { background: rgba(0,212,255,0.04); }
+  td {
+    padding: 14px 16px;
+    color: var(--ink);
+    vertical-align: middle;
+  }
+  td:first-child {
+    color: var(--ink-muted); font-size: 12px; font-weight: 600;
+  }
+
+  .token-cell {
+    font-family: 'SFMono-Regular', 'Consolas', monospace;
+    font-size: 10px;
+    color: rgba(0,212,255,0.85);
+    word-break: break-all;
+    max-width: 320px;
+    line-height: 1.5;
+    position: relative;
+  }
+  .token-shimmer {
+    background: linear-gradient(90deg,
+      rgba(0,212,255,0.5) 0%,
+      rgba(124,58,237,0.5) 50%,
+      rgba(0,212,255,0.5) 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+  @keyframes shimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+  }
+
+  .badge-grp {
+    display: inline-flex; align-items: center;
+    background: rgba(0,212,255,0.12);
+    border: 1px solid rgba(0,212,255,0.25);
+    color: var(--primary);
+    border-radius: 9999px;
+    padding: 4px 12px;
+    font-size: 12px; font-weight: 600;
+  }
+
+  .exp-text { font-size: 12px; color: rgba(0,255,179,0.8); font-weight: 500; }
+
+  .copy-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 10px;
+    color: var(--primary);
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    overflow: hidden; position: relative;
+  }
+  .copy-btn:hover { background: rgba(0,212,255,0.2); transform: scale(1.08); }
+  .copy-btn:active { transform: scale(0.93); }
+  .copy-btn svg { width:16px; height:16px; }
+  .copy-btn.copied { background: rgba(0,255,179,0.15); border-color: rgba(0,255,179,0.35); color: #00FFB3; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes spinOnce {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ── COUNTER BADGE ── */
+  .stat-strip {
+    display: flex; gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    flex: 1; min-width: 100px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .stat-val { font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1; }
+  .stat-lbl { font-size: 11px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ── FLOATING PARTICLES ── */
+  .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .particle {
+    position: absolute; width: 2px; height: 2px;
+    border-radius: 50%; background: var(--primary);
+    animation: particleDrift linear infinite;
+    opacity: 0;
+  }
+  @keyframes particleDrift {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: .6; }
+    90%  { opacity: .3; }
+    100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+  }
+
+  /* Loading spinner */
+  .spin-icon { animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* WOW: stagger for counter */
+  .count-up { animation: countUp .5s ease both; }
+  @keyframes countUp {
+    from { transform: scale(0.5) translateY(10px); opacity: 0; }
+    to   { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.25); border-radius: 99px; }
+
+  /* ══════════════════════════════════════════════
+     ── ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ (ДЕНЬ/НОЧЬ) ──
+     ══════════════════════════════════════════════ */
+  .theme-toggle {
+    position: fixed; top: 20px; right: 20px; z-index: 999;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--surface);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--ink);
+    transition: background .2s, transform .15s, box-shadow .2s, border-color .2s;
+    box-shadow: var(--shadow-card);
+  }
+  .theme-toggle:hover { background: var(--surface-hover); transform: scale(1.08) rotate(-8deg); border-color: var(--border-glow); }
+  .theme-toggle:active { transform: scale(0.94); }
+  .theme-toggle svg { width: 21px; height: 21px; }
+  @media (max-width: 640px) { .theme-toggle { top: 12px; right: 12px; width: 40px; height: 40px; } }
+
+  /* ══════════════════════════════════════════════
+     ── TAB NAVIGATION ──
+     ══════════════════════════════════════════════ */
+  .tab-nav {
+    display: flex; justify-content: center; gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+    animation: fadeUp .7s ease both .05s;
+  }
+  .tab-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 26px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    color: var(--ink-muted);
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s, box-shadow .2s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .tab-btn:hover { background: rgba(255,255,255,0.08); color: var(--ink); }
+  .tab-btn:active { transform: scale(0.97); }
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    color: var(--ink-strong);
+    border-color: transparent;
+    box-shadow: 0 4px 20px rgba(0,212,255,0.35);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeUp .5s ease both; }
+
+  /* ══════════════════════════════════════════════
+     ── VERIFICATION PANEL ──
+     ══════════════════════════════════════════════ */
+  .glass-card h3 {
+    font-size: 18px; font-weight: 700; color: var(--ink-strong);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .glass-card h4 { font-size: 14px; font-weight: 700; color: var(--ink); margin: 18px 0 10px; }
+  .glass-card p { color: var(--ink-muted); font-size: 13.5px; line-height: 1.6; }
+  .glass-card b { color: var(--ink-strong); }
+
+  .red { color: var(--danger); font-weight: 700; }
+  .green { color: var(--success); font-weight: 700; }
+  .orange { color: var(--warn); font-weight: 700; }
+  .blue { color: var(--primary); font-weight: 700; }
+
+  .risk-banner {
+    padding: 16px 22px;
+    border-radius: var(--radius-md);
+    margin-bottom: 28px;
+    font-weight: 700;
+    font-size: 1.05em;
+    display: flex; align-items: center; gap: 12px;
+    border: 1px solid;
+    animation: fadeUp .5s ease both;
+  }
+  .risk-low  { background: rgba(0,255,179,0.08);  border-color: rgba(0,255,179,0.3);  color: var(--success); }
+  .risk-med  { background: rgba(255,215,0,0.08);   border-color: rgba(255,215,0,0.3);  color: var(--warn); }
+  .risk-high { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.35); color: var(--danger); }
+
+  .badge {
+    display: inline-flex; align-items: center;
+    padding: 3px 12px;
+    border-radius: 9999px;
+    font-size: 11px; font-weight: 700; letter-spacing: .02em;
+    white-space: nowrap;
+  }
+  .badge-danger { background: rgba(255,107,107,0.15); border: 1px solid rgba(255,107,107,0.35); color: var(--danger); }
+  .badge-warn   { background: rgba(255,215,0,0.12);   border: 1px solid rgba(255,215,0,0.3);   color: var(--warn); }
+  .badge-ok     { background: rgba(0,255,179,0.12);   border: 1px solid rgba(0,255,179,0.3);   color: var(--success); }
+  .badge-info   { background: rgba(0,212,255,0.12);   border: 1px solid rgba(0,212,255,0.3);   color: var(--primary); }
+
+  .score-ring {
+    width: 112px; height: 112px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    margin: 0 auto 16px;
+    border: 3px solid var(--primary);
+    background: radial-gradient(circle, rgba(0,212,255,0.12), rgba(124,58,237,0.08));
+    box-shadow: 0 0 0 8px rgba(0,212,255,0.08), 0 4px 24px rgba(0,212,255,0.2);
+  }
+  .score-val { font-size: 2em; font-weight: 900; color: var(--ink-strong); line-height: 1; }
+  .score-max { font-size: .7em; color: var(--ink-muted); }
+
+  .grade-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 9999px;
+    font-weight: 800;
+    font-size: .9em;
+    letter-spacing: .03em;
+  }
+  .grade-5 { background: rgba(0,255,179,0.15);   color: var(--success); border: 1px solid rgba(0,255,179,0.35); }
+  .grade-4 { background: rgba(0,212,255,0.15);   color: var(--primary); border: 1px solid rgba(0,212,255,0.35); }
+  .grade-3 { background: rgba(255,215,0,0.15);   color: var(--warn);    border: 1px solid rgba(255,215,0,0.35); }
+  .grade-2 { background: rgba(255,107,107,0.15); color: var(--danger);  border: 1px solid rgba(255,107,107,0.35); }
+
+  .empty-state { text-align: center; color: var(--ink-muted); padding: 20px; }
+
+  .formula-tag {
+    display: inline-block;
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.3);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: .8em;
+    font-weight: 700;
+    margin-left: 6px;
+  }
+
+  .hl-paste {
+    background: rgba(255,215,0,0.1);
+    border: 1px solid rgba(255,215,0,0.3);
+    color: var(--warn);
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  .hash-mono {
+    font-family: 'SFMono-Regular', 'Consolas', monospace;
+    font-size: 11px;
+    color: rgba(0,212,255,0.75);
+    word-break: break-all;
+  }
+
+  .code-log {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    color: rgba(0,255,179,0.85);
+    font-family: 'SFMono-Regular', 'Consolas', monospace;
+    font-size: 11px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 400px;
+    overflow-y: auto;
+    line-height: 1.6;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* generic th used for label cells inside two-column summary tables */
+  th {
+    padding: 14px 16px;
+    text-align: left;
+    vertical-align: middle;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--ink-muted);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+  }
+</style>
+</head>
+<body data-page-id="page-1-token-generator" data-artboard-width="1440" data-device-type="web">
+
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Переключить тему (день/ночь)" aria-label="Переключить тему">
+  <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+  <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+</button>
+
+<!-- Blob background -->
+<div data-node-id="n1" class="blob-layer" aria-hidden="true">
+  <div data-node-id="n2" class="blob blob-1"></div>
+  <div data-node-id="n3" class="blob blob-2"></div>
+  <div data-node-id="n4" class="blob blob-3"></div>
+  <div data-node-id="n5" class="blob blob-4"></div>
+  <div data-node-id="n6" class="blob blob-5"></div>
+</div>
+<div data-node-id="n7" class="grid-noise" aria-hidden="true"></div>
+
+<!-- Floating particles -->
+<div data-node-id="n8" class="particles" aria-hidden="true" id="particles"></div>
+
+<div data-node-id="n9" class="page-wrap">
+
+  <!-- ══ HEADER ══ -->
+  <header data-node-id="n10" class="page-header" data-role="hero">
+    <div data-node-id="n11" class="header-badge">
+      <svg data-node-id="n12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path data-node-id="n13" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Система безопасности / КФ МВД
+    </div>
+    <h1 data-node-id="n14" class="page-title">Платформа контроля ПЗ</h1>
+    <p data-node-id="n15" class="page-sub">Генерация ECDSA-подписанных токен-ключей и расшифровка ЭЦП-отчётов курсантов — в едином рабочем месте преподавателя</p>
+  </header>
+
+  <!-- ══ TAB NAVIGATION ══ -->
+  <nav class="tab-nav" role="tablist" aria-label="Разделы платформы">
+    <button class="tab-btn active" id="tabBtnGenerate" role="tab" aria-selected="true" onclick="switchTab('tab-generate', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+      Генератор токенов
+    </button>
+    <button class="tab-btn" id="tabBtnVerify" role="tab" aria-selected="false" onclick="switchTab('tab-verify', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 2s8 4 8 4v6c0 6-8 10-8 10S4 18 4 12V6s8-4 8-4z"/></svg>
+      Проверка отчётов
+    </button>
+  </nav>
+
+  <!-- ══ TAB: GENERATE ══ -->
+  <div class="tab-panel active" id="tab-generate">
+
+  <!-- ══ SIGNING KEY CARD (ECDSA) ══ -->
+  <div class="glass-card" data-component="signing-key">
+    <svg class="doodle doodle-tl" width="70" height="70" viewBox="0 0 70 70" fill="none" stroke="white" stroke-width="1.5">
+      <circle cx="26" cy="44" r="14"/><path d="M36 34L58 12M52 18l6 6M44 26l6 6"/>
+    </svg>
+
+    <div class="card-heading">
+      <div class="card-icon" style="background:linear-gradient(135deg,#7C3AED 0%,#00D4FF 100%)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+          <circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6M15.5 7.5L19 11l-3.5 3.5-3.5-3.5z"/>
+        </svg>
+      </div>
+      <div>
+        <h2>Ключ цифровой подписи (ECDSA)</h2>
+        <p>Асимметричная подпись — токен нельзя подделать без приватного ключа. Подлинность проверяется в База.html по публичному ключу</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Приватный ключ (JWK) — держите только у себя</label>
+      <textarea id="privKeyJwk" rows="3" placeholder="Нажмите «Сгенерировать новую пару» или вставьте ранее сохранённый приватный ключ"></textarea>
+      <span class="field-hint warn">⚠️ Никогда не передавайте курсантам и не публикуйте. Сохраните этот текст у себя (например, в менеджере паролей) — если он потеряется, придётся сгенерировать новую пару и заново вставить публичный ключ в База.html; уже выданные токены при этом перестанут проходить проверку.</span>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary-neo" onclick="generateSigningKeyPair(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6M15.5 7.5L19 11l-3.5 3.5-3.5-3.5z"/></svg>
+        Сгенерировать новую пару ключей
+      </button>
+    </div>
+
+    <div class="field" id="pubKeyBlock" style="display:none;margin-top:6px">
+      <label>Публичный ключ (JWK) — вставьте один раз в База.html</label>
+      <textarea id="pubKeyJwk" rows="3" readonly></textarea>
+      <span class="field-hint">Откройте файл База.html → найдите строку <code>const TEACHER_PUBLIC_KEY_JWK = null;</code> в начале <code>&lt;script&gt;</code> → замените <code>null</code> на скопированный ниже объект. Один и тот же публичный ключ подходит для всех последующих партий токенов, подписанных этим приватным ключом — вставлять его нужно только один раз.</span>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-accent-neo" style="padding:10px 20px;font-size:13px" onclick="copyPubKey(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Скопировать публичный ключ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN FORM CARD ══ -->
+  <div data-node-id="n16" class="glass-card" data-component="form-card">
+
+    <!-- Doodle decorations -->
+    <svg data-node-id="n17" class="doodle doodle-tl" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="white" stroke-width="1.5">
+      <rect data-node-id="n18" x="20" y="30" width="40" height="32" rx="4"/>
+      <path data-node-id="n19" d="M28 30v-8a12 12 0 0124 0v8"/>
+      <circle data-node-id="n20" cx="40" cy="48" r="4"/>
+      <line data-node-id="n21" x1="40" y1="52" x2="40" y2="56"/>
+    </svg>
+    <svg data-node-id="n22" class="doodle doodle-tr" width="70" height="70" viewBox="0 0 70 70" fill="none" stroke="white" stroke-width="1.5">
+      <circle data-node-id="n23" cx="35" cy="30" r="16"/>
+      <path data-node-id="n24" d="M35 14V6M35 54v-8M19.7 19.7l-5.7-5.7M50.3 50.3l-5.7-5.7M14 30H6M64 30h-8M19.7 40.3l-5.7 5.7M50.3 19.7l-5.7 5.7"/>
+      <circle data-node-id="n25" cx="35" cy="30" r="6"/>
+    </svg>
+    <svg data-node-id="n26" class="doodle doodle-br" width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="white" stroke-width="1.5">
+      <path data-node-id="n27" d="M10 20 L30 10 L50 20 L50 40 L30 50 L10 40 Z"/>
+      <path data-node-id="n28" d="M20 25 L30 20 L40 25 L40 35 L30 40 L20 35 Z"/>
+      <circle data-node-id="n29" cx="30" cy="30" r="4"/>
+    </svg>
+
+    <div data-node-id="n30" class="card-heading">
+      <div data-node-id="n31" class="card-icon">
+        <svg data-node-id="n32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+          <path data-node-id="n33" d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+        </svg>
+      </div>
+      <div data-node-id="n34">
+        <h2 data-node-id="n35">Параметры генерации</h2>
+        <p data-node-id="n36">Заполните данные — токены будут созданы мгновенно</p>
+      </div>
+    </div>
+
+    <div data-node-id="n37" class="form-grid">
+      <!-- Left: students textarea -->
+      <div data-node-id="n38" class="field">
+        <label data-node-id="n39">Список курсантов (ФИО)</label>
+        <textarea data-node-id="n40" id="students" rows="9"
+          placeholder="Иванов Иван Иванович&#10;Петров Петр Петрович&#10;Сидоров Сидор Сидорович&#10;Козлов Алексей Дмитриевич&#10;..."></textarea>
+        <span data-node-id="n41" class="field-hint">По одному ФИО на строку — можно вставить столбец из Excel</span>
+      </div>
+
+      <!-- Right: settings -->
+      <div data-node-id="n42" style="display:flex;flex-direction:column;gap:18px">
+        <div data-node-id="n43" class="field">
+          <label data-node-id="n44">Группа</label>
+          <input data-node-id="n45" type="text" id="grp" value="ИБ-21">
+        </div>
+        <div data-node-id="n46" class="field">
+          <label data-node-id="n47">Номер задания</label>
+          <input data-node-id="n48" type="text" id="task" value="ПЗ-01">
+        </div>
+        <div data-node-id="n53" class="field">
+          <label data-node-id="n54">Срок действия (часов)</label>
+          <input data-node-id="n55" type="number" id="ttl" value="3" min="1" max="504">
+          <span data-node-id="n56" class="field-hint">Рекомендуем: продолжительность урока + 30 минут. Максимум — 504 часа (3 недели), для многодневных или самостоятельных ПЗ</span>
+        </div>
+      </div>
+    </div>
+
+    <div data-node-id="n57" class="btn-row">
+      <button data-node-id="n58" class="btn btn-primary-neo btn-pulse" id="btnGenerate" onclick="generateAll(this)">
+        <svg data-node-id="n59" id="btnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path data-node-id="n60" d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>
+        Сгенерировать токены
+      </button>
+      <button data-node-id="n61" class="btn btn-success-neo" id="btnCsv" style="display:none" onclick="downloadCSV(this)">
+        <svg data-node-id="n62" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path data-node-id="n63" d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Скачать CSV
+      </button>
+      <button data-node-id="n64" class="btn btn-accent-neo" id="btnCopy" style="display:none" onclick="copyAll(this)">
+        <svg data-node-id="n65" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect data-node-id="n66" x="9" y="9" width="13" height="13" rx="2"/><path data-node-id="n67" d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Копировать всё
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ RESULT CARD ══ -->
+  <div data-node-id="n68" class="glass-card" id="resultCard" data-component="result-card">
+    <svg data-node-id="n69" class="doodle doodle-tr" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="white" stroke-width="1.5">
+      <path data-node-id="n70" d="M20 40h40M40 20v40M25 25l30 30M55 25L25 55"/>
+      <circle data-node-id="n71" cx="40" cy="40" r="20"/>
+    </svg>
+
+    <div data-node-id="n72" class="result-header">
+      <div data-node-id="n73" class="card-heading" style="margin-bottom:0">
+        <div data-node-id="n74" class="card-icon" style="background:linear-gradient(135deg,#00FFB3,#00A88F)">
+          <svg data-node-id="n75" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <polyline data-node-id="n76" points="9 11 12 14 22 4"/><path data-node-id="n77" d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+          </svg>
+        </div>
+        <div data-node-id="n78">
+          <h3 data-node-id="n79">Сгенерированные токены</h3>
+          <p data-node-id="n80">ECDSA P-256 · UUID nonce · Время истечения</p>
+        </div>
+      </div>
+      <div data-node-id="n81" class="count-pill" id="countLabel">0 токенов</div>
+    </div>
+
+    <!-- Stats strip -->
+    <div data-node-id="n82" class="stat-strip" id="statStrip">
+      <div data-node-id="n83" class="stat-box">
+        <span data-node-id="n84" class="stat-val" id="statCount">0</span>
+        <span data-node-id="n85" class="stat-lbl">Токенов</span>
+      </div>
+      <div data-node-id="n86" class="stat-box">
+        <span data-node-id="n87" class="stat-val" id="statGroup" style="font-size:18px;color:var(--accent)">—</span>
+        <span data-node-id="n88" class="stat-lbl">Группа</span>
+      </div>
+      <div data-node-id="n89" class="stat-box">
+        <span data-node-id="n90" class="stat-val" id="statTask" style="font-size:18px;color:#00FFB3">—</span>
+        <span data-node-id="n91" class="stat-lbl">Задание</span>
+      </div>
+      <div data-node-id="n92" class="stat-box">
+        <span data-node-id="n93" class="stat-val" id="statTTL" style="font-size:18px;color:#FFD700">—</span>
+        <span data-node-id="n94" class="stat-lbl">Часов</span>
+      </div>
+    </div>
+
+    <div data-node-id="n95" class="result-meta">
+      Каждый токен содержит: ФИО · Группа · ID задания · Вариант · Метка времени выдачи · Срок действия · Уникальный UUID-nonce · ECDSA-подпись · Genesis-хэш
+    </div>
+
+    <div data-node-id="n96" class="table-wrap">
+      <table data-node-id="n97" data-component="tokens-table">
+        <thead data-node-id="n98">
+          <tr data-node-id="n99">
+            <th data-node-id="n100">#</th>
+            <th data-node-id="n101">ФИО курсанта</th>
+            <th data-node-id="n102">Группа</th>
+            <th data-node-id="n103">Действителен до</th>
+            <th data-node-id="n104">Токен-ключ</th>
+            <th data-node-id="n105"></th>
+          </tr>
+        </thead>
+        <tbody data-node-id="n106" id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  </div><!-- /tab-generate -->
+
+  <!-- ══ TAB: VERIFY ══ -->
+  <div class="tab-panel" id="tab-verify">
+
+    <!-- ══ DECODER INPUT CARD ══ -->
+    <div class="glass-card" data-component="decoder-input">
+      <svg class="doodle doodle-tl" width="70" height="70" viewBox="0 0 70 70" fill="none" stroke="white" stroke-width="1.5">
+        <circle cx="35" cy="30" r="16"/>
+        <path d="M35 14V6M35 54v-8M19.7 19.7l-5.7-5.7M50.3 50.3l-5.7-5.7M14 30H6M64 30h-8M19.7 40.3l-5.7 5.7M50.3 19.7l-5.7 5.7"/>
+        <circle cx="35" cy="30" r="6"/>
+      </svg>
+      <svg class="doodle doodle-br" width="60" height="60" viewBox="0 0 60 60" fill="none" stroke="white" stroke-width="1.5">
+        <path d="M10 20 L30 10 L50 20 L50 40 L30 50 L10 40 Z"/>
+        <path d="M20 25 L30 20 L40 25 L40 35 L30 40 L20 35 Z"/>
+        <circle cx="30" cy="30" r="4"/>
+      </svg>
+
+      <div class="card-heading">
+        <div class="card-icon" style="background:linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="16" r="1.5"/>
+          </svg>
+        </div>
+        <div>
+          <h2>Дешифратор ЭЦП-отчётов</h2>
+          <p>Вставьте отчёт курсанта — платформа проверит блокчейн-цепочку, риски и покажет ответы</p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>ЭЦП-отчёт курсанта</label>
+        <textarea id="raw" rows="6" placeholder="Вставьте PZ-REPORT::...::END или Base64/JSON из ответа курсанта"></textarea>
+        <span class="field-hint">Поддерживаются форматы: <code>PZ-REPORT::...::END</code>, чистый Base64, JSON. Проверяется целостность блокчейн-цепочки, анализируются риски, отображаются ответы и цифровой след устройства.</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary-neo btn-pulse" id="btnDecode" onclick="decodeReport(this)">
+          <svg id="btnDecodeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Расшифровать и проверить
+        </button>
+        <button class="btn btn-accent-neo" onclick="document.getElementById('fileSingle').click()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5-5 5 5M12 5v11"/></svg>
+          Загрузить JSON-файл
+        </button>
+        <input type="file" id="fileSingle" accept=".json,.txt,application/json" style="display:none" onchange="handleSingleFile(event)">
+      </div>
+    </div>
+
+    <!-- ══ BATCH VERIFICATION CARD ══ -->
+    <div class="glass-card" data-component="batch-verify">
+      <svg class="doodle doodle-tr" width="70" height="70" viewBox="0 0 70 70" fill="none" stroke="white" stroke-width="1.5">
+        <rect x="14" y="14" width="30" height="30" rx="4"/>
+        <rect x="26" y="26" width="30" height="30" rx="4"/>
+      </svg>
+
+      <div class="card-heading">
+        <div class="card-icon" style="background:linear-gradient(135deg,#00FFB3 0%,#00A88F 100%)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/>
+          </svg>
+        </div>
+        <div>
+          <h2>Пакетная проверка отчётов</h2>
+          <p>Загрузите сразу 30+ JSON-файлов — платформа проверит каждый и построит общую аналитику по группе</p>
+        </div>
+      </div>
+
+      <div class="field" id="batchDropZone">
+        <label>Файлы отчётов (JSON)</label>
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap">
+          <button class="btn btn-success-neo" onclick="document.getElementById('fileBatch').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+            Выбрать файлы
+          </button>
+          <input type="file" id="fileBatch" accept=".json,.txt,application/json" multiple style="display:none" onchange="handleBatchFiles(event)">
+          <span class="field-hint" id="batchProgress" style="display:none"></span>
+        </div>
+        <span class="field-hint">Поддерживается любое количество файлов за раз (30, 50, 100+). Каждый отчёт проверяется отдельно — целостность цепочки, риски, баллы — а результаты сводятся в общий дашборд с диаграммами. Файлы можно и просто <b>перетащить сюда мышью</b>.</span>
+      </div>
+    </div>
+
+    <!-- ══ ФИЛЬТРЫ ПАКЕТНОГО ДАШБОРДА ══ -->
+    <div class="filters-bar" id="batchFilters" style="display:none">
+      <input type="text" id="batchFilterFio" placeholder="🔍 Поиск по ФИО…" oninput="debouncedApplyBatchFilters()">
+      <select id="batchFilterGroup" onchange="applyBatchFilters()"><option value="">Все группы</option></select>
+      <select id="batchFilterGrade" onchange="applyBatchFilters()">
+        <option value="">Все оценки</option>
+        <option value="5">Отлично</option><option value="4">Хорошо</option>
+        <option value="3">Удовл.</option><option value="2">Неуд.</option>
+      </select>
+      <select id="batchFilterRisk" onchange="applyBatchFilters()">
+        <option value="">Все риски</option>
+        <option value="high">Высокий риск</option><option value="medium">Средний</option><option value="low">Низкий</option>
+      </select>
+      <input type="date" id="batchFilterDateFrom" onchange="applyBatchFilters()" title="Дата начала — от">
+      <input type="date" id="batchFilterDateTo" onchange="applyBatchFilters()" title="Дата начала — до">
+      <button class="btn btn-accent-neo" style="padding:9px 16px;font-size:12px" onclick="resetBatchFilters()">✕ Сбросить</button>
+      <span id="batchFilterCount" class="field-hint" style="margin:0"></span>
+    </div>
+
+    <!-- ══ BATCH DASHBOARD (заполняется динамически) ══ -->
+    <div id="batchDashboard" style="display:none"></div>
+
+    <!-- ══ VERIFY RESULTS ══ -->
+    <div id="verifyResult" style="display:none">
+
+      <div id="riskBanner"></div>
+
+      <div class="glass-card" id="summary"></div>
+      <div class="glass-card" id="scoreCard"></div>
+      <div class="glass-card" id="violations"></div>
+      <div class="glass-card" id="pastes"></div>
+      <div class="glass-card" id="screenshots"></div>
+      <div class="glass-card" id="fpBlock"></div>
+      <div class="glass-card" id="timings"></div>
+      <div class="glass-card" id="answers"></div>
+
+      <div class="glass-card">
+        <h3>📋 Полная хэш-цепочка (Blockchain Log)</h3>
+        <pre class="code-log" id="chainLog"></pre>
+      </div>
+
+    </div>
+
+  </div><!-- /tab-verify -->
+
+</div><!-- /page-wrap -->
+
+<script>
+/* ── PARTICLES ── */
+(function spawnParticles() {
+  const container = document.getElementById('particles');
+  const colors = ['#00D4FF', '#7C3AED', '#00FFB3', '#FFD700'];
+  for (let i = 0; i < 28; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      width: ${1 + Math.random() * 2}px;
+      height: ${1 + Math.random() * 2}px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      animation-duration: ${8 + Math.random() * 16}s;
+      animation-delay: ${-Math.random() * 20}s;
+    `;
+    container.appendChild(p);
+  }
+})();
+
+/* ── RIPPLE ── */
+function addRipple(btn, e) {
+  const r = document.createElement('span');
+  r.className = 'ripple-effect';
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 2;
+  const x = (e.clientX - rect.left) - size / 2;
+  const y = (e.clientY - rect.top) - size / 2;
+  r.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px`;
+  btn.appendChild(r);
+  setTimeout(() => r.remove(), 700);
+}
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('click', e => addRipple(btn, e));
+});
+
+/* ── ТЕМА (ДЕНЬ/НОЧЬ) ── */
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const moon = document.getElementById('themeIconMoon');
+  const sun = document.getElementById('themeIconSun');
+  if (moon && sun) {
+    moon.style.display = theme === 'light' ? 'none' : 'block';
+    sun.style.display = theme === 'light' ? 'block' : 'none';
+  }
+  try { localStorage.setItem('pz_platform_theme', theme); } catch (e) {}
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  applyTheme(current === 'light' ? 'dark' : 'light');
+}
+/* Синхронизируем иконку кнопки с темой, применённой ещё в <head> (до отрисовки) */
+applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+
+/* ── TABS ── */
+function switchTab(panelId, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+  document.getElementById(panelId).classList.add('active');
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── CRYPTO UTILS ── */
+let allTokens = [];
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function arrayBufferToBase64(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf)));
+}
+
+async function importSigningPrivateKey(jwkStr) {
+  const jwk = JSON.parse(jwkStr);
+  return crypto.subtle.importKey('jwk', jwk, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']);
+}
+
+async function signPayload(privateKey, dataStr) {
+  const sigBuf = await crypto.subtle.sign(
+    { name: 'ECDSA', hash: { name: 'SHA-256' } },
+    privateKey,
+    new TextEncoder().encode(dataStr)
+  );
+  return arrayBufferToBase64(sigBuf);
+}
+
+/* ── ГЕНЕРАЦИЯ ПАРЫ КЛЮЧЕЙ (один раз на курс/семестр) ── */
+async function generateSigningKeyPair(btn) {
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Генерация ключей…';
+  try {
+    const kp = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+    const priv = await crypto.subtle.exportKey('jwk', kp.privateKey);
+    const pub  = await crypto.subtle.exportKey('jwk', kp.publicKey);
+    document.getElementById('privKeyJwk').value = JSON.stringify(priv);
+    document.getElementById('pubKeyJwk').value = JSON.stringify(pub);
+    document.getElementById('pubKeyBlock').style.display = 'block';
+    document.getElementById('pubKeyBlock').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } catch (e) {
+    alert('❌ Не удалось сгенерировать ключевую пару: ' + e.message);
+  }
+  btn.disabled = false;
+  btn.innerHTML = original;
+}
+
+function copyPubKey(btn) {
+  const val = document.getElementById('pubKeyJwk').value;
+  if (!val) return;
+  navigator.clipboard.writeText(val).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✅ Скопировано!';
+    setTimeout(() => { btn.textContent = orig; }, 1800);
+  }).catch(() => alert('Не удалось скопировать — выделите текст вручную'));
+}
+
+/* ── GENERATE ── */
+async function generateAll(btn) {
+  const names = document.getElementById('students').value
+    .split('\n').map(n => n.trim()).filter(n => n.length > 0);
+  if (names.length === 0) { shakeInput('students'); return; }
+
+  const privKeyStr = document.getElementById('privKeyJwk').value.trim();
+  if (!privKeyStr) { shakeInput('privKeyJwk'); return; }
+
+  let privateKey;
+  try {
+    privateKey = await importSigningPrivateKey(privKeyStr);
+  } catch (e) {
+    alert('❌ Неверный формат приватного ключа (ожидается JWK JSON). Сгенерируйте новую пару или вставьте ранее сохранённый ключ.');
+    return;
+  }
+
+  const grp   = document.getElementById('grp').value.trim();
+  const task  = document.getElementById('task').value.trim();
+  const ttlH  = parseInt(document.getElementById('ttl').value);
+  const now   = Date.now();
+  const exp   = now + ttlH * 3600 * 1000;
+
+  /* Loading state */
+  const icon = document.getElementById('btnIcon');
+  icon.classList.add('spin-icon');
+  btn.disabled = true;
+
+  allTokens = [];
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+
+  for (let i = 0; i < names.length; i++) {
+    const fio = names[i];
+    const variant = 1000 + Math.floor(Math.random() * 8999);
+    const payload = { fio, grp, task, var: variant, iat: now, exp, nonce: crypto.randomUUID(), seq: i + 1 };
+    const bodyB64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+    const sig     = await signPayload(privateKey, bodyB64);
+    const genesis = await sha256(bodyB64 + sig + payload.nonce);
+    const token   = `${bodyB64}.${sig}.${genesis}`;
+    const expDate = new Date(exp).toLocaleString('ru-RU');
+    allTokens.push({ fio, grp, task, token, expDate });
+
+    const tr = document.createElement('tr');
+    tr.className = 'row-in';
+    tr.style.animationDelay = `${i * 0.05}s`;
+    const safeToken = token.replace(/'/g, "\\'");
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td style="font-weight:600;color: var(--ink-strong)">${fio}</td>
+      <td><span class="badge-grp">${grp}</span></td>
+      <td><span class="exp-text">${expDate}</span></td>
+      <td class="token-cell"><span class="token-shimmer">${token.slice(0, 40)}…</span><br><span style="-webkit-text-fill-color:rgba(226,232,240,0.45);font-size:9px">${token.slice(40, 80)}…</span></td>
+      <td>
+        <button class="copy-btn" title="Скопировать токен" onclick="copyToken(this, '${safeToken}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  /* Update stats */
+  const sc = document.getElementById('statCount');
+  sc.textContent = names.length;
+  sc.className = 'stat-val count-up';
+  setTimeout(() => sc.className = 'stat-val', 600);
+  document.getElementById('statGroup').textContent = grp;
+  document.getElementById('statTask').textContent  = task;
+  document.getElementById('statTTL').textContent   = ttlH >= 24 ? `${(ttlH / 24).toFixed(ttlH % 24 === 0 ? 0 : 1)} дн.` : `${ttlH}ч`;
+  document.getElementById('countLabel').textContent = `${names.length} токенов`;
+
+  /* Show result */
+  const rc = document.getElementById('resultCard');
+  rc.classList.add('visible');
+  rc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  /* Show export buttons */
+  document.getElementById('btnCsv').style.display  = 'inline-flex';
+  document.getElementById('btnCopy').style.display = 'inline-flex';
+
+  /* Reset button */
+  icon.classList.remove('spin-icon');
+  btn.disabled = false;
+}
+
+/* ── COPY TOKEN ── */
+function copyToken(btn, token) {
+  navigator.clipboard.writeText(token).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>`;
+    }, 2000);
+  });
+}
+
+/* ── COPY ALL ── */
+function copyAll(btn) {
+  const text = allTokens.map(r => `${r.fio}\t${r.grp}\t${r.expDate}\t${r.token}`).join('\n');
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px"><polyline points="20 6 9 17 4 12"/></svg> Скопировано!`;
+    setTimeout(() => { btn.innerHTML = orig; }, 2000);
+  });
+}
+
+/* ── DOWNLOAD CSV ── */
+function downloadCSV(btn) {
+  const grp  = document.getElementById('grp').value;
+  const task = document.getElementById('task').value;
+  const rows = ['ФИО;Группа;Задание;Действителен до;Токен-ключ'];
+  allTokens.forEach(r => rows.push(`${r.fio};${r.grp};${r.task};${r.expDate};${r.token}`));
+  const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Токены_${grp}_${task}_${new Date().toLocaleDateString('ru-RU')}.csv`;
+  a.click();
+}
+
+/* ── SHAKE (validation feedback) ── */
+function shakeInput(id) {
+  const el = document.getElementById(id);
+  el.style.animation = 'none';
+  el.style.borderColor = '#ff6b6b';
+  el.style.boxShadow = '0 0 0 3px rgba(255,107,107,0.25)';
+  el.animate([
+    { transform: 'translateX(0)' },
+    { transform: 'translateX(-8px)' },
+    { transform: 'translateX(8px)' },
+    { transform: 'translateX(-6px)' },
+    { transform: 'translateX(6px)' },
+    { transform: 'translateX(0)' }
+  ], { duration: 400, easing: 'ease-in-out' }).onfinish = () => {
+    el.style.borderColor = '';
+    el.style.boxShadow = '';
+  };
+  el.focus();
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── ДЕШИФРАТОР / ВЕРИФИКАЦИЯ ОТЧЁТОВ ──
+   Использует ту же функцию sha256() из блока CRYPTO UTILS выше
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Верификация блокчейн-цепочки ── */
+async function verifyChain(chain, genesis) {
+  if (!Array.isArray(chain)) return { ok: false, brokenAt: 0, entry: null, reason: 'chain не массив' };
+  if (chain.length === 0) return { ok: false, brokenAt: 0, entry: null, reason: 'цепочка пуста' };
+
+  for (let i = 0; i < chain.length; i++) {
+    const entry = chain[i];
+    if (!entry || typeof entry !== 'object')
+      return { ok: false, brokenAt: i, entry, reason: 'entry не объект' };
+    if (!entry.ts || !entry.event || !entry.hash)
+      return { ok: false, brokenAt: i, entry, reason: 'отсутствуют обязательные поля (ts, event, hash)' };
+
+    const prev = i === 0 ? genesis : (chain[i - 1]?.hash ?? '');
+    const payload = prev + JSON.stringify(entry.event) + entry.ts;
+    const expected = await sha256(payload);
+
+    if (expected !== entry.hash)
+      return { ok: false, brokenAt: i, entry, reason: `hash mismatch: ожидалось ${expected}, получено ${entry.hash}` };
+  }
+  return { ok: true, length: chain.length, genesis: genesis };
+}
+
+/* ── Парсеры входных данных ── */
+function cleanInput(raw) {
+  return raw.trim().replace(/\s+/g, '');
+}
+
+function tryParseReport(raw) {
+  const m = raw.match(/PZ-REPORT::(.+?)::END/s);
+  if (m && m[1]) {
+    const dec = decodeB64(m[1]);
+    if (dec) return dec;
+  }
+
+  const clean = cleanInput(raw);
+  if (/^[A-Za-z0-9+/=]+$/.test(clean) && clean.length > 100) {
+    const dec = decodeB64(clean);
+    if (dec) return dec;
+  }
+
+  try { return JSON.parse(raw); } catch (e) {}
+
+  throw new Error('Не удалось распознать формат. Ожидается: PZ-REPORT::...::END, Base64 или JSON');
+}
+
+function decodeB64(b64) {
+  try {
+    const binary = atob(b64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    const json = new TextDecoder('utf-8').decode(bytes);
+    return JSON.parse(json);
+  } catch (e) {
+    return null;
+  }
+}
+
+/* ── Анализ рисков ── */
+/* Длительность выполнения ПЗ в минутах (из meta.start/meta.end) */
+function reportDurationMin(report) {
+  const start = report?.meta?.start, end = report?.meta?.end;
+  if (!start || !end) return 0;
+  const ms = new Date(end).getTime() - new Date(start).getTime();
+  return ms > 0 ? Math.round(ms / 60000) : 0;
+}
+
+/* Универсальный расчёт оценки — те же процентные пороги (68.75/81.25/93.75%),
+   что и в База.html, но применённые к фактическому max_score конкретного отчёта.
+   Работает для любого ПЗ, а не только для того, где максимум — 16 баллов. */
+function gradeInfo(score, maxScore) {
+  maxScore = maxScore || 16; // старые отчёты без max_score — считаем по исходной шкале
+  if (score === null || score === undefined) return { num: null, text: '—', cls: '' };
+  const t = {
+    five:  Math.ceil(maxScore * 0.9375),
+    four:  Math.ceil(maxScore * 0.8125),
+    three: Math.ceil(maxScore * 0.6875)
+  };
+  if (score >= t.five)  return { num: '5', text: 'ОТЛИЧНО',            cls: 'grade-5' };
+  if (score >= t.four)  return { num: '4', text: 'ХОРОШО',              cls: 'grade-4' };
+  if (score >= t.three) return { num: '3', text: 'УДОВЛЕТВОРИТЕЛЬНО',   cls: 'grade-3' };
+  return                       { num: '2', text: 'НЕУДОВЛЕТВОРИТЕЛЬНО', cls: 'grade-2' };
+}
+
+function analyzeRisks(report, chainOk) {
+  const chain = report?.blockchain?.chain ?? [];
+  const footprint = report?.footprint ?? {};
+  const meta = report?.meta ?? {};
+
+  const risks = [];
+  let score = 0;
+
+  const awayCount = footprint?.away_log?.length ?? 0;
+  const awayTotalSec = footprint?.away_log?.reduce((s, r) => s + (r.seconds || 0), 0) ?? 0;
+  if (awayCount > 0) {
+    risks.push({ type: 'away', level: awayCount > 3 ? 'high' : 'medium',
+      text: `Уход с вкладки: ${awayCount} раз, суммарно ${awayTotalSec} сек` });
+    score += awayCount > 3 ? 30 : 15;
+  }
+
+  const pasteCount = footprint?.paste_log?.length ?? 0;
+  if (pasteCount > 0) {
+    risks.push({ type: 'paste', level: pasteCount > 5 ? 'high' : 'medium',
+      text: `Вставок из буфера: ${pasteCount}` });
+    score += pasteCount > 5 ? 25 : 10;
+  }
+
+  const screenshotEvents = chain.filter(e => e?.event?.type === 'SCREENSHOT_ATTEMPT');
+  if (screenshotEvents.length > 0) {
+    risks.push({ type: 'screenshot', level: 'high', text: `Попытки скриншота: ${screenshotEvents.length}` });
+    score += 40;
+  }
+
+  const devtoolsEvents = chain.filter(e => e?.event?.desc?.includes('DevTools') || e?.event?.type === 'VIOLATION');
+  if (devtoolsEvents.length > 0) {
+    risks.push({ type: 'devtools', level: 'high', text: `Попытки открыть DevTools: ${devtoolsEvents.length}` });
+    score += 35;
+  }
+
+  const copyBlockedEvents = chain.filter(e => e?.event?.type === 'COPY_BLOCKED');
+  if (copyBlockedEvents.length > 0) {
+    risks.push({ type: 'copy_blocked', level: copyBlockedEvents.length > 5 ? 'medium' : 'low',
+      text: `Заблокированных попыток скопировать текст задания: ${copyBlockedEvents.length}` });
+    score += copyBlockedEvents.length > 5 ? 15 : 5;
+  }
+
+  const formulaEvents = chain.filter(e => e?.event?.type === 'FORMULA_EVAL');
+  if (formulaEvents.length > 5) {
+    risks.push({ type: 'formula', level: 'low', text: `Использование формул: ${formulaEvents.length} (проверьте ручной ввод)` });
+    score += 5;
+  }
+
+  if (meta.score === null) {
+    risks.push({ type: 'unchecked', level: 'medium', text: 'Ответы не проверены курсантом перед отправкой' });
+    score += 10;
+  }
+
+  /* Скорость выполнения — подозрительно быстро для полноценного ПЗ */
+  const durMin = reportDurationMin(report);
+  if (durMin > 0 && durMin < 3) {
+    risks.push({ type: 'too_fast', level: 'high', text: `Подозрительно быстро: ${durMin} мин на всю работу` });
+    score += 25;
+  } else if (durMin > 0 && durMin < 5) {
+    risks.push({ type: 'fast', level: 'medium', text: `Быстрое выполнение: ${durMin} мин` });
+    score += 10;
+  }
+
+  /* Малоактивность мыши при значительной длительности — возможен бот/скрипт */
+  const mouseSamples = footprint?.mouse_samples?.length ?? 0;
+  if (mouseSamples < 5 && durMin > 2) {
+    risks.push({ type: 'mouse_inactive', level: 'medium', text: `Почти нет данных о движении мыши (${mouseSamples} точек) при длительности ${durMin} мин` });
+    score += 15;
+  }
+
+  /* Регулярность интервалов между нажатиями клавиш — слишком низкая дисперсия похожа на автоввод/бота */
+  const keyStats = footprint?.key_stats;
+  if (keyStats && typeof keyStats === 'object') {
+    const intervals = Object.values(keyStats).map(v => v?.avgInterval_ms).filter(v => typeof v === 'number');
+    if (intervals.length > 1) {
+      const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+      const variance = intervals.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / intervals.length;
+      if (variance < 100) {
+        risks.push({ type: 'robotic_typing', level: 'medium', text: 'Слишком равномерный ритм набора текста (низкая дисперсия интервалов) — возможен автоввод' });
+        score += 15;
+      }
+    }
+  }
+
+  /* Нарушенная целостность блокчейн-цепочки — весомый вклад в риск-скор, а не только отдельный статус */
+  if (chainOk === false) {
+    risks.push({ type: 'chain_broken', level: 'high', text: 'Нарушена целостность блокчейн-цепочки событий — данные могли быть отредактированы' });
+    score += 30;
+  }
+
+  let level = 'low';
+  if (score >= 60) level = 'high';
+  else if (score >= 25) level = 'medium';
+
+  return {
+    risks, level, score, awayCount, pasteCount,
+    screenshotCount: screenshotEvents.length, devtoolsCount: devtoolsEvents.length,
+    copyBlockedCount: copyBlockedEvents.length, durationMin: durMin
+  };
+}
+
+/* ── Основная функция декодирования ── */
+/* Разбирает и проверяет отчёт, возвращая chainCheck + riskAnalysis (без отрисовки) */
+async function analyzeReport(report) {
+  const chain = report?.blockchain?.chain ?? [];
+  const genesis = report?.blockchain?.genesis ?? '';
+  const chainCheck = await verifyChain(chain, genesis);
+  const riskAnalysis = analyzeRisks(report, chainCheck.ok);
+  return { chainCheck, riskAnalysis };
+}
+
+/* Обработчик формы ручного ввода/вставки отчёта */
+async function decodeReport(btn) {
+  const raw = document.getElementById('raw').value;
+  if (!raw.trim()) { shakeInput('raw'); return; }
+
+  let report;
+  try {
+    report = tryParseReport(raw);
+  } catch (e) {
+    alert('❌ Ошибка декодирования: ' + e.message);
+    return;
+  }
+
+  const icon = document.getElementById('btnDecodeIcon');
+  icon.classList.add('spin-icon');
+  btn.disabled = true;
+
+  const { chainCheck, riskAnalysis } = await analyzeReport(report);
+  renderSingleReport(report, chainCheck, riskAnalysis);
+
+  icon.classList.remove('spin-icon');
+  btn.disabled = false;
+  const resEl = document.getElementById('verifyResult');
+  resEl.style.display = 'block';
+  resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* Загрузка одного JSON-файла — автоматически подставляет содержимое и запускает проверку */
+async function handleSingleFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    document.getElementById('raw').value = text;
+    await decodeReport(document.getElementById('btnDecode'));
+  } catch (e) {
+    alert('❌ Не удалось прочитать файл: ' + e.message);
+  }
+  event.target.value = '';
+}
+
+/* Заполняет единый блок #verifyResult данными конкретного отчёта
+   (используется и ручным вводом, и переходом «Подробно» из пакетного дашборда) */
+function renderSingleReport(report, chainCheck, riskAnalysis) {
+  const chain = report?.blockchain?.chain ?? [];
+  const meta = report?.meta ?? {};
+  const footprint = report?.footprint ?? {};
+  const fp = report?.fingerprint ?? {};
+  const answers = report?.answers ?? {};
+
+  /* — РИСК-БАННЕР — */
+  const riskEl = document.getElementById('riskBanner');
+  const riskClass = riskAnalysis.level === 'low' ? 'risk-low' : riskAnalysis.level === 'medium' ? 'risk-med' : 'risk-high';
+  const riskIcon = riskAnalysis.level === 'low' ? '✅' : riskAnalysis.level === 'medium' ? '⚠️' : '🚨';
+  const riskText = riskAnalysis.level === 'low' ? 'НИЗКИЙ РИСК — нарушений не обнаружено'
+    : riskAnalysis.level === 'medium' ? 'СРЕДНИЙ РИСК — обнаружены подозрительные события'
+    : 'ВЫСОКИЙ РИСК — критические нарушения!';
+  riskEl.innerHTML = `<div class="risk-banner ${riskClass}">${riskIcon} ${riskText}</div>`;
+
+  /* — СВОДКА — */
+  const awayCount = riskAnalysis.awayCount;
+  const pasteCount = riskAnalysis.pasteCount;
+
+  document.getElementById('summary').innerHTML = `
+    <h3>📊 Сводка по курсанту</h3>
+    <div class="table-wrap"><table>
+      <tr><th>ФИО</th><td><b>${meta.fio ?? '—'}</b></td><th>Группа</th><td>${meta.group ?? '—'}</td></tr>
+      <tr><th>Задание</th><td>${meta.task ?? '—'}</td><th>Вариант</th><td>${meta.var ?? '—'}</td></tr>
+      <tr><th>Начало</th><td>${meta.start ? new Date(meta.start).toLocaleString('ru-RU') : '—'}</td>
+          <th>Завершение</th><td>${meta.end ? new Date(meta.end).toLocaleString('ru-RU') : '—'}</td></tr>
+      <tr><th>Длительность выполнения</th><td class="${riskAnalysis.durationMin > 0 && riskAnalysis.durationMin < 5 ? 'orange' : ''}">${riskAnalysis.durationMin > 0 ? riskAnalysis.durationMin + ' мин' : '—'}</td>
+          <th>Риск-балл</th><td><b>${riskAnalysis.score}</b> / 100</td></tr>
+      <tr><th>Время вне вкладки</th><td class="${awayCount > 0 ? 'red' : 'green'}">${meta.total_away ?? '—'}</td>
+          <th>Nonce</th><td class="hash-mono">${meta.nonce ?? '—'}</td></tr>
+      <tr><th>Уходов с вкладки</th><td class="${awayCount > 0 ? 'red' : 'green'}">${awayCount}</td>
+          <th>Вставок (Paste)</th><td class="${pasteCount > 0 ? 'red' : 'green'}">${pasteCount}</td></tr>
+      <tr><th>Попыток скриншота</th><td class="${riskAnalysis.screenshotCount > 0 ? 'red' : 'green'}">${riskAnalysis.screenshotCount}</td>
+          <th>Событий в цепочке</th><td>${chain.length}</td></tr>
+      <tr><th>Целостность цепочки</th>
+          <td colspan="3" class="${chainCheck.ok ? 'green' : 'red'}">
+            ${chainCheck.ok ? '✅ Блокчейн не нарушен — данные подлинные' : `❌ ЦЕПОЧКА НАРУШЕНА на событии #${chainCheck.brokenAt}! (${chainCheck.reason})`}
+          </td></tr>
+    </table></div>
+  `;
+
+  /* — БАЛЛ И ОЦЕНКА — */
+  const scoreVal = meta.score;
+  const maxScore = meta.max_score ?? 16; // старые отчёты без max_score — считаем по исходной шкале
+  const gi = gradeInfo(scoreVal, maxScore);
+  const scoreHtml = scoreVal !== null && scoreVal !== undefined ? `
+    <div class="two-col">
+      <div style="text-align:center">
+        <div class="score-ring">
+          <div class="score-val">${scoreVal}</div>
+          <div class="score-max">/ ${maxScore}</div>
+        </div>
+        <div class="grade-badge ${gi.cls}">
+          ${gi.text}
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:8px">📈 Результат проверки</h3>
+        <p><b>Практические задачи:</b> ${Object.keys(answers?.tasks ?? {}).length} полей отвечено</p>
+        <p><b>Тестовые задания:</b> ${Object.keys(answers?.tests ?? {}).length} отвечено</p>
+        <p style="margin-top:12px">
+          ${gi.num === '5' ? '✅ Отличный результат! Материал освоен на высоком уровне.'
+            : gi.num === '4' ? '⚠️ Хороший результат. Рекомендуется повторить ошибочные темы.'
+            : gi.num === '3' ? '⚠️ Удовлетворительный результат. Необходимо дополнительное изучение.'
+            : '❌ Работа не зачтена. Требуется повторное прохождение.'}
+        </p>
+      </div>
+    </div>
+  ` : `<div class="empty-state">❌ Ответы не были проверены курсантом перед отправкой отчёта</div>`;
+
+  document.getElementById('scoreCard').innerHTML = `<h3>🎯 Балл и оценка</h3>${scoreHtml}`;
+
+  /* — НАРУШЕНИЯ — */
+  const violationEvents = chain.filter(e =>
+    ['TAB_LEFT', 'WINDOW_BLUR', 'PASTE_DETECTED', 'VIOLATION', 'SCREENSHOT_ATTEMPT', 'PAGE_CLOSE_ATTEMPT', 'COPY_BLOCKED'].includes(e?.event?.type)
+  );
+
+  let vHtml = '<h3>⚠️ Нарушения и подозрительные события</h3>';
+  if (violationEvents.length === 0) {
+    vHtml += '<p class="green">✅ Подозрительных событий не обнаружено</p>';
+  } else {
+    vHtml += '<div class="table-wrap"><table><thead><tr><th>#</th><th>Время</th><th>Тип</th><th>Серьёзность</th><th>Подробности</th></tr></thead><tbody>';
+    violationEvents.forEach((v, idx) => {
+      const type = v?.event?.type;
+      const badgeClass = type === 'VIOLATION' || type === 'SCREENSHOT_ATTEMPT' ? 'badge-danger'
+        : type === 'PASTE_DETECTED' || type === 'COPY_BLOCKED' ? 'badge-warn' : 'badge-info';
+      const label = {
+        TAB_LEFT: 'Уход с вкладки',
+        TAB_RETURNED: 'Возвращение на вкладку',
+        WINDOW_BLUR: 'Смена окна/программы',
+        WINDOW_FOCUS: 'Возврат фокуса',
+        PASTE_DETECTED: 'ВСТАВКА ТЕКСТА',
+        COPY_DETECTED: 'Копирование',
+        COPY_BLOCKED: 'ПОПЫТКА КОПИРОВАНИЯ ТЕКСТА ЗАДАНИЯ',
+        VIOLATION: 'НАРУШЕНИЕ',
+        SCREENSHOT_ATTEMPT: 'ПОПЫТКА СКРИНШОТА',
+        PAGE_CLOSE_ATTEMPT: 'Попытка закрыть страницу',
+        FORMULA_EVAL: 'Формула'
+      }[type] || type;
+
+      let details = '';
+      if (type === 'PASTE_DETECTED') {
+        details = `Поле: <b>${v.event.field}</b>, ${v.event.chars} симв.<br><span class="hl-paste">${v.event.preview ?? v.event.full ?? '—'}</span>`;
+      } else if (type === 'VIOLATION') {
+        details = v.event.desc ?? JSON.stringify(v.event);
+      } else if (type === 'COPY_BLOCKED') {
+        details = v.event.desc ?? 'Попытка скопировать текст условия задачи/вопроса была заблокирована';
+      } else if (type === 'SCREENSHOT_ATTEMPT') {
+        details = `Метод: ${v.event.method ?? '—'}`;
+      } else if (type === 'TAB_LEFT') {
+        details = 'Курсант покинул вкладку задания';
+      } else if (type === 'TAB_RETURNED') {
+        details = `Отсутствовал ${v.event.away_seconds ?? '?'} сек`;
+      } else {
+        details = JSON.stringify(v.event);
+      }
+
+      vHtml += `<tr>
+        <td>${idx + 1}</td>
+        <td>${v?.ts ? new Date(v.ts).toLocaleTimeString('ru-RU') : '—'}</td>
+        <td><span class="badge ${badgeClass}">${label}</span></td>
+        <td>${v.severity ?? '—'}</td>
+        <td>${details}</td>
+      </tr>`;
+    });
+    vHtml += '</tbody></table></div>';
+  }
+  document.getElementById('violations').innerHTML = vHtml;
+
+  /* — ВСТАВКИ (детально) — */
+  const pasteLog = footprint?.paste_log ?? [];
+  let pHtml = '<h3>📋 Детали вставок (Paste) — содержимое буфера обмена</h3>';
+  if (pasteLog.length === 0) {
+    pHtml += '<p class="green">✅ Вставок не обнаружено</p>';
+  } else {
+    pHtml += '<div class="table-wrap"><table><thead><tr><th>Время</th><th>Поле</th><th>Символов</th><th>Содержимое</th></tr></thead><tbody>';
+    pasteLog.forEach((p) => {
+      pHtml += `<tr>
+        <td>${p?.ts ? new Date(p.ts).toLocaleTimeString('ru-RU') : '—'}</td>
+        <td>${p?.field ?? '—'}</td>
+        <td class="${(p?.chars ?? 0) > 50 ? 'red' : ''}">${p?.chars ?? '—'}</td>
+        <td style="max-width:400px;overflow-wrap:break-word"><span class="hl-paste"><b>${p?.full ?? p?.preview ?? '—'}</b></span></td>
+      </tr>`;
+    });
+    pHtml += '</tbody></table></div>';
+  }
+  document.getElementById('pastes').innerHTML = pHtml;
+
+  /* — СКРИНШОТЫ — */
+  const screenshotEvents = chain.filter(e => e?.event?.type === 'SCREENSHOT_ATTEMPT');
+  let sHtml = '<h3>📸 Попытки скриншота</h3>';
+  if (screenshotEvents.length === 0) {
+    sHtml += '<p class="green">✅ Попыток скриншота не обнаружено</p>';
+  } else {
+    sHtml += '<div class="table-wrap"><table><thead><tr><th>Время</th><th>Метод</th><th>Действие системы</th></tr></thead><tbody>';
+    screenshotEvents.forEach(s => {
+      sHtml += `<tr>
+        <td>${s?.ts ? new Date(s.ts).toLocaleTimeString('ru-RU') : '—'}</td>
+        <td class="red"><b>${s?.event?.method ?? '—'}</b></td>
+        <td>Буфер обмена перетёрт предупреждением, событие записано в журнал</td>
+      </tr>`;
+    });
+    sHtml += '</tbody></table></div>';
+  }
+  document.getElementById('screenshots').innerHTML = sHtml;
+
+  /* — FINGERPRINT — */
+  const screen = fp?.screen ?? {};
+  const hardware = fp?.hardware ?? {};
+  const browser = fp?.browser ?? {};
+  const system = fp?.system ?? {};
+  const cryptoFp = fp?.crypto ?? {};
+
+  document.getElementById('fpBlock').innerHTML = `
+    <h3>🖥️ Fingerprint — устройство курсанта</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Device ID (SHA-256)</th><td colspan="3" class="hash-mono">${fp?.deviceID ?? '—'}</td></tr>
+      <tr><th>Visitor ID (FingerprintJS)</th><td colspan="3" class="hash-mono">${fp?.visitorId ?? '—'}</td></tr>
+      <tr><th>Экран</th><td>${screen?.width ?? '—'}×${screen?.height ?? '—'}, ${screen?.colorDepth ?? '—'}bpp, DPR ${screen?.pixelRatio ?? '—'}</td>
+          <th>Ядра CPU</th><td>${hardware?.cores ?? '—'}</td></tr>
+      <tr><th>RAM</th><td>${hardware?.memory ?? '—'} GB</td>
+          <th>Touch points</th><td>${hardware?.touch ?? '—'}</td></tr>
+      <tr><th>Платформа</th><td>${browser?.platform ?? '—'}</td>
+          <th>Язык</th><td>${browser?.language ?? '—'}</td></tr>
+      <tr><th>Timezone</th><td>${system?.timezone ?? '—'}</td>
+          <th>Смещение</th><td>UTC${(system?.timezoneOffset ?? 0) > 0 ? '-' : '+'}${Math.abs(system?.timezoneOffset ?? 0) / 60}</td></tr>
+      <tr><th>Canvas hash</th><td colspan="3" class="hash-mono">${cryptoFp?.canvas ?? '—'}</td></tr>
+      <tr><th>Audio hash</th><td colspan="3" class="hash-mono">${cryptoFp?.audio ?? '—'}</td></tr>
+      <tr><th>WebGL GPU</th><td colspan="3">${(typeof cryptoFp?.webgl === 'object' ? (cryptoFp?.webgl?.vendor + ' / ' + cryptoFp?.webgl?.renderer) : cryptoFp?.webgl) ?? '—'}</td></tr>
+      <tr><th>Шрифты</th><td colspan="3">${(fp?.fonts ?? []).join(', ') || '—'}</td></tr>
+      <tr><th>User Agent</th><td colspan="3" style="font-size:11px;word-break:break-all">${browser?.userAgent ?? '—'}</td></tr>
+    </table></div>
+  `;
+
+  /* — ТАЙМИНГИ ПОЛЕЙ — */
+  const fieldTimings = footprint?.field_timings ?? {};
+  const timingEntries = Object.entries(fieldTimings);
+  let tHtml = '<h3>⏱️ Тайминги полей ввода</h3>';
+  if (timingEntries.length === 0) {
+    tHtml += '<p class="empty-state">Нет данных о таймингах</p>';
+  } else {
+    tHtml += '<div class="table-wrap"><table><thead><tr><th>Поле</th><th>Время (сек)</th><th>Символов</th><th>Средняя скорость</th></tr></thead><tbody>';
+    timingEntries.forEach(([field, timing]) => {
+      const sec = Math.round((timing?.totalMs ?? 0) / 1000);
+      const chars = timing?.char_count ?? 0;
+      const wpm = sec > 0 ? Math.round((chars / 5) / (sec / 60)) : '—';
+      tHtml += `<tr>
+        <td><code>${field}</code></td>
+        <td>${sec}</td>
+        <td>${chars}</td>
+        <td>${wpm !== '—' ? wpm + ' WPM' : '—'}</td>
+      </tr>`;
+    });
+    tHtml += '</tbody></table></div>';
+  }
+  document.getElementById('timings').innerHTML = tHtml;
+
+  /* — ОТВЕТЫ — */
+  let aHtml = '<h3>📝 Ответы курсанта</h3>';
+
+  const taskAnswers = answers?.tasks ?? {};
+  const taskEntries = Object.entries(taskAnswers);
+  if (taskEntries.length > 0) {
+    aHtml += '<h4 style="color:var(--primary)">Часть I. Практические задачи</h4>';
+    aHtml += '<div class="table-wrap"><table><thead><tr><th>Поле</th><th>Ответ</th><th>Формула</th></tr></thead><tbody>';
+    taskEntries.forEach(([field, val]) => {
+      const hasFormula = val?.startsWith?.('=') || (typeof val === 'string' && val.includes('formula'));
+      aHtml += `<tr>
+        <td><code>${field}</code></td>
+        <td>${val ?? '<i style="color:var(--ink-muted)">пусто</i>'}</td>
+        <td>${hasFormula ? '<span class="formula-tag">ƒx формула</span>' : '—'}</td>
+      </tr>`;
+    });
+    aHtml += '</tbody></table></div>';
+  }
+
+  const testAnswers = answers?.tests ?? {};
+  const testEntries = Object.entries(testAnswers);
+  if (testEntries.length > 0) {
+    aHtml += '<h4 style="color:var(--accent)">Часть II. Тестовые задания</h4>';
+    aHtml += '<div class="table-wrap"><table><thead><tr><th>Вопрос</th><th>Выбранные варианты</th></tr></thead><tbody>';
+    testEntries.forEach(([q, vals]) => {
+      aHtml += `<tr>
+        <td><code>${q}</code></td>
+        <td>${Array.isArray(vals) ? vals.join(', ') : (vals ?? '<i style="color:var(--ink-muted)">пусто</i>')}</td>
+      </tr>`;
+    });
+    aHtml += '</tbody></table></div>';
+  }
+
+  if (taskEntries.length === 0 && testEntries.length === 0) {
+    aHtml += '<p class="empty-state">Нет данных об ответах</p>';
+  }
+
+  document.getElementById('answers').innerHTML = aHtml;
+
+  /* — ПОЛНЫЙ ЛОГ — */
+  document.getElementById('chainLog').textContent = JSON.stringify(chain, null, 2);
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── ПАКЕТНАЯ ПРОВЕРКА (30+ ФАЙЛОВ) + АНАЛИТИЧЕСКИЙ ДАШБОРД ──
+   ══════════════════════════════════════════════════════════ */
+let batchResults = [];
+
+async function handleBatchFiles(event) {
+  const files = Array.from(event.target.files || []).filter(f => f.name.toLowerCase().endsWith('.json') || f.name.toLowerCase().endsWith('.txt'));
+  await processBatchFiles(files);
+  event.target.value = '';
+}
+
+async function processBatchFiles(files) {
+  if (files.length === 0) return;
+
+  const progressEl = document.getElementById('batchProgress');
+  const dash = document.getElementById('batchDashboard');
+  dash.style.display = 'none';
+  progressEl.style.display = 'inline';
+  batchResults = [];
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    progressEl.textContent = `⏳ Обработка ${i + 1} / ${files.length}: ${file.name}`;
+    try {
+      const text = await file.text();
+      const report = tryParseReport(text);
+      const { chainCheck, riskAnalysis } = await analyzeReport(report);
+      batchResults.push({ fileName: file.name, report, chainCheck, riskAnalysis, error: null, _origIdx: batchResults.length });
+    } catch (e) {
+      batchResults.push({ fileName: file.name, report: null, chainCheck: null, riskAnalysis: null, error: e.message || 'Не удалось разобрать файл', _origIdx: batchResults.length });
+    }
+  }
+
+  progressEl.textContent = `✅ Обработано файлов: ${files.length}`;
+  populateBatchFilters();
+  document.getElementById('batchFilters').style.display = 'flex';
+  applyBatchFilters();
+}
+
+/* ── ФИЛЬТРЫ ПАКЕТНОГО ДАШБОРДА ── */
+function populateBatchFilters() {
+  const groups = [...new Set(batchResults.filter(r => !r.error).map(r => r.report?.meta?.group).filter(Boolean))].sort();
+  const sel = document.getElementById('batchFilterGroup');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">Все группы</option>' + groups.map(g => `<option value="${g}">${g}</option>`).join('');
+  if (groups.includes(current)) sel.value = current;
+}
+
+let batchFilterDebounce = null;
+function debouncedApplyBatchFilters() {
+  clearTimeout(batchFilterDebounce);
+  batchFilterDebounce = setTimeout(applyBatchFilters, 200);
+}
+
+function applyBatchFilters() {
+  const fio   = (document.getElementById('batchFilterFio').value || '').toLowerCase().trim();
+  const grp   = document.getElementById('batchFilterGroup').value;
+  const grade = document.getElementById('batchFilterGrade').value;
+  const risk  = document.getElementById('batchFilterRisk').value;
+  const dFrom = document.getElementById('batchFilterDateFrom').value;
+  const dTo   = document.getElementById('batchFilterDateTo').value;
+
+  const filtered = batchResults.filter(r => {
+    if (r.error) return true; // файлы с ошибкой разбора всегда видны — требуют внимания
+    const meta = r.report?.meta ?? {};
+    if (fio && !(meta.fio || '').toLowerCase().includes(fio)) return false;
+    if (grp && meta.group !== grp) return false;
+    if (grade) {
+      const sv = meta.score;
+      const g = (sv === null || sv === undefined) ? null : gradeInfo(sv, meta.max_score ?? 16).num;
+      if (g !== grade) return false;
+    }
+    if (risk && r.riskAnalysis.level !== risk) return false;
+    if (dFrom || dTo) {
+      const d = meta.start ? new Date(meta.start).toISOString().slice(0, 10) : '';
+      if (dFrom && d < dFrom) return false;
+      if (dTo && d > dTo) return false;
+    }
+    return true;
+  });
+
+  const countEl = document.getElementById('batchFilterCount');
+  if (countEl) countEl.textContent = `Показано ${filtered.length} из ${batchResults.length}`;
+  renderDashboard(filtered);
+}
+
+function resetBatchFilters() {
+  document.getElementById('batchFilterFio').value = '';
+  document.getElementById('batchFilterGroup').value = '';
+  document.getElementById('batchFilterGrade').value = '';
+  document.getElementById('batchFilterRisk').value = '';
+  document.getElementById('batchFilterDateFrom').value = '';
+  document.getElementById('batchFilterDateTo').value = '';
+  applyBatchFilters();
+}
+
+/* ── DRAG & DROP для пакетной загрузки ── */
+(function setupBatchDropZone() {
+  const zone = document.getElementById('batchDropZone');
+  if (!zone) return;
+  ['dragenter', 'dragover'].forEach(evt => {
+    zone.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); zone.classList.add('dropzone-active'); });
+  });
+  ['dragleave', 'drop'].forEach(evt => {
+    zone.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); zone.classList.remove('dropzone-active'); });
+  });
+  zone.addEventListener('drop', e => {
+    const files = Array.from(e.dataTransfer.files || []).filter(f => f.name.toLowerCase().endsWith('.json') || f.name.toLowerCase().endsWith('.txt'));
+    if (files.length === 0) { alert('Перетащите JSON-файлы отчётов'); return; }
+    processBatchFiles(files);
+  });
+})();
+
+/* ── SVG-диаграммы (без внешних зависимостей) ── */
+function svgDonut(segments, size) {
+  size = size || 150;
+  const r = size * 0.36, cx = size / 2, cy = size / 2, sw = size * 0.13;
+  const total = segments.reduce((s, x) => s + x.value, 0) || 1;
+  const circumference = 2 * Math.PI * r;
+  let offset = 0, circles = '';
+  segments.forEach(seg => {
+    const frac = seg.value / total;
+    const dash = frac * circumference;
+    if (seg.value > 0) {
+      circles += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${seg.color}" stroke-width="${sw}" stroke-dasharray="${dash} ${circumference - dash}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${cx} ${cy})"/>`;
+    }
+    offset += dash;
+  });
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="flex-shrink:0">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="${sw}"/>
+    ${circles}
+    <text x="${cx}" y="${cy - 2}" text-anchor="middle" style="fill:var(--ink-strong)" font-size="${size*0.16}" font-weight="900" font-family="Inter,sans-serif">${total}</text>
+    <text x="${cx}" y="${cy + size*0.12}" text-anchor="middle" fill="rgba(226,232,240,0.55)" font-size="${size*0.07}" font-family="Inter,sans-serif">отчётов</text>
+  </svg>`;
+}
+
+function legendList(segments) {
+  return segments.map(s => `
+    <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-muted);margin-bottom:8px">
+      <span style="width:11px;height:11px;border-radius:3px;background:${s.color};display:inline-block;flex-shrink:0"></span>
+      <span style="flex:1">${s.label}</span>
+      <b style="color: var(--ink-strong)">${s.value}</b>
+    </div>`).join('');
+}
+
+function barChartHtml(items) {
+  const maxVal = Math.max(...items.map(i => i.value), 1);
+  return items.map(it => {
+    const pct = Math.round((it.value / maxVal) * 100);
+    return `<div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-muted);margin-bottom:5px">
+        <span>${it.label}</span><b style="color: var(--ink-strong)">${it.value}</b>
+      </div>
+      <div style="height:10px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${it.color};border-radius:99px"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── Отрисовка дашборда по результатам пакетной проверки ── */
+/* ══════════════════════════════════════════════════════════
+   ── ДЕТЕКЦИЯ ПЛАГИАТА (сходство ответов между курсантами) ──
+   ══════════════════════════════════════════════════════════ */
+function answerSimilarity(repA, repB) {
+  const aT = repA?.answers?.tasks ?? {}, bT = repB?.answers?.tasks ?? {};
+  const aQ = repA?.answers?.tests ?? {}, bQ = repB?.answers?.tests ?? {};
+
+  let match = 0, total = 0;
+
+  new Set([...Object.keys(aT), ...Object.keys(bT)]).forEach(k => {
+    const av = (aT[k] ?? '').toString().trim().toLowerCase();
+    const bv = (bT[k] ?? '').toString().trim().toLowerCase();
+    if (!av && !bv) return;              // оба пустых — не учитываем
+    total++;
+    if (av && av === bv) match++;
+  });
+
+  new Set([...Object.keys(aQ), ...Object.keys(bQ)]).forEach(k => {
+    const av = JSON.stringify(aQ[k] ?? null);
+    const bv = JSON.stringify(bQ[k] ?? null);
+    total++;
+    if (av !== 'null' && av === bv) match++;
+  });
+
+  return total > 0 ? match / total : 0;
+}
+
+function findPlagiarismPairs(ok, threshold) {
+  threshold = threshold ?? 0.75;
+  const pairs = [];
+  for (let i = 0; i < ok.length; i++) {
+    for (let j = i + 1; j < ok.length; j++) {
+      const sim = answerSimilarity(ok[i].report, ok[j].report);
+      if (sim >= threshold) pairs.push({ a: ok[i], b: ok[j], sim });
+    }
+  }
+  return pairs.sort((x, y) => y.sim - x.sim);
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── СОВПАДЕНИЯ УСТРОЙСТВ («кто чьим устройством пользовался») ──
+   ══════════════════════════════════════════════════════════ */
+function findDeviceCollisions(ok) {
+  const byDevice = {}, byVisitor = {};
+  ok.forEach(r => {
+    const dId = r.report?.fingerprint?.deviceID;
+    const vId = r.report?.fingerprint?.visitorId;
+    if (dId) (byDevice[dId] = byDevice[dId] || []).push(r);
+    if (vId) (byVisitor[vId] = byVisitor[vId] || []).push(r);
+  });
+  const groups = new Map(); // key: комбинация участников, чтобы не дублировать
+  Object.values(byDevice).filter(g => g.length > 1).forEach(g => {
+    groups.set(g.map(x => x._i).sort().join(','), { members: g, matchType: 'Device ID + Visitor ID' });
+  });
+  Object.values(byVisitor).filter(g => g.length > 1).forEach(g => {
+    const key = g.map(x => x._i).sort().join(',');
+    if (!groups.has(key)) groups.set(key, { members: g, matchType: 'Visitor ID (FingerprintJS)' });
+  });
+  return [...groups.values()];
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── ТЕПЛОВАЯ КАРТА ВРЕМЕНИ ПО ЗАДАНИЯМ ──
+   ══════════════════════════════════════════════════════════ */
+function buildTimeHeatmapHtml(ok) {
+  if (ok.length === 0) return '<p class="empty-state">Нет данных для построения карты</p>';
+
+  /* Ключи полей берём из фактических данных (не зашиты числом) — работает для
+     любого ПЗ с любым количеством задач/тестов, если он использует привычную
+     схему имён "task-N" / "task-N-M" / "q-N"; для иной схемы имён — просто
+     показываем сам ключ, обрезанный до разумной длины. */
+  const keySet = new Set();
+  ok.forEach(r => {
+    const ft = r.report?.footprint?.field_timings ?? {};
+    Object.keys(ft).forEach(k => keySet.add(k));
+  });
+
+  const parseKey = k => {
+    const m = k.match(/^(task|q)-(\d+)(?:-(\d+))?$/);
+    if (!m) return [2, 0, 0];
+    return [m[1] === 'task' ? 0 : 1, parseInt(m[2], 10), m[3] !== undefined ? parseInt(m[3], 10) : -1];
+  };
+  const fieldOrder = [...keySet].sort((a, b) => {
+    const pa = parseKey(a), pb = parseKey(b);
+    return pa[0] - pb[0] || pa[1] - pb[1] || pa[2] - pb[2] || a.localeCompare(b);
+  });
+
+  const subLetters = 'абвгдежзиклмн';
+  const labels = fieldOrder.map(k => {
+    const m = k.match(/^task-(\d+)(?:-(\d+))?$/);
+    if (m) return 'З' + (parseInt(m[1], 10) + 1) + (m[2] !== undefined ? (subLetters[parseInt(m[2], 10)] || ('.' + m[2])) : '');
+    const mq = k.match(/^q-(\d+)$/);
+    if (mq) return 'Т' + (parseInt(mq[1], 10) + 1);
+    return k.length > 7 ? k.slice(0, 7) : k; // нестандартная схема имён полей
+  });
+
+  if (fieldOrder.length === 0) return '<p class="empty-state">В отчётах нет данных о таймингах полей</p>';
+
+  const rows = ok.map(r => {
+    const ft = r.report?.footprint?.field_timings ?? {};
+    return {
+      fio: r.report?.meta?.fio ?? r.fileName,
+      vals: fieldOrder.map(f => Math.round((ft[f]?.totalMs ?? 0) / 1000))
+    };
+  });
+  const colMax = fieldOrder.map((_, ci) => Math.max(1, ...rows.map(r => r.vals[ci])));
+
+  let html = '<div style="overflow:auto;max-height:480px;border:1px solid var(--border);border-radius:var(--radius-md)">';
+  html += '<table style="border-collapse:collapse;width:100%;font-size:11px">';
+  html += '<thead><tr style="position:sticky;top:0;background:var(--surface-solid);z-index:2">';
+  html += '<th style="position:sticky;left:0;background:var(--surface-solid);z-index:3;text-align:left;padding:8px 12px;min-width:150px">ФИО</th>';
+  labels.forEach(l => { html += `<th style="text-align:center;padding:8px 3px;min-width:32px">${l}</th>`; });
+  html += '</tr></thead><tbody>';
+
+  rows.forEach(r => {
+    html += `<tr><td style="position:sticky;left:0;background:var(--surface-solid);padding:6px 12px;white-space:nowrap;color: var(--ink-strong);font-weight:600;border-bottom:1px solid var(--border)">${r.fio}</td>`;
+    r.vals.forEach((v, ci) => {
+      const alpha = Math.min(0.92, v / colMax[ci]);
+      html += `<td style="text-align:center;padding:6px 2px;border-bottom:1px solid rgba(255,255,255,0.04);background:rgba(0,212,255,${alpha.toFixed(2)});color:${alpha > 0.5 ? 'var(--ink-strong)' : 'var(--ink-muted)'}">${v || '·'}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  html += '<p style="margin-top:12px;font-size:12px;color:var(--ink-muted)">Цвет ячейки — время (сек), потраченное на поле, относительно максимума в группе по этому же полю. Подозрительно короткое время часто указывает на вставку готового ответа, подозрительно долгое — на поиск решения в сети.</p>';
+  return html;
+}
+
+/* ── СОРТИРОВКА СВОДНОЙ ТАБЛИЦЫ ── */
+let batchTableRows = [];
+let batchSortState = { key: null, dir: 1 };
+
+function sortBatchTable(key) {
+  if (batchSortState.key === key) batchSortState.dir *= -1;
+  else { batchSortState.key = key; batchSortState.dir = 1; }
+  renderBatchTableBody();
+}
+
+function renderBatchTableBody() {
+  const { key, dir } = batchSortState;
+  let rows = [...batchTableRows];
+  if (key) {
+    rows.sort((a, b) => {
+      const av = a.sortVals[key], bv = b.sortVals[key];
+      if (av === bv) return 0;
+      return av < bv ? -1 * dir : 1 * dir;
+    });
+  }
+  const tbody = document.getElementById('batchTableBody');
+  if (tbody) tbody.innerHTML = rows.map(r => r.rowHtml).join('');
+  document.querySelectorAll('#batchTableHead th[data-sort]').forEach(th => {
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.remove();
+    if (th.dataset.sort === key) {
+      th.insertAdjacentHTML('beforeend', `<span class="sort-arrow" style="margin-left:4px;color:var(--primary)">${dir > 0 ? '▲' : '▼'}</span>`);
+    }
+  });
+}
+
+function renderDashboard(results) {
+  const withIdx = results.map(r => ({ ...r, _i: r._origIdx }));
+  const ok = withIdx.filter(r => !r.error);
+  const errored = withIdx.filter(r => r.error);
+  const scored = ok.filter(r => r.report?.meta?.score !== null && r.report?.meta?.score !== undefined);
+
+  const avgScore = scored.length ? (scored.reduce((s, r) => s + r.report.meta.score, 0) / scored.length).toFixed(1) : '—';
+  const batchMaxScore = scored.length ? Math.max(...scored.map(r => r.report.meta.max_score ?? 16)) : 16;
+  const passCount = scored.filter(r => gradeInfo(r.report.meta.score, r.report.meta.max_score ?? 16).num !== '2').length;
+  const passRate = scored.length ? Math.round((passCount / scored.length) * 100) : 0;
+
+  const riskCounts = { low: 0, medium: 0, high: 0 };
+  ok.forEach(r => { riskCounts[r.riskAnalysis.level] = (riskCounts[r.riskAnalysis.level] || 0) + 1; });
+
+  const gradeCounts = { '5': 0, '4': 0, '3': 0, '2': 0 };
+  scored.forEach(r => {
+    const g = gradeInfo(r.report.meta.score, r.report.meta.max_score ?? 16).num;
+    gradeCounts[g]++;
+  });
+
+  /* Гистограмма распределения баллов — шаг подстраивается под фактический максимум ПЗ */
+  const binCount = 8;
+  const binStep = Math.max(1, Math.ceil(batchMaxScore / binCount));
+  const scoreBins = Array.from({ length: binCount }, (_, i) => {
+    const from = i * binStep, to = Math.min(batchMaxScore, (i + 1) * binStep);
+    return { label: `${from}-${to}`, value: 0 };
+  });
+  scored.forEach(r => {
+    const bin = Math.min(binCount - 1, Math.floor((r.report.meta.score || 0) / binStep));
+    scoreBins[bin].value++;
+  });
+
+  /* Средний балл по группам */
+  const groupAgg = {};
+  scored.forEach(r => {
+    const g = r.report.meta.group || '—';
+    (groupAgg[g] = groupAgg[g] || []).push(r.report.meta.score);
+  });
+  const groupAverages = Object.entries(groupAgg)
+    .map(([g, vals]) => ({ label: g, value: +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1), color: '#00D4FF' }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  const chainFailCount = ok.filter(r => !r.chainCheck.ok).length;
+  const totalAway = ok.reduce((s, r) => s + (r.riskAnalysis.awayCount || 0), 0);
+  const totalPaste = ok.reduce((s, r) => s + (r.riskAnalysis.pasteCount || 0), 0);
+  const totalScreenshot = ok.reduce((s, r) => s + (r.riskAnalysis.screenshotCount || 0), 0);
+  const totalDevtools = ok.reduce((s, r) => s + (r.riskAnalysis.devtoolsCount || 0), 0);
+  const totalCopyBlocked = ok.reduce((s, r) => s + (r.riskAnalysis.copyBlockedCount || 0), 0);
+
+  const durations = ok.map(r => r.riskAnalysis.durationMin).filter(d => d > 0);
+  const avgDuration = durations.length ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : '—';
+  const uniqueDevices = new Set(ok.map(r => r.report?.fingerprint?.deviceID).filter(Boolean)).size;
+
+  const plagiarismPairs = findPlagiarismPairs(ok, 0.75);
+  const deviceCollisions = findDeviceCollisions(ok);
+
+  let html = '';
+
+  /* — СТАТ-СТРИП — */
+  html += `
+    <div class="glass-card">
+      <h3>📊 Общая аналитика по группе</h3>
+      <div class="stat-strip">
+        <div class="stat-box"><span class="stat-val">${results.length}</span><span class="stat-lbl">Отчётов загружено</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:${avgScore !== '—' && (avgScore / batchMaxScore) >= 0.8125 ? 'var(--success)' : 'var(--primary)'}">${avgScore}</span><span class="stat-lbl">Средний балл</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:var(--success)">${passRate}%</span><span class="stat-lbl">Успеваемость</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:var(--danger)">${riskCounts.high}</span><span class="stat-lbl">Высокий риск</span></div>
+        <div class="stat-box"><span class="stat-val">${avgDuration}${avgDuration !== '—' ? ' мин' : ''}</span><span class="stat-lbl">Среднее время</span></div>
+        <div class="stat-box"><span class="stat-val">${uniqueDevices}</span><span class="stat-lbl">Уникальных устройств</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:${chainFailCount > 0 ? 'var(--danger)' : 'var(--success)'}">${chainFailCount}</span><span class="stat-lbl">Цепочка нарушена</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:${plagiarismPairs.length > 0 ? 'var(--danger)' : 'var(--success)'}">${plagiarismPairs.length}</span><span class="stat-lbl">Пар с совпадением ответов</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:${deviceCollisions.length > 0 ? 'var(--danger)' : 'var(--success)'}">${deviceCollisions.length}</span><span class="stat-lbl">Совпадений устройств</span></div>
+        ${errored.length ? `<div class="stat-box"><span class="stat-val" style="color:var(--warn)">${errored.length}</span><span class="stat-lbl">Не распознано</span></div>` : ''}
+      </div>
+    </div>`;
+
+  /* — ДИАГРАММЫ — */
+  html += `
+    <div class="glass-card">
+      <h3>📈 Диаграммы по группе</h3>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr">
+        <div>
+          <h4 style="margin-top:0">Распределение риска</h4>
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            ${svgDonut([
+              { label: 'Низкий', value: riskCounts.low, color: '#00FFB3' },
+              { label: 'Средний', value: riskCounts.medium, color: '#FFD700' },
+              { label: 'Высокий', value: riskCounts.high, color: '#FF6B6B' }
+            ], 130)}
+            <div style="flex:1;min-width:120px">
+              ${legendList([
+                { label: 'Низкий риск', value: riskCounts.low, color: '#00FFB3' },
+                { label: 'Средний риск', value: riskCounts.medium, color: '#FFD700' },
+                { label: 'Высокий риск', value: riskCounts.high, color: '#FF6B6B' }
+              ])}
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 style="margin-top:0">Оценки (${scored.length} проверено)</h4>
+          ${barChartHtml([
+            { label: 'Отлично (5)', value: gradeCounts['5'], color: '#00FFB3' },
+            { label: 'Хорошо (4)', value: gradeCounts['4'], color: '#00D4FF' },
+            { label: 'Удовл. (3)', value: gradeCounts['3'], color: '#FFD700' },
+            { label: 'Неудовл. (2)', value: gradeCounts['2'], color: '#FF6B6B' }
+          ])}
+        </div>
+        <div>
+          <h4 style="margin-top:0">Нарушения по типам (сумма)</h4>
+          ${barChartHtml([
+            { label: 'Уходы с вкладки', value: totalAway, color: '#00D4FF' },
+            { label: 'Вставки (paste)', value: totalPaste, color: '#FFD700' },
+            { label: 'Попытки скриншота', value: totalScreenshot, color: '#FF6B6B' },
+            { label: 'Попытки DevTools', value: totalDevtools, color: '#7C3AED' },
+            { label: 'Копирование текста заблокировано', value: totalCopyBlocked, color: '#FF9F43' }
+          ])}
+        </div>
+      </div>
+    </div>`;
+
+  /* — ГИСТОГРАММА БАЛЛОВ И СРЕДНИЙ БАЛЛ ПО ГРУППАМ — */
+  html += `
+    <div class="glass-card">
+      <h3>📊 Распределение баллов и группы</h3>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr">
+        <div>
+          <h4 style="margin-top:0">Гистограмма баллов (${scored.length} проверено)</h4>
+          ${scored.length ? barChartHtml(scoreBins.map((b, i) => ({ ...b, color: i >= 6 ? '#00FFB3' : i >= 4 ? '#00D4FF' : i >= 2 ? '#FFD700' : '#FF6B6B' }))) : '<p class="empty-state">Нет проверенных работ</p>'}
+        </div>
+        <div>
+          <h4 style="margin-top:0">Средний балл по группам (${groupAverages.length})</h4>
+          ${groupAverages.length ? barChartHtml(groupAverages.map(g => ({ ...g, color: (g.value / batchMaxScore) >= 0.8125 ? '#00FFB3' : (g.value / batchMaxScore) >= 0.6875 ? '#00D4FF' : '#FFD700' }))) : '<p class="empty-state">Нет проверенных работ</p>'}
+        </div>
+      </div>
+    </div>`;
+
+  /* — ЦЕЛОСТНОСТЬ ЦЕПОЧЕК СОБЫТИЙ — */
+  html += `
+    <div class="glass-card">
+      <h3>🔗 Верификация цепочки событий</h3>`;
+  if (chainFailCount === 0) {
+    html += `<p class="green">✅ У всех ${ok.length} отчётов блокчейн-цепочка событий целостна — данные не подделаны</p>`;
+  } else {
+    html += `<p class="red" style="margin-bottom:12px">❌ Обнаружено отчётов с нарушенной цепочкой: <b>${chainFailCount}</b> — данные могли быть отредактированы после формирования</p>`;
+    html += '<div class="table-wrap"><table><thead><tr><th>ФИО</th><th>Файл</th><th>Нарушение на событии #</th><th>Причина</th></tr></thead><tbody>';
+    ok.filter(r => !r.chainCheck.ok).forEach(r => {
+      html += `<tr>
+        <td style="font-weight:600;color: var(--ink-strong)">${r.report?.meta?.fio ?? '—'}</td>
+        <td style="font-size:11px;color:var(--ink-muted)">${r.fileName}</td>
+        <td>${r.chainCheck.brokenAt ?? '—'}</td>
+        <td class="red">${r.chainCheck.reason ?? '—'}</td>
+      </tr>`;
+    });
+    html += '</tbody></table></div>';
+  }
+  html += `</div>`;
+
+  /* — ДЕТЕКЦИЯ ПЛАГИАТА — */
+  html += `
+    <div class="glass-card">
+      <h3>🕵️ Детекция плагиата (сходство ответов)</h3>
+      <p style="margin-bottom:14px">Сравнение ответов на практические задачи и тесты между всеми парами курсантов. Показаны пары с совпадением ≥ 75%.
+      <b style="color:var(--warn)">Важно:</b> у практических задач один правильный числовой ответ — совпадение верных ответов ожидаемо и само по себе не доказывает списывание; обращайте больше внимания на пары с высоким совпадением при <i>низком</i> балле или совпадением ошибочных ответов.</p>`;
+  if (plagiarismPairs.length === 0) {
+    html += `<p class="green">✅ Пар с подозрительно высоким совпадением ответов не обнаружено</p>`;
+  } else {
+    html += '<div class="table-wrap"><table><thead><tr><th>Курсант A</th><th>Курсант B</th><th>Совпадение</th><th>Баллы (A / B)</th><th></th></tr></thead><tbody>';
+    plagiarismPairs.forEach(p => {
+      const sa = p.a.report?.meta?.score, sb = p.b.report?.meta?.score;
+      const simClass = p.sim >= 0.95 ? 'red' : p.sim >= 0.85 ? 'orange' : '';
+      html += `<tr>
+        <td style="font-weight:600;color: var(--ink-strong)">${p.a.report?.meta?.fio ?? p.a.fileName}</td>
+        <td style="font-weight:600;color: var(--ink-strong)">${p.b.report?.meta?.fio ?? p.b.fileName}</td>
+        <td class="${simClass}"><b>${Math.round(p.sim * 100)}%</b></td>
+        <td>${sa ?? '—'} / ${sb ?? '—'}</td>
+        <td>
+          <button class="copy-btn" style="width:auto;padding:0 10px;height:28px;font-size:10px;font-weight:700;margin-right:6px" onclick="showBatchDetail(${p.a._i})">A</button>
+          <button class="copy-btn" style="width:auto;padding:0 10px;height:28px;font-size:10px;font-weight:700" onclick="showBatchDetail(${p.b._i})">B</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table></div>';
+  }
+  html += `</div>`;
+
+  /* — СОВПАДЕНИЯ УСТРОЙСТВ («кто чьим устройством пользовался») — */
+  html += `
+    <div class="glass-card">
+      <h3>🖥️ Совпадения устройств</h3>
+      <p style="margin-bottom:14px">Сопоставление device fingerprint (canvas/audio/WebGL-хэш) и Visitor ID между отчётами. Совпадение означает, что отчёты сформированы <b>с одного и того же физического устройства/браузерного профиля</b> — либо один курсант выполнял работу за другого, либо один человек отправил несколько отчётов под разными именами.</p>`;
+  if (deviceCollisions.length === 0) {
+    html += `<p class="green">✅ Совпадений устройств между разными курсантами не обнаружено</p>`;
+  } else {
+    deviceCollisions.forEach(group => {
+      const names = group.members.map(m => m.report?.meta?.fio ?? m.fileName);
+      html += `
+        <div style="border:1px solid rgba(255,107,107,.3);background:rgba(255,107,107,.06);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:12px">
+          <div style="margin-bottom:8px"><span class="badge badge-danger">${group.matchType}</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            ${group.members.map(m => `
+              <button class="copy-btn" style="width:auto;padding:0 14px;height:32px;font-size:12px;font-weight:700" onclick="showBatchDetail(${m._i})">
+                ${m.report?.meta?.fio ?? m.fileName}
+              </button>`).join('')}
+          </div>
+        </div>`;
+    });
+  }
+  html += `</div>`;
+
+  /* — ТЕПЛОВАЯ КАРТА ВРЕМЕНИ ПО ЗАДАНИЯМ — */
+  html += `
+    <div class="glass-card">
+      <h3>🌡️ Тепловая карта времени по заданиям</h3>
+      ${buildTimeHeatmapHtml(ok)}
+    </div>`;
+
+  /* — ТАБЛИЦА ПО КУРСАНТАМ (сортируемая) — */
+  html += `
+    <div class="glass-card">
+      <div class="result-header" style="margin-bottom:16px">
+        <h3 style="margin-bottom:0">🗂️ Сводная таблица (${results.length})</h3>
+        <button class="btn btn-success-neo" style="padding:10px 20px;font-size:13px" onclick="downloadBatchCSV()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Скачать сводный CSV
+        </button>
+      </div>
+      <p style="margin:-6px 0 14px;font-size:12px;color:var(--ink-muted)">💡 Кликните по заголовку колонки, чтобы отсортировать</p>
+      <div class="table-wrap"><table>
+        <thead id="batchTableHead"><tr>
+          <th data-sort="n" onclick="sortBatchTable('n')" style="cursor:pointer">#</th>
+          <th>Файл</th>
+          <th data-sort="fio" onclick="sortBatchTable('fio')" style="cursor:pointer">ФИО</th>
+          <th>Группа</th><th>Задание</th>
+          <th data-sort="score" onclick="sortBatchTable('score')" style="cursor:pointer">Балл</th>
+          <th>Оценка</th>
+          <th data-sort="risk" onclick="sortBatchTable('risk')" style="cursor:pointer">Риск-балл</th>
+          <th data-sort="integrity" onclick="sortBatchTable('integrity')" style="cursor:pointer">Целостность</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="batchTableBody"></tbody>
+      </table></div>
+    </div>`;
+
+  batchTableRows = withIdx.map((r, n) => {
+    if (r.error) {
+      return {
+        sortVals: { n: n, fio: r.fileName, score: -1, risk: -1, integrity: 0 },
+        rowHtml: `<tr>
+          <td>${n + 1}</td>
+          <td style="max-width:200px;overflow-wrap:break-word">${r.fileName}</td>
+          <td colspan="6"><span class="badge badge-danger">Ошибка разбора</span> ${r.error}</td>
+          <td>—</td>
+        </tr>`
+      };
+    }
+    const meta = r.report?.meta ?? {};
+    const sv = meta.score;
+    const maxSv = meta.max_score ?? 16;
+    const grade = (sv === null || sv === undefined) ? null : gradeInfo(sv, maxSv).num;
+    const riskBadge = r.riskAnalysis.level === 'high' ? 'badge-danger' : r.riskAnalysis.level === 'medium' ? 'badge-warn' : 'badge-ok';
+    const riskLabel = r.riskAnalysis.level === 'high' ? 'Высокий' : r.riskAnalysis.level === 'medium' ? 'Средний' : 'Низкий';
+    return {
+      sortVals: { n: n, fio: (meta.fio ?? '').toLowerCase(), score: sv ?? -1, risk: r.riskAnalysis.score, integrity: r.chainCheck.ok ? 1 : 0 },
+      rowHtml: `<tr>
+        <td>${n + 1}</td>
+        <td style="max-width:180px;overflow-wrap:break-word;font-size:11px;color:var(--ink-muted)">${r.fileName}</td>
+        <td style="font-weight:600;color: var(--ink-strong)">${meta.fio ?? '—'}</td>
+        <td><span class="badge-grp">${meta.group ?? '—'}</span></td>
+        <td>${meta.task ?? '—'}</td>
+        <td>${sv !== null && sv !== undefined ? sv + ' / ' + maxSv : '—'}</td>
+        <td>${grade ? `<span class="grade-badge grade-${grade}">${grade}</span>` : '<span class="empty-state" style="padding:0">—</span>'}</td>
+        <td><span class="badge ${riskBadge}">${riskLabel}</span> <b style="color:var(--ink-muted);font-size:11px">${r.riskAnalysis.score}</b></td>
+        <td>${r.chainCheck.ok ? '<span class="green">✅ OK</span>' : '<span class="red">❌ нарушена</span>'}</td>
+        <td><button class="copy-btn" style="width:auto;padding:0 12px;height:32px;font-size:11px;font-weight:700" onclick="showBatchDetail(${r._i})">Подробно</button></td>
+      </tr>`
+    };
+  });
+
+
+  batchSortState = { key: null, dir: 1 };
+  document.getElementById('batchDashboard').innerHTML = html;
+  renderBatchTableBody();
+  document.getElementById('batchDashboard').style.display = 'block';
+  document.getElementById('batchDashboard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* Открыть детальный отчёт по конкретному курсанту из пакетной таблицы */
+function showBatchDetail(i) {
+  const r = batchResults[i];
+  if (!r || r.error) { alert('❌ Этот файл не удалось разобрать: ' + (r?.error ?? 'неизвестная ошибка')); return; }
+  renderSingleReport(r.report, r.chainCheck, r.riskAnalysis);
+  const resEl = document.getElementById('verifyResult');
+  resEl.style.display = 'block';
+  resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* Скачать сводный CSV по всей пачке отчётов */
+function downloadBatchCSV() {
+  const rows = ['Файл;ФИО;Группа;Задание;Балл;Максимум;Оценка;Риск;Риск_балл;Длительность_мин;Кол-во_рисков;Целостность_цепочки;Device_ID'];
+  batchResults.forEach(r => {
+    if (r.error) { rows.push(`${r.fileName};ОШИБКА;;;;;;;;;;;${r.error}`); return; }
+    const meta = r.report?.meta ?? {};
+    const sv = meta.score;
+    const maxSv = meta.max_score ?? 16;
+    const grade = (sv === null || sv === undefined) ? '—' : gradeInfo(sv, maxSv).num;
+    rows.push(`${r.fileName};${meta.fio ?? '—'};${meta.group ?? '—'};${meta.task ?? '—'};${sv ?? '—'};${maxSv};${grade};${r.riskAnalysis.level};${r.riskAnalysis.score};${r.riskAnalysis.durationMin || ''};${r.riskAnalysis.risks.length};${r.chainCheck.ok ? 'OK' : 'НАРУШЕНА'};${r.report?.fingerprint?.deviceID ?? ''}`);
+  });
+  const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Сводка_пакетной_проверки_${new Date().toLocaleDateString('ru-RU')}.csv`;
+  a.click();
+}
+
+/* ── АВТОЗАГРУЗКА ОТЧЁТА ИЗ URL (#r=...) ──
+   Срабатывает, если открыть эту страницу по ссылке из QR-кода ЭЦП-отчёта
+   (когда в База.html настроен VERIFIER_URL). Переключает на вкладку
+   «Проверка отчётов» и сразу запускает анализ. */
+(function autoLoadReportFromHash() {
+  const hash = window.location.hash;
+  if (!hash || !hash.startsWith('#r=')) return;
+  const b64 = hash.slice(3);
+  if (!b64) return;
+
+  window.addEventListener('DOMContentLoaded', () => {
+    try {
+      document.getElementById('raw').value = 'PZ-REPORT::' + b64 + '::END';
+      switchTab('tab-verify', document.getElementById('tabBtnVerify'));
+      decodeReport(document.getElementById('btnDecode'));
+    } catch (e) {
+      console.warn('Не удалось автоматически загрузить отчёт из ссылки:', e);
+    }
+  });
+})();
+
+/* ── INTERSECTION OBSERVER (wow animations) ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationPlayState = 'running';
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.glass-card').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
