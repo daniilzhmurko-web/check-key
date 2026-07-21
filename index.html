@@ -16,6 +16,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
+    /* ══ ТЁМНАЯ ТЕМА — редизайн по референсу «crypto wallet» ══
+       Индиго-фиолетовый акцент вместо неонового циана, приглушённые
+       семантические цвета (зелёный/красный/жёлтый), как в финансовых
+       приложениях: спокойный «стеклянный» тёмный интерфейс. */
     --primary: #8B5CF6;
     --primary-glow: rgba(139,92,246,0.30);
     --accent: #3B82F6;
@@ -40,6 +44,9 @@
     --font: 'Inter', sans-serif;
   }
 
+  /* ══ СВЕТЛАЯ ТЕМА — редизайн в стиле Bauhaus (референс «Learning built with blocks») ══
+     Плоские блоки основных цветов, жёсткие чёрные обводки и офсетные
+     тени вместо мягкого свечения, жирная типографика. */
   [data-theme="light"] {
     --primary: #2A3EFF;
     --primary-glow: rgba(42,62,255,0.18);
@@ -76,10 +83,12 @@
     font-family: var(--font);
     background: var(--bg);
     color: var(--ink);
+    
     overflow-x: hidden;
     position: relative;
   }
 
+  /* ── BLOB BACKGROUND ── */
   .blob-layer {
     position: fixed;
     inset: 0;
@@ -107,6 +116,7 @@
     100% { transform: translate(0,0) scale(1); }
   }
 
+  /* Grid noise overlay */
   .grid-noise {
     position: fixed; inset: 0; pointer-events: none; z-index: 0;
     background-image:
@@ -115,6 +125,7 @@
     background-size: 48px 48px;
   }
 
+  /* ── LAYOUT ── */
   .page-wrap {
     position: relative; z-index: 1;
     max-width: 1020px;
@@ -122,6 +133,7 @@
     padding: 40px 24px 80px;
   }
 
+  /* ── HEADER ── */
   .page-header {
     text-align: center;
     margin-bottom: 48px;
@@ -160,6 +172,7 @@
     line-height: 1.6;
   }
 
+  /* ── GLASS CARD ── */
   .glass-card {
     background: var(--surface);
     backdrop-filter: blur(24px) saturate(180%);
@@ -184,6 +197,8 @@
   .glass-card:nth-child(2) { animation-delay: .1s; }
   .glass-card:nth-child(3) { animation-delay: .2s; }
 
+  /* Светлая тема: убираем стекло/блюр — плоские карточки с чёрной
+     обводкой и жёсткой офсетной тенью (Bauhaus / neo-brutalist). */
   [data-theme="light"] .glass-card {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -193,6 +208,7 @@
   }
   [data-theme="light"] .glass-card::before { display: none; }
 
+  /* ── DOODLE DECORATIONS ── */
   .doodle {
     position: absolute;
     opacity: 0.07;
@@ -204,6 +220,7 @@
   .doodle-tr { top: 16px; right: 16px; }
   .doodle-br { bottom: 16px; right: 16px; }
 
+  /* ── CARD HEADER ── */
   .card-heading {
     display: flex; align-items: center; gap: 12px;
     margin-bottom: 28px;
@@ -230,6 +247,7 @@
   }
   .card-heading p { font-size: 13px; color: var(--ink-muted); margin-top: 2px; }
 
+  /* ── FORM GRID ── */
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -237,6 +255,7 @@
   }
   @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
 
+  /* ── FIELD ── */
   .field { display: flex; flex-direction: column; gap: 6px; }
   .field label {
     font-size: 12px; font-weight: 600;
@@ -246,12 +265,14 @@
   .field-hint { font-size: 11px; color: color-mix(in srgb, var(--ink) 35%, transparent); margin-top: 4px; }
   .field-hint.warn { color: color-mix(in srgb, var(--danger) 80%, transparent); }
 
+  /* Drag-and-drop зона пакетной загрузки */
   #batchDropZone { transition: background .2s, border-color .2s, box-shadow .2s; border-radius: var(--radius-md); }
   #batchDropZone.dropzone-active {
     background: color-mix(in srgb, var(--success) 6%, transparent);
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--success) 40%, transparent) inset, 0 0 24px color-mix(in srgb, var(--success) 15%, transparent);
   }
 
+  /* Панель фильтров пакетного дашборда */
   .filters-bar {
     display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
     background: color-mix(in srgb, var(--ink-strong) 3%, transparent); border: 1px solid var(--border);
@@ -284,8 +305,10 @@
   }
   input::placeholder, textarea::placeholder { color: color-mix(in srgb, var(--ink) 25%, transparent); }
 
+  /* number input: hide spinners */
   input[type=number]::-webkit-inner-spin-button { opacity: .4; }
 
+  /* ── BUTTONS ── */
   .btn-row {
     display: flex; flex-wrap: wrap; gap: 12px;
     margin-top: 28px;
@@ -304,6 +327,7 @@
   .btn:active { transform: scale(0.97); }
   .btn svg { width:18px; height:18px; flex-shrink:0; }
 
+  /* Ripple */
   .ripple-effect {
     position: absolute;
     border-radius: 50%;
@@ -337,6 +361,9 @@
   }
   .btn-accent-neo:hover { filter: brightness(1.1); }
 
+  /* Светлая тема: плоские neo-brutalist кнопки — заливка основным цветом,
+     жёсткая чёрная обводка, офсетная тень, лёгкий "прыжок" при наведении
+     вместо свечения (соответствует стилю референса Bauhaus). */
   [data-theme="light"] .btn-primary-neo,
   [data-theme="light"] .btn-success-neo,
   [data-theme="light"] .btn-accent-neo {
@@ -354,6 +381,7 @@
     box-shadow: 2px 2px 0 #111111;
   }
 
+  /* Pulse on primary btn */
   .btn-pulse::after {
     content: '';
     position: absolute; inset: -3px;
@@ -368,6 +396,7 @@
     100% { opacity: 0; }
   }
 
+  /* ── RESULT CARD ── */
   #resultCard { display: none; }
   #resultCard.visible {
     display: block;
@@ -395,6 +424,7 @@
     border-radius: 0 8px 8px 0;
   }
 
+  /* ── TABLE ── */
   .table-wrap {
     overflow-x: auto;
     border-radius: var(--radius-md);
@@ -492,6 +522,7 @@
   .copy-btn svg { width:16px; height:16px; }
   .copy-btn.copied { background: color-mix(in srgb, var(--success) 15%, transparent); border-color: color-mix(in srgb, var(--success) 35%, transparent); color: var(--success); }
 
+  /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -500,6 +531,7 @@
     to { transform: rotate(360deg); }
   }
 
+  /* ── COUNTER BADGE ── */
   .stat-strip {
     display: flex; gap: 16px;
     margin-bottom: 20px;
@@ -517,6 +549,7 @@
   .stat-val { font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1; }
   .stat-lbl { font-size: 11px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .06em; }
 
+  /* ── FLOATING PARTICLES ── */
   .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
   [data-theme="light"] .particles { display: none; }
   .particle {
@@ -532,19 +565,25 @@
     100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
   }
 
+  /* Loading spinner */
   .spin-icon { animation: spin .7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* WOW: stagger for counter */
   .count-up { animation: countUp .5s ease both; }
   @keyframes countUp {
     from { transform: scale(0.5) translateY(10px); opacity: 0; }
     to   { transform: scale(1) translateY(0); opacity: 1; }
   }
 
+  /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--primary) 25%, transparent); border-radius: 99px; }
 
+  /* ══════════════════════════════════════════════
+     ── ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ (ДЕНЬ/НОЧЬ) ──
+     ══════════════════════════════════════════════ */
   .theme-toggle {
     position: fixed; top: 20px; right: 20px; z-index: 999;
     width: 46px; height: 46px; border-radius: 50%;
@@ -564,6 +603,9 @@
   [data-theme="light"] .theme-toggle { border-width: 2.5px; }
   [data-theme="light"] .theme-toggle:hover { transform: scale(1.05); box-shadow: 2px 2px 0 #111111; }
 
+  /* ══════════════════════════════════════════════
+     ── TAB NAVIGATION ──
+     ══════════════════════════════════════════════ */
   .tab-nav {
     display: flex; justify-content: center; gap: 10px;
     flex-wrap: wrap;
@@ -602,6 +644,9 @@
   .tab-panel { display: none; }
   .tab-panel.active { display: block; animation: fadeUp .5s ease both; }
 
+  /* ══════════════════════════════════════════════
+     ── VERIFICATION PANEL ──
+     ══════════════════════════════════════════════ */
   .glass-card h3 {
     font-size: 18px; font-weight: 700; color: var(--ink-strong);
     margin-bottom: 16px;
@@ -670,6 +715,9 @@
   .grade-3 { background: color-mix(in srgb, var(--warn) 15%, transparent);    color: var(--warn);    border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); }
   .grade-2 { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger);  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent); }
 
+  /* Светлая тема: бейджи/оценки — сплошная заливка цветом с чёрной
+     обводкой вместо бледного полупрозрачного чипа (как плашки "DONE" и
+     счётчики дней в референсе Bauhaus — насыщенные плотные блоки). */
   [data-theme="light"] .badge { border-width: 2px; font-weight: 800; }
   [data-theme="light"] .badge-danger { background: var(--danger);  border-color: var(--border); color: #fff; }
   [data-theme="light"] .badge-warn   { background: var(--warn);    border-color: var(--border); color: #111; }
@@ -729,6 +777,7 @@
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
   @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
 
+  /* generic th used for label cells inside two-column summary tables */
   th {
     padding: 14px 16px;
     text-align: left;
@@ -802,7 +851,7 @@
       </div>
       <div>
         <h2>Ключ цифровой подписи (ECDSA)</h2>
-        <p>Асимметричная подпись — токен нельзя подделать без приватного ключа. Подлинность проверяется в База.html по публическому ключу</p>
+        <p>Асимметричная подпись — токен нельзя подделать без приватного ключа. Подлинность проверяется в База.html по публичному ключу</p>
       </div>
     </div>
 
@@ -838,6 +887,8 @@
 
   <!-- ══ MAIN FORM CARD ══ -->
   <div data-node-id="n16" class="glass-card" data-component="form-card">
+
+    <!-- Doodle decorations -->
     <svg data-node-id="n17" class="doodle doodle-tl" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="white" stroke-width="1.5">
       <rect data-node-id="n18" x="20" y="30" width="40" height="32" rx="4"/>
       <path data-node-id="n19" d="M28 30v-8a12 12 0 0124 0v8"/>
@@ -868,6 +919,7 @@
     </div>
 
     <div data-node-id="n37" class="form-grid">
+      <!-- Left: students textarea -->
       <div data-node-id="n38" class="field">
         <label data-node-id="n39">Список курсантов (ФИО)</label>
         <textarea data-node-id="n40" id="students" rows="9"
@@ -875,6 +927,7 @@
         <span data-node-id="n41" class="field-hint">По одному ФИО на строку — можно вставить столбец из Excel</span>
       </div>
 
+      <!-- Right: settings -->
       <div data-node-id="n42" style="display:flex;flex-direction:column;gap:18px">
         <div data-node-id="n43" class="field">
           <label data-node-id="n44">Группа</label>
@@ -932,6 +985,7 @@
       <div data-node-id="n81" class="count-pill" id="countLabel">0 токенов</div>
     </div>
 
+    <!-- Stats strip -->
     <div data-node-id="n82" class="stat-strip" id="statStrip">
       <div data-node-id="n83" class="stat-box">
         <span data-node-id="n84" class="stat-val" id="statCount">0</span>
@@ -1073,11 +1127,12 @@
       <span id="batchFilterCount" class="field-hint" style="margin:0"></span>
     </div>
 
-    <!-- ══ BATCH DASHBOARD ══ -->
+    <!-- ══ BATCH DASHBOARD (заполняется динамически) ══ -->
     <div id="batchDashboard" style="display:none"></div>
 
     <!-- ══ VERIFY RESULTS ══ -->
     <div id="verifyResult" style="display:none">
+
       <div id="riskBanner"></div>
       <div style="margin:12px 0 20px;text-align:right">
         <button class="btn btn-success-neo" style="padding:10px 20px;font-size:13px" onclick="downloadStandaloneAnalyticsReport()">
@@ -1100,6 +1155,7 @@
         <h3>📋 Полная хэш-цепочка (Blockchain Log)</h3>
         <pre class="code-log" id="chainLog"></pre>
       </div>
+
     </div>
 
   </div><!-- /tab-verify -->
@@ -1157,6 +1213,7 @@ function toggleTheme() {
   const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
   applyTheme(current === 'light' ? 'dark' : 'light');
 }
+/* Синхронизируем иконку кнопки с темой, применённой ещё в <head> (до отрисовки) */
 applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
 
 /* ── TABS ── */
@@ -1195,7 +1252,7 @@ async function signPayload(privateKey, dataStr) {
   return arrayBufferToBase64(sigBuf);
 }
 
-/* ── ГЕНЕРАЦИЯ ПАРЫ КЛЮЧЕЙ ── */
+/* ── ГЕНЕРАЦИЯ ПАРЫ КЛЮЧЕЙ (один раз на курс/семестр) ── */
 async function generateSigningKeyPair(btn) {
   const original = btn.innerHTML;
   btn.disabled = true;
@@ -1225,11 +1282,12 @@ function copyPubKey(btn) {
   }).catch(() => alert('Не удалось скопировать — выделите текст вручную'));
 }
 
-/* ── ПУБЛИКАЦИЯ КЛЮЧА: СКАЧИВАНИЕ НА ПК + АВТООТПРАВКА НА GITHUB ──
-   Эта функция делает сразу два действия:
-   1. Скачивает файл public-key.json на локальный компьютер.
-   2. Перезаписывает файл public-key.json в репозитории Practical-work01 через GitHub API. */
-async function downloadPublicKeyJson(btn) {
+/* ── ПУБЛИКАЦИЯ ПУБЛИЧНОГО КЛЮЧА (public-key.json) ──
+   Формирует файл public-key.json из уже сгенерированного публичного JWK-
+   ключа. Этот файл нужно положить РЯДОМ с файлом База.html на сервере —
+   при открытии страницы через http(s) она сама подхватит ключ оттуда
+   (см. ensurePublicKeyLoaded() в База.html), редактировать код не нужно. */
+function downloadPublicKeyJson(btn) {
   const val = document.getElementById('pubKeyJwk').value;
   if (!val) { alert('Сначала сгенерируйте пару ключей.'); return; }
   let parsed;
@@ -1244,87 +1302,15 @@ async function downloadPublicKeyJson(btn) {
     return;
   }
   const json = JSON.stringify(parsed, null, 2);
-
-  // ==========================================
-  // ДЕЙСТВИЕ 1: ЛОКАЛЬНОЕ СКАЧИВАНИЕ НА ПК (как раньше)
-  // ==========================================
   const blob = new Blob([json], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'public-key.json';
   a.click();
-  URL.revokeObjectURL(a.href);
 
-  // ==========================================
-  // ДЕЙСТВИЕ 2: ОТПРАВКА НА GITHUB (в фоне)
-  // ==========================================
-  const originalText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '⏳ Скачано! Публикация на GitHub...';
-
-  // Вставьте сюда ваш НОВЫЙ Fine-grained токен взамен удаленного
-  const token = "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"; 
-  const owner = "daniilzhmurko-web"; 
-  const repo = "Practical-work01"; 
-  const path = "public-key.json"; 
-  const branch = "main";
-
-  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-  let sha = null;
-
-  // 1. Проверяем существующий файл на GitHub, чтобы получить SHA для его перезаписи [4]
-  try {
-    const getResponse = await fetch(url, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/vnd.github+json'
-      }
-    });
-    if (getResponse.ok) {
-      const fileData = await getResponse.json();
-      sha = fileData.sha;
-    }
-  } catch (e) {
-    console.log("Файла еще нет на GitHub или ошибка сети, попробуем создать новый без SHA.");
-  }
-
-  // 2. Кодируем новый ключ в Base64
-  const base64Content = btoa(unescape(encodeURIComponent(json)));
-
-  // 3. Отправляем PUT запрос на обновление файла [5]
-  try {
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/vnd.github+json',
-        'Content-Type': 'application/json',
-        'X-GitHub-Api-Version': '2022-11-28'
-      },
-      body: JSON.stringify({
-        message: "Автоматическое обновление ключа преподавателя public-key.json",
-        content: base64Content,
-        branch: branch,
-        sha: sha // Обязательно передаем SHA существующего файла, чтобы перезаписать его [5]
-      })
-    });
-
-    if (response.ok) {
-      btn.innerHTML = '✅ Скачано и опубликовано!';
-      alert("✅ Файл public-key.json успешно сохранен на ваш ПК и опубликован в репозитории " + repo);
-    } else {
-      const errData = await response.json();
-      alert("💾 Файл скачан локально на ПК, но GitHub вернул ошибку при публикации: " + (errData.message || "неизвестная ошибка"));
-      btn.innerHTML = originalText;
-    }
-  } catch (err) {
-    alert("💾 Файл скачан локально на ПК, но возникла сетевая ошибка при публикации на GitHub.");
-    console.error(err);
-    btn.innerHTML = originalText;
-  } finally {
-    btn.disabled = false;
-    setTimeout(() => { btn.innerHTML = originalText; }, 3000);
-  }
+  const orig = btn.innerHTML;
+  btn.innerHTML = '✅ public-key.json скачан';
+  setTimeout(() => { btn.innerHTML = orig; }, 2200);
 }
 
 /* ── GENERATE ── */
@@ -1340,7 +1326,7 @@ async function generateAll(btn) {
   try {
     privateKey = await importSigningPrivateKey(privKeyStr);
   } catch (e) {
-    alert('❌ Неверный формат приватного ключа (JWK JSON). Сгенерируйте заново или вставьте ранее сохранённый ключ.');
+    alert('❌ Неверный формат приватного ключа (ожидается JWK JSON). Сгенерируйте новую пару или вставьте ранее сохранённый ключ.');
     return;
   }
 
@@ -1350,6 +1336,7 @@ async function generateAll(btn) {
   const now   = Date.now();
   const exp   = now + ttlH * 3600 * 1000;
 
+  /* Loading state */
   const icon = document.getElementById('btnIcon');
   icon.classList.add('spin-icon');
   btn.disabled = true;
@@ -1388,6 +1375,7 @@ async function generateAll(btn) {
     tbody.appendChild(tr);
   }
 
+  /* Update stats */
   const sc = document.getElementById('statCount');
   sc.textContent = names.length;
   sc.className = 'stat-val count-up';
@@ -1397,17 +1385,21 @@ async function generateAll(btn) {
   document.getElementById('statTTL').textContent   = ttlH >= 24 ? `${(ttlH / 24).toFixed(ttlH % 24 === 0 ? 0 : 1)} дн.` : `${ttlH}ч`;
   document.getElementById('countLabel').textContent = `${names.length} токенов`;
 
+  /* Show result */
   const rc = document.getElementById('resultCard');
   rc.classList.add('visible');
   rc.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+  /* Show export buttons */
   document.getElementById('btnCsv').style.display  = 'inline-flex';
   document.getElementById('btnCopy').style.display = 'inline-flex';
 
+  /* Reset button */
   icon.classList.remove('spin-icon');
   btn.disabled = false;
 }
 
+/* ── COPY TOKEN ── */
 function copyToken(btn, token) {
   navigator.clipboard.writeText(token).then(() => {
     btn.classList.add('copied');
@@ -1419,6 +1411,7 @@ function copyToken(btn, token) {
   });
 }
 
+/* ── COPY ALL ── */
 function copyAll(btn) {
   const text = allTokens.map(r => `${r.fio}\t${r.grp}\t${r.expDate}\t${r.token}`).join('\n');
   navigator.clipboard.writeText(text).then(() => {
@@ -1428,6 +1421,7 @@ function copyAll(btn) {
   });
 }
 
+/* ── DOWNLOAD CSV ── */
 function downloadCSV(btn) {
   const grp  = document.getElementById('grp').value;
   const task = document.getElementById('task').value;
@@ -1440,6 +1434,7 @@ function downloadCSV(btn) {
   a.click();
 }
 
+/* ── SHAKE (validation feedback) ── */
 function shakeInput(id) {
   const el = document.getElementById(id);
   el.style.animation = 'none';
@@ -1459,7 +1454,12 @@ function shakeInput(id) {
   el.focus();
 }
 
-/* ── ВЕРИФИКАЦИЯ ОТЧЁТОВ ── */
+/* ══════════════════════════════════════════════════════════
+   ── ДЕШИФРАТОР / ВЕРИФИКАЦИЯ ОТЧЁТОВ ──
+   Использует ту же функцию sha256() из блока CRYPTO UTILS выше
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Верификация блокчейн-цепочки ── */
 async function verifyChain(chain, genesis) {
   if (!Array.isArray(chain)) return { ok: false, brokenAt: 0, entry: null, reason: 'chain не массив' };
   if (chain.length === 0) return { ok: false, brokenAt: 0, entry: null, reason: 'цепочка пуста' };
@@ -1481,6 +1481,7 @@ async function verifyChain(chain, genesis) {
   return { ok: true, length: chain.length, genesis: genesis };
 }
 
+/* ── Парсеры входных данных ── */
 function cleanInput(raw) {
   return raw.trim().replace(/\s+/g, '');
 }
@@ -1499,6 +1500,7 @@ function tryParseReport(raw) {
   }
 
   try { return JSON.parse(raw); } catch (e) {}
+
   throw new Error('Не удалось распознать формат. Ожидается: PZ-REPORT::...::END, Base64 или JSON');
 }
 
@@ -1514,6 +1516,8 @@ function decodeB64(b64) {
   }
 }
 
+/* ── Анализ рисков ── */
+/* Длительность выполнения ПЗ в минутах (из meta.start/meta.end) */
 function reportDurationMin(report) {
   const start = report?.meta?.start, end = report?.meta?.end;
   if (!start || !end) return 0;
@@ -1521,8 +1525,11 @@ function reportDurationMin(report) {
   return ms > 0 ? Math.round(ms / 60000) : 0;
 }
 
+/* Универсальный расчёт оценки — те же процентные пороги (68.75/81.25/93.75%),
+   что и в База.html, но применённые к фактическому max_score конкретного отчёта.
+   Работает для любого ПЗ, а не только для того, где максимум — 16 баллов. */
 function gradeInfo(score, maxScore) {
-  maxScore = maxScore || 16;
+  maxScore = maxScore || 16; // старые отчёты без max_score — считаем по исходной шкале
   if (score === null || score === undefined) return { num: null, text: '—', cls: '' };
   const t = {
     five:  Math.ceil(maxScore * 0.9375),
@@ -1588,6 +1595,7 @@ function analyzeRisks(report, chainOk) {
     score += 10;
   }
 
+  /* Скорость выполнения — подозрительно быстро для полноценного ПЗ */
   const durMin = reportDurationMin(report);
   if (durMin > 0 && durMin < 3) {
     risks.push({ type: 'too_fast', level: 'high', text: `Подозрительно быстро: ${durMin} мин на всю работу` });
@@ -1597,12 +1605,14 @@ function analyzeRisks(report, chainOk) {
     score += 10;
   }
 
+  /* Малоактивность мыши при значительной длительности — возможен бот/скрипт */
   const mouseSamples = footprint?.mouse_samples?.length ?? 0;
   if (mouseSamples < 5 && durMin > 2) {
     risks.push({ type: 'mouse_inactive', level: 'medium', text: `Почти нет данных о движении мыши (${mouseSamples} точек) при длительности ${durMin} мин` });
     score += 15;
   }
 
+  /* Регулярность интервалов между нажатиями клавиш — слишком низкая дисперсия похожа на автоввод/бота */
   const keyStats = footprint?.key_stats;
   if (keyStats && typeof keyStats === 'object') {
     const intervals = Object.values(keyStats).map(v => v?.avgInterval_ms).filter(v => typeof v === 'number');
@@ -1610,17 +1620,25 @@ function analyzeRisks(report, chainOk) {
       const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
       const variance = intervals.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / intervals.length;
       if (variance < 100) {
-        risks.push({ type: 'robotic_typing', level: 'medium', text: 'Слишком равномерный ритм набора текста — возможен автоввод' });
+        risks.push({ type: 'robotic_typing', level: 'medium', text: 'Слишком равномерный ритм набора текста (низкая дисперсия интервалов) — возможен автоввод' });
         score += 15;
       }
     }
   }
 
+  /* Нарушенная целостность блокчейн-цепочки — весомый вклад в риск-скор, а не только отдельный статус */
   if (chainOk === false) {
-    risks.push({ type: 'chain_broken', level: 'high', text: 'Нарушена целостность цепочки событий' });
+    risks.push({ type: 'chain_broken', level: 'high', text: 'Нарушена целостность блокчейн-цепочки событий — данные могли быть отредактированы' });
     score += 30;
   }
 
+  /* ══════════════════════════════════════════════════════════
+     СИНХРОНИЗАЦИЯ С БАЗА.HTML (п. «расширь пакетную проверку»):
+     новые отчёты База.html содержат блок report.analytics —
+     клиентскую поведенческую телеметрию (keystroke/mouse/cognitive/
+     temporal/contextual/honeypot). Старые отчёты этого блока не имеют —
+     все проверки ниже поэтому защищены от undefined и просто не
+     добавляют риск, если данных нет (обратная совместимость). ═══ */
   const an = report?.analytics;
   let machineTypingFlag = false, teleportCount = 0, honeypotCount = 0,
       quickAnswerCount = 0, skippedReadingCount = 0, instantAnswerCount = 0,
@@ -1629,7 +1647,7 @@ function analyzeRisks(report, chainOk) {
   if (an) {
     if (an.keystroke?.machine_like) {
       machineTypingFlag = true;
-      risks.push({ type: 'machine_typing', level: 'medium', text: 'Механически равномерный ритм набора текста (низкий коэфф. вариации интервалов)' });
+      risks.push({ type: 'machine_typing', level: 'medium', text: 'Механически равномерный ритм набора текста (низкий коэфф. вариации интервалов между клавишами)' });
       score += 15;
     }
 
@@ -1637,19 +1655,19 @@ function analyzeRisks(report, chainOk) {
     if (teleportCount > 0) {
       const pts = Math.min(20, teleportCount * 5);
       risks.push({ type: 'mouse_teleport', level: teleportCount >= 4 ? 'high' : 'medium',
-        text: `Резкие «прыжки» курсора мыши: ${teleportCount} раз` });
+        text: `Резкие «прыжки» курсора мыши: ${teleportCount} раз (возможное переключение окна/экрана)` });
       score += pts;
     }
 
     honeypotCount = an.honeypot?.length ?? 0;
     if (honeypotCount > 0) {
-      risks.push({ type: 'honeypot', level: 'high', text: `Сработала скрытая honeypot-ловушка: ${honeypotCount} раз` });
+      risks.push({ type: 'honeypot', level: 'high', text: `Сработала скрытая honeypot-ловушка: ${honeypotCount} раз (признак автоматизированного заполнения)` });
       score += Math.min(30, honeypotCount * 30);
     }
 
     quickAnswerCount = an.temporal?.quick_answers?.length ?? 0;
     if (quickAnswerCount > 2) {
-      risks.push({ type: 'quick_answers', level: 'medium', text: `Серия быстрых ответов подряд: ${quickAnswerCount} раз` });
+      risks.push({ type: 'quick_answers', level: 'medium', text: `Серия быстрых ответов подряд (<2 сек между полями): ${quickAnswerCount} раз` });
       score += 10;
     }
 
@@ -1658,17 +1676,19 @@ function analyzeRisks(report, chainOk) {
     instantAnswerCount  = cogVals.filter(f => f?.instant_answer).length;
     if (instantAnswerCount > 0) {
       risks.push({ type: 'instant_answer', level: instantAnswerCount >= 3 ? 'medium' : 'low',
-        text: `Мгновенные ответы без времени на прочтение: ${instantAnswerCount} поле(й)` });
+        text: `Мгновенные ответы без времени на прочтение условия: ${instantAnswerCount} поле(й)` });
       score += Math.min(15, instantAnswerCount * 5);
     } else if (skippedReadingCount > 0) {
-      risks.push({ type: 'skipped_reading', level: 'low', text: `Ответ дан быстрее времени прочтения: ${skippedReadingCount} поле(й)` });
+      risks.push({ type: 'skipped_reading', level: 'low', text: `Ответ дан заметно быстрее оценочного времени прочтения условия: ${skippedReadingCount} поле(й)` });
       score += 5;
     }
 
     idleTotalSec = (an.temporal?.idle_periods ?? []).reduce((s, p) => s + (p.seconds || 0), 0);
+    // Простои сами по себе не добавляем в риск-балл (законная причина — обдумывание),
+    // но передаём дальше для информационного отображения в сводке/дашборде.
 
     if (an.contextual?.multiMonitorSuspected) {
-      risks.push({ type: 'multi_monitor', level: 'low', text: 'Эвристический признак второго монитора' });
+      risks.push({ type: 'multi_monitor', level: 'low', text: 'Эвристический признак второго монитора (окно вне границ основного экрана)' });
       score += 5;
     }
   }
@@ -1687,6 +1707,8 @@ function analyzeRisks(report, chainOk) {
   };
 }
 
+/* ── Основная функция декодирования ── */
+/* Разбирает и проверяет отчёт, возвращая chainCheck + riskAnalysis (без отрисовки) */
 async function analyzeReport(report) {
   const chain = report?.blockchain?.chain ?? [];
   const genesis = report?.blockchain?.genesis ?? '';
@@ -1695,6 +1717,7 @@ async function analyzeReport(report) {
   return { chainCheck, riskAnalysis };
 }
 
+/* Обработчик формы ручного ввода/вставки отчёта */
 async function decodeReport(btn) {
   const raw = document.getElementById('raw').value;
   if (!raw.trim()) { shakeInput('raw'); return; }
@@ -1721,6 +1744,7 @@ async function decodeReport(btn) {
   resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+/* Загрузка одного JSON-файла — автоматически подставляет содержимое и запускает проверку */
 async function handleSingleFile(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -1734,12 +1758,23 @@ async function handleSingleFile(event) {
   event.target.value = '';
 }
 
+/* Заполняет единый блок #verifyResult данными конкретного отчёта
+   (используется и ручным вводом, и переходом «Подробно» из пакетного дашборда) */
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 }
 
+/* Текущий отображаемый отчёт — используется кнопкой «Скачать аналитический HTML-отчёт» */
 let currentReport = null, currentChainCheck = null, currentRiskAnalysis = null;
 
+/* ══════════════════════════════════════════════════════════
+   АВТОНОМНЫЙ АНАЛИТИЧЕСКИЙ HTML-ОТЧЁТ (скачивается из платформы)
+   Синхронизировано со стилем аналитического отчёта из База.html, но
+   ДОПОЛНИТЕЛЬНО включает независимый риск-анализ самой платформы
+   (analyzeRisks) и проверку целостности блокчейн-цепочки — то есть
+   строго больше информации, чем самоэкспорт из База.html.
+   Полностью автономный файл: инлайн CSS, без CDN и без сети.
+   ══════════════════════════════════════════════════════════ */
 function buildStandaloneAnalyticsHtml(report, chainCheck, riskAnalysis) {
   const meta = report?.meta ?? {};
   const an = report?.analytics ?? null;
@@ -1822,8 +1857,8 @@ function buildStandaloneAnalyticsHtml(report, chainCheck, riskAnalysis) {
 </style></head>
 <body><div class="wrap">
   <h1>📊 Аналитический отчёт по практическому заданию</h1>
-  <div class="sub">Сформирован на основе JSON-отчёта курсанта.</div>
-  <div class="disclaimer">⚠️ Показатели ниже — эвристические индикаторы для приоритизации ручной проверки.</div>
+  <div class="sub">Сформирован «Платформой контроля ПЗ» на основе JSON-отчёта курсанта. Файл автономен — не требует сети.</div>
+  <div class="disclaimer">⚠️ Показатели ниже — эвристические индикаторы для приоритизации ручной проверки преподавателем. Это не автоматическое доказательство списывания.</div>
 
   <div class="card"><h2>Основные сведения</h2>
     <table class="meta-table">
@@ -1833,7 +1868,7 @@ function buildStandaloneAnalyticsHtml(report, chainCheck, riskAnalysis) {
       <tr><td>Начало / конец:</td><td>${meta.start ? esc(new Date(meta.start).toLocaleString('ru-RU')) : '—'} — ${meta.end ? esc(new Date(meta.end).toLocaleString('ru-RU')) : '—'}</td></tr>
       <tr><td>Балл:</td><td>${meta.score !== null && meta.score !== undefined ? meta.score + ' / ' + (meta.max_score ?? 16) : 'не проверено'}</td></tr>
       <tr><td>Суммарное отсутствие на вкладке:</td><td>${esc(meta.total_away)}</td></tr>
-      <tr><td>Целостность цепочки:</td><td>${chainCheck.ok ? '<span class="badge badge-ok">✅ не нарушена</span>' : `<span class="badge badge-danger">❌ нарушена на #${chainCheck.brokenAt}</span>`}</td></tr>
+      <tr><td>Целостность блокчейн-цепочки:</td><td>${chainCheck.ok ? '<span class="badge badge-ok">✅ не нарушена</span>' : `<span class="badge badge-danger">❌ нарушена на #${chainCheck.brokenAt}</span>`}</td></tr>
     </table>
   </div>
 
@@ -1848,7 +1883,7 @@ function buildStandaloneAnalyticsHtml(report, chainCheck, riskAnalysis) {
     </div>
   </div>
 
-  <div class="card"><h2>⌨️ Динамика набора текста</h2>${svgLine(wpmPoints)}</div>
+  <div class="card"><h2>⌨️ Динамика набора текста (WPM в динамике сессии)</h2>${svgLine(wpmPoints)}</div>
 
   <div class="grid2">
     <div class="card"><h2>🖱️ Траектория мыши</h2>${svgPath(an?.mouse?.path_sample)}</div>
@@ -1860,6 +1895,8 @@ function buildStandaloneAnalyticsHtml(report, chainCheck, riskAnalysis) {
   <div class="card"><h2>🧩 Когнитивный профиль по полям ответа</h2>
     <table class="data"><thead><tr><th>Поле</th><th>Слов</th><th>Оценка чтения</th><th>До 1-го символа</th><th>Правок</th><th>Флаги</th></tr></thead><tbody>${cogRows}</tbody></table>
   </div>
+
+  ${!an ? '<div class="disclaimer">Этот отчёт сформирован старой версией База.html — блок расширенной клиентской аналитики (keystroke/mouse/cognitive) в нём отсутствует; выше показан только независимый риск-анализ платформы.</div>' : ''}
 </div></body></html>`;
 }
 
@@ -1881,10 +1918,12 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
   const fp = report?.fingerprint ?? {};
   const answers = report?.answers ?? {};
 
+  // Запоминаем текущий отчёт/анализ — нужно для «Скачать аналитический HTML-отчёт»
   currentReport = report;
   currentChainCheck = chainCheck;
   currentRiskAnalysis = riskAnalysis;
 
+  /* — РИСК-БАННЕР — */
   const riskEl = document.getElementById('riskBanner');
   const riskClass = riskAnalysis.level === 'low' ? 'risk-low' : riskAnalysis.level === 'medium' ? 'risk-med' : 'risk-high';
   const riskIcon = riskAnalysis.level === 'low' ? '✅' : riskAnalysis.level === 'medium' ? '⚠️' : '🚨';
@@ -1893,6 +1932,7 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
     : 'ВЫСОКИЙ РИСК — критические нарушения!';
   riskEl.innerHTML = `<div class="risk-banner ${riskClass}">${riskIcon} ${riskText}</div>`;
 
+  /* — СВОДКА — */
   const awayCount = riskAnalysis.awayCount;
   const pasteCount = riskAnalysis.pasteCount;
 
@@ -1903,7 +1943,7 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
       <tr><th>Задание</th><td>${meta.task ?? '—'}</td><th>Вариант</th><td>${meta.var ?? '—'}</td></tr>
       <tr><th>Начало</th><td>${meta.start ? new Date(meta.start).toLocaleString('ru-RU') : '—'}</td>
           <th>Завершение</th><td>${meta.end ? new Date(meta.end).toLocaleString('ru-RU') : '—'}</td></tr>
-      <tr><th>Длительность</th><td class="${riskAnalysis.durationMin > 0 && riskAnalysis.durationMin < 5 ? 'orange' : ''}">${riskAnalysis.durationMin > 0 ? riskAnalysis.durationMin + ' мин' : '—'}</td>
+      <tr><th>Длительность выполнения</th><td class="${riskAnalysis.durationMin > 0 && riskAnalysis.durationMin < 5 ? 'orange' : ''}">${riskAnalysis.durationMin > 0 ? riskAnalysis.durationMin + ' мин' : '—'}</td>
           <th>Риск-балл</th><td><b>${riskAnalysis.score}</b> / 100</td></tr>
       <tr><th>Время вне вкладки</th><td class="${awayCount > 0 ? 'red' : 'green'}">${meta.total_away ?? '—'}</td>
           <th>Nonce</th><td class="hash-mono">${meta.nonce ?? '—'}</td></tr>
@@ -1918,8 +1958,9 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
     </table></div>
   `;
 
+  /* — БАЛЛ И ОЦЕНКА — */
   const scoreVal = meta.score;
-  const maxScore = meta.max_score ?? 16;
+  const maxScore = meta.max_score ?? 16; // старые отчёты без max_score — считаем по исходной шкале
   const gi = gradeInfo(scoreVal, maxScore);
   const scoreHtml = scoreVal !== null && scoreVal !== undefined ? `
     <div class="two-col">
@@ -1937,17 +1978,18 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
         <p><b>Практические задачи:</b> ${Object.keys(answers?.tasks ?? {}).length} полей отвечено</p>
         <p><b>Тестовые задания:</b> ${Object.keys(answers?.tests ?? {}).length} отвечено</p>
         <p style="margin-top:12px">
-          ${gi.num === '5' ? '✅ Отличный результат! Материал освоен.'
-            : gi.num === '4' ? '⚠️ Хороший результат.'
-            : gi.num === '3' ? '⚠️ Удовлетворительный результат.'
-            : '❌ Работа не зачтена.'}
+          ${gi.num === '5' ? '✅ Отличный результат! Материал освоен на высоком уровне.'
+            : gi.num === '4' ? '⚠️ Хороший результат. Рекомендуется повторить ошибочные темы.'
+            : gi.num === '3' ? '⚠️ Удовлетворительный результат. Необходимо дополнительное изучение.'
+            : '❌ Работа не зачтена. Требуется повторное прохождение.'}
         </p>
       </div>
     </div>
-  ` : `<div class="empty-state">❌ Ответы не были проверены перед отправкой</div>`;
+  ` : `<div class="empty-state">❌ Ответы не были проверены курсантом перед отправкой отчёта</div>`;
 
   document.getElementById('scoreCard').innerHTML = `<h3>🎯 Балл и оценка</h3>${scoreHtml}`;
 
+  /* — НАРУШЕНИЯ — */
   const violationEvents = chain.filter(e =>
     ['TAB_LEFT', 'WINDOW_BLUR', 'PASTE_DETECTED', 'VIOLATION', 'SCREENSHOT_ATTEMPT', 'PAGE_CLOSE_ATTEMPT', 'COPY_BLOCKED'].includes(e?.event?.type)
   );
@@ -1963,15 +2005,15 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
         : type === 'PASTE_DETECTED' || type === 'COPY_BLOCKED' ? 'badge-warn' : 'badge-info';
       const label = {
         TAB_LEFT: 'Уход с вкладки',
-        TAB_RETURNED: 'Возвращение',
+        TAB_RETURNED: 'Возвращение на вкладку',
         WINDOW_BLUR: 'Смена окна/программы',
         WINDOW_FOCUS: 'Возврат фокуса',
         PASTE_DETECTED: 'ВСТАВКА ТЕКСТА',
         COPY_DETECTED: 'Копирование',
-        COPY_BLOCKED: 'ПОПЫТКА КОПИРОВАНИЯ ТЕКСТА',
+        COPY_BLOCKED: 'ПОПЫТКА КОПИРОВАНИЯ ТЕКСТА ЗАДАНИЯ',
         VIOLATION: 'НАРУШЕНИЕ',
         SCREENSHOT_ATTEMPT: 'ПОПЫТКА СКРИНШОТА',
-        PAGE_CLOSE_ATTEMPT: 'Закрытие страницы',
+        PAGE_CLOSE_ATTEMPT: 'Попытка закрыть страницу',
         FORMULA_EVAL: 'Формула'
       }[type] || type;
 
@@ -1981,11 +2023,11 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
       } else if (type === 'VIOLATION') {
         details = v.event.desc ?? JSON.stringify(v.event);
       } else if (type === 'COPY_BLOCKED') {
-        details = v.event.desc ?? 'Попытка копирования заблокирована';
+        details = v.event.desc ?? 'Попытка скопировать текст условия задачи/вопроса была заблокирована';
       } else if (type === 'SCREENSHOT_ATTEMPT') {
         details = `Метод: ${v.event.method ?? '—'}`;
       } else if (type === 'TAB_LEFT') {
-        details = 'Курсант покинул вкладку';
+        details = 'Курсант покинул вкладку задания';
       } else if (type === 'TAB_RETURNED') {
         details = `Отсутствовал ${v.event.away_seconds ?? '?'} сек`;
       } else {
@@ -2004,8 +2046,9 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
   }
   document.getElementById('violations').innerHTML = vHtml;
 
+  /* — ВСТАВКИ (детально) — */
   const pasteLog = footprint?.paste_log ?? [];
-  let pHtml = '<h3>📋 Детали вставок (Paste)</h3>';
+  let pHtml = '<h3>📋 Детали вставок (Paste) — содержимое буфера обмена</h3>';
   if (pasteLog.length === 0) {
     pHtml += '<p class="green">✅ Вставок не обнаружено</p>';
   } else {
@@ -2022,23 +2065,25 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
   }
   document.getElementById('pastes').innerHTML = pHtml;
 
+  /* — СКРИНШОТЫ — */
   const screenshotEvents = chain.filter(e => e?.event?.type === 'SCREENSHOT_ATTEMPT');
   let sHtml = '<h3>📸 Попытки скриншота</h3>';
   if (screenshotEvents.length === 0) {
-    sHtml += '<p class="green">✅ Попыток не обнаружено</p>';
+    sHtml += '<p class="green">✅ Попыток скриншота не обнаружено</p>';
   } else {
-    sHtml += '<div class="table-wrap"><table><thead><tr><th>Время</th><th>Метод</th><th>Действие</th></tr></thead><tbody>';
+    sHtml += '<div class="table-wrap"><table><thead><tr><th>Время</th><th>Метод</th><th>Действие системы</th></tr></thead><tbody>';
     screenshotEvents.forEach(s => {
       sHtml += `<tr>
         <td>${s?.ts ? new Date(s.ts).toLocaleTimeString('ru-RU') : '—'}</td>
         <td class="red"><b>${s?.event?.method ?? '—'}</b></td>
-        <td>Буфер обмена перетёрт, событие записано</td>
+        <td>Буфер обмена перетёрт предупреждением, событие записано в журнал</td>
       </tr>`;
     });
     sHtml += '</tbody></table></div>';
   }
   document.getElementById('screenshots').innerHTML = sHtml;
 
+  /* — FINGERPRINT — */
   const screen = fp?.screen ?? {};
   const hardware = fp?.hardware ?? {};
   const browser = fp?.browser ?? {};
@@ -2046,11 +2091,11 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
   const cryptoFp = fp?.crypto ?? {};
 
   document.getElementById('fpBlock').innerHTML = `
-    <h3>🖥️ Fingerprint — устройство</h3>
+    <h3>🖥️ Fingerprint — устройство курсанта</h3>
     <div class="table-wrap"><table>
       <tr><th>Device ID (SHA-256)</th><td colspan="3" class="hash-mono">${fp?.deviceID ?? '—'}</td></tr>
-      <tr><th>Visitor ID</th><td colspan="3" class="hash-mono">${fp?.visitorId ?? '—'}</td></tr>
-      <tr><th>Экран</th><td>${screen?.width ?? '—'}×${screen?.height ?? '—'}, ${screen?.colorDepth ?? '—'}bpp</td>
+      <tr><th>Visitor ID (FingerprintJS)</th><td colspan="3" class="hash-mono">${fp?.visitorId ?? '—'}</td></tr>
+      <tr><th>Экран</th><td>${screen?.width ?? '—'}×${screen?.height ?? '—'}, ${screen?.colorDepth ?? '—'}bpp, DPR ${screen?.pixelRatio ?? '—'}</td>
           <th>Ядра CPU</th><td>${hardware?.cores ?? '—'}</td></tr>
       <tr><th>RAM</th><td>${hardware?.memory ?? '—'} GB</td>
           <th>Touch points</th><td>${hardware?.touch ?? '—'}</td></tr>
@@ -2066,13 +2111,14 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
     </table></div>
   `;
 
+  /* — ТАЙМИНГИ ПОЛЕЙ — */
   const fieldTimings = footprint?.field_timings ?? {};
   const timingEntries = Object.entries(fieldTimings);
   let tHtml = '<h3>⏱️ Тайминги полей ввода</h3>';
   if (timingEntries.length === 0) {
     tHtml += '<p class="empty-state">Нет данных о таймингах</p>';
   } else {
-    tHtml += '<div class="table-wrap"><table><thead><tr><th>Поле</th><th>Время (сек)</th><th>Символов</th><th>Скорость</th></tr></thead><tbody>';
+    tHtml += '<div class="table-wrap"><table><thead><tr><th>Поле</th><th>Время (сек)</th><th>Символов</th><th>Средняя скорость</th></tr></thead><tbody>';
     timingEntries.forEach(([field, timing]) => {
       const sec = Math.round((timing?.totalMs ?? 0) / 1000);
       const chars = timing?.char_count ?? 0;
@@ -2087,9 +2133,13 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
     tHtml += '</tbody></table></div>';
   }
   document.getElementById('timings').innerHTML = tHtml;
+
+  /* — РАСШИРЕННАЯ АНАЛИТИКА (report.analytics — синхронизировано с База.html) — */
   document.getElementById('analyticsBlock').innerHTML = renderAnalyticsBlockHtml(report);
 
+  /* — ОТВЕТЫ — */
   let aHtml = '<h3>📝 Ответы курсанта</h3>';
+
   const taskAnswers = answers?.tasks ?? {};
   const taskEntries = Object.entries(taskAnswers);
   if (taskEntries.length > 0) {
@@ -2123,11 +2173,16 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
   if (taskEntries.length === 0 && testEntries.length === 0) {
     aHtml += '<p class="empty-state">Нет данных об ответах</p>';
   }
+
   document.getElementById('answers').innerHTML = aHtml;
+
+  /* — ПОЛНЫЙ ЛОГ — */
   document.getElementById('chainLog').textContent = JSON.stringify(chain, null, 2);
 }
 
-/* ── ПАКЕТНАЯ ПРОВЕРКА ── */
+/* ══════════════════════════════════════════════════════════
+   ── ПАКЕТНАЯ ПРОВЕРКА (30+ ФАЙЛОВ) + АНАЛИТИЧЕСКИЙ ДАШБОРД ──
+   ══════════════════════════════════════════════════════════ */
 let batchResults = [];
 
 async function handleBatchFiles(event) {
@@ -2154,16 +2209,17 @@ async function processBatchFiles(files) {
       const { chainCheck, riskAnalysis } = await analyzeReport(report);
       batchResults.push({ fileName: file.name, report, chainCheck, riskAnalysis, error: null, _origIdx: batchResults.length });
     } catch (e) {
-      batchResults.push({ fileName: file.name, report: null, chainCheck: null, riskAnalysis: null, error: e.message || 'Ошибка', _origIdx: batchResults.length });
+      batchResults.push({ fileName: file.name, report: null, chainCheck: null, riskAnalysis: null, error: e.message || 'Не удалось разобрать файл', _origIdx: batchResults.length });
     }
   }
 
-  progressEl.textContent = `✅ Обработано: ${files.length}`;
+  progressEl.textContent = `✅ Обработано файлов: ${files.length}`;
   populateBatchFilters();
   document.getElementById('batchFilters').style.display = 'flex';
   applyBatchFilters();
 }
 
+/* ── ФИЛЬТРЫ ПАКЕТНОГО ДАШБОРДА ── */
 function populateBatchFilters() {
   const groups = [...new Set(batchResults.filter(r => !r.error).map(r => r.report?.meta?.group).filter(Boolean))].sort();
   const sel = document.getElementById('batchFilterGroup');
@@ -2187,7 +2243,7 @@ function applyBatchFilters() {
   const dTo   = document.getElementById('batchFilterDateTo').value;
 
   const filtered = batchResults.filter(r => {
-    if (r.error) return true;
+    if (r.error) return true; // файлы с ошибкой разбора всегда видны — требуют внимания
     const meta = r.report?.meta ?? {};
     if (fio && !(meta.fio || '').toLowerCase().includes(fio)) return false;
     if (grp && meta.group !== grp) return false;
@@ -2220,6 +2276,7 @@ function resetBatchFilters() {
   applyBatchFilters();
 }
 
+/* ── DRAG & DROP для пакетной загрузки ── */
 (function setupBatchDropZone() {
   const zone = document.getElementById('batchDropZone');
   if (!zone) return;
@@ -2231,11 +2288,12 @@ function resetBatchFilters() {
   });
   zone.addEventListener('drop', e => {
     const files = Array.from(e.dataTransfer.files || []).filter(f => f.name.toLowerCase().endsWith('.json') || f.name.toLowerCase().endsWith('.txt'));
-    if (files.length === 0) { alert('Перетащите файлы'); return; }
+    if (files.length === 0) { alert('Перетащите JSON-файлы отчётов'); return; }
     processBatchFiles(files);
   });
 })();
 
+/* ── SVG-диаграммы (без внешних зависимостей) ── */
 function svgDonut(segments, size) {
   size = size || 150;
   const r = size * 0.36, cx = size / 2, cy = size / 2, sw = size * 0.13;
@@ -2253,8 +2311,8 @@ function svgDonut(segments, size) {
   return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="flex-shrink:0">
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="color-mix(in srgb, var(--ink-strong) 8%, transparent)" stroke-width="${sw}"/>
     ${circles}
-    <text x="${cx}" y="${cy - 2}" text-anchor="middle" style="fill:var(--ink-strong)" font-size="${size*0.16}" font-weight="900">${total}</text>
-    <text x="${cx}" y="${cy + size*0.12}" text-anchor="middle" fill="var(--ink-muted)" font-size="${size*0.07}">отчётов</text>
+    <text x="${cx}" y="${cy - 2}" text-anchor="middle" style="fill:var(--ink-strong)" font-size="${size*0.16}" font-weight="900" font-family="Inter,sans-serif">${total}</text>
+    <text x="${cx}" y="${cy + size*0.12}" text-anchor="middle" fill="var(--ink-muted)" font-size="${size*0.07}" font-family="Inter,sans-serif">отчётов</text>
   </svg>`;
 }
 
@@ -2282,6 +2340,13 @@ function barChartHtml(items) {
   }).join('');
 }
 
+/* ══════════════════════════════════════════════════════════
+   ── РАСШИРЕННАЯ АНАЛИТИКА ПОВЕДЕНИЯ (report.analytics) ──
+   Синхронизировано со структурой, которую формирует База.html:
+   keystroke / mouse / cognitive / temporal / contextual / honeypot /
+   suspicion. Все секции защищены от отсутствия данных (старые отчёты
+   без этого блока просто показывают заглушку, а не падают с ошибкой).
+   ══════════════════════════════════════════════════════════ */
 function svgSuspicionGaugeMini(score, level) {
   score = Math.max(0, Math.min(100, score || 0));
   const color = score >= 56 ? 'var(--danger)' : (score >= 26 ? 'var(--warn)' : 'var(--success)');
@@ -2293,14 +2358,14 @@ function svgSuspicionGaugeMini(score, level) {
     <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="color-mix(in srgb, var(--ink-strong) 10%, transparent)" stroke-width="14" stroke-linecap="round"/>
     <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="${color}" stroke-width="14" stroke-linecap="round"
       stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
-    <text x="${cx}" y="${cy-8}" text-anchor="middle" font-size="26" font-weight="800" fill="${color}">${score}</text>
-    <text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="11" fill="var(--ink-muted)">риск: ${level ?? '—'}</text>
+    <text x="${cx}" y="${cy-8}" text-anchor="middle" font-size="26" font-weight="800" fill="${color}" font-family="Inter,sans-serif">${score}</text>
+    <text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="11" fill="var(--ink-muted)" font-family="Inter,sans-serif">риск: ${level ?? '—'}</text>
   </svg>`;
 }
 
 function svgMousePathMini(pathSample) {
   const w = 280, h = 170;
-  if (!pathSample || !pathSample.length) return '<p class="empty-state" style="margin:0">Нет траектории</p>';
+  if (!pathSample || !pathSample.length) return '<p class="empty-state" style="margin:0">Недостаточно данных о движении мыши</p>';
   const xs = pathSample.map(p => p.x), ys = pathSample.map(p => p.y);
   const minX = Math.min(...xs), maxX = Math.max(...xs, minX + 1);
   const minY = Math.min(...ys), maxY = Math.max(...ys, minY + 1);
@@ -2316,7 +2381,7 @@ function svgMousePathMini(pathSample) {
 
 function svgWpmLineMini(keyStats) {
   const points = Object.entries(keyStats || {}).map(([ts, v]) => v?.wpm).filter(v => typeof v === 'number').slice(-40);
-  if (!points.length) return '<p class="empty-state" style="margin:0">Нет данных</p>';
+  if (!points.length) return '<p class="empty-state" style="margin:0">Нет данных WPM</p>';
   const w = 280, h = 110, pad = 14;
   const maxY = Math.max(1, ...points), minY = Math.min(0, ...points);
   const scaleX = (w - pad * 2) / Math.max(1, points.length - 1);
@@ -2333,8 +2398,8 @@ function svgWpmLineMini(keyStats) {
 function renderAnalyticsBlockHtml(report) {
   const an = report?.analytics;
   if (!an) {
-    return `<h3>🧠 Поведенческая аналитика</h3>
-      <p class="empty-state">Этот отчёт сформирован старой версией База.html — блок аналитики отсутствует.</p>`;
+    return `<h3>🧠 Расширенная поведенческая аналитика</h3>
+      <p class="empty-state">Этот отчёт сформирован более старой версией База.html — блок <code>analytics</code> (keystroke/mouse/cognitive/temporal/contextual/honeypot) в нём отсутствует.</p>`;
   }
 
   const ks = an.keystroke ?? {};
@@ -2346,54 +2411,57 @@ function renderAnalyticsBlockHtml(report) {
   const susp = an.suspicion ?? { score: 0, level: '—', breakdown: [] };
   const keyStats = report?.footprint?.key_stats ?? {};
 
-  let html = '<h3>🧠 Поведенческая аналитика (из отчёта)</h3>';
-  html += `<p style="margin-bottom:16px;font-size:12.5px;color:var(--ink-muted)">⚠️ Показатели эвристические — сверяйте с содержанием ответов.</p>`;
+  let html = '<h3>🧠 Расширенная поведенческая аналитика (клиентская телеметрия из отчёта)</h3>';
+  html += `<p style="margin-bottom:16px;font-size:12.5px;color:var(--ink-muted)">⚠️ Все показатели ниже — эвристические индикаторы, посчитанные в браузере курсанта и включённые в его же отчёт. Это вспомогательный материал для ручной проверки, а не независимое доказательство — сверяйте с риск-баллом платформы выше и с содержанием ответов.</p>`;
 
+  /* Самооценка клиента (suspicion, встроенная в отчёт) */
   html += `<div class="form-grid" style="grid-template-columns:200px 1fr;align-items:center;margin-bottom:20px">
     <div style="display:flex;justify-content:center">${svgSuspicionGaugeMini(susp.score, susp.level)}</div>
     <div>
-      <h4 style="margin-top:0">Индекс подозрительности клиента</h4>
+      <h4 style="margin-top:0">Самооценка клиента («индекс подозрительности» из самого отчёта)</h4>
       ${susp.breakdown && susp.breakdown.length ? `
-        <div class="table-wrap"><table><thead><tr><th>Фактор</th><th style="text-align:right">Баллы</th></tr></thead><tbody>
+        <div class="table-wrap"><table><thead><tr><th>Фактор (по мнению клиентского кода)</th><th style="text-align:right">Баллы</th></tr></thead><tbody>
           ${susp.breakdown.map(b => `<tr><td>${b.label}</td><td style="text-align:right"><b>+${b.points}</b></td></tr>`).join('')}
-        </tbody></table></div>` : '<p class="green" style="margin:0">Код клиента не выявил нарушений</p>'}
+        </tbody></table></div>` : '<p class="green" style="margin:0">Клиентский код не обнаружил явных эвристических признаков</p>'}
     </div>
   </div>`;
 
+  /* Keystroke + Mouse рядом */
   html += `<div class="form-grid" style="grid-template-columns:1fr 1fr;margin-bottom:20px">
     <div>
-      <h4 style="margin-top:0">⌨️ Динамика текста</h4>
+      <h4 style="margin-top:0">⌨️ Динамика набора текста</h4>
       <div class="table-wrap"><table>
         <tr><th>Нажатий</th><td>${ks.total_keys ?? '—'}</td></tr>
-        <tr><th>Ср. удержание</th><td>${ks.avg_hold_ms ?? '—'} мс</td></tr>
-        <tr><th>Ср. интервал</th><td>${ks.avg_flight_ms ?? '—'} мс</td></tr>
-        <tr><th>Вариация ритма</th><td>${ks.flight_cv ?? '—'}</td></tr>
-        <tr><th>Удалений (Backspace)</th><td>${ks.backspace_rate !== undefined ? (ks.backspace_rate * 100).toFixed(1) + '%' : '—'}</td></tr>
-        <tr><th>Робот-ритм</th><td>${ks.machine_like ? '<span class="badge badge-danger">да</span>' : '<span class="badge badge-ok">нет</span>'}</td></tr>
+        <tr><th>Ср. удержание клавиши</th><td>${ks.avg_hold_ms ?? '—'} мс</td></tr>
+        <tr><th>Ср. интервал между клавишами</th><td>${ks.avg_flight_ms ?? '—'} мс</td></tr>
+        <tr><th>Коэфф. вариации ритма</th><td>${ks.flight_cv ?? '—'}</td></tr>
+        <tr><th>Backspace / длина ввода</th><td>${ks.backspace_rate !== undefined ? (ks.backspace_rate * 100).toFixed(1) + '%' : '—'}</td></tr>
+        <tr><th>Механический ритм</th><td>${ks.machine_like ? '<span class="badge badge-danger">да</span>' : '<span class="badge badge-ok">нет</span>'}</td></tr>
       </table></div>
-      <div style="margin-top:10px;font-size:11.5px;color:var(--ink-muted)">WPM в динамике сессии:</div>
+      <div style="margin-top:10px;font-size:11.5px;color:var(--ink-muted)">Скорость печати (WPM) в динамике сессии:</div>
       ${svgWpmLineMini(keyStats)}
     </div>
     <div>
       <h4 style="margin-top:0">🖱️ Динамика мыши</h4>
       <div class="table-wrap"><table>
-        <tr><th>Точек</th><td>${ms.points_collected ?? '—'}</td></tr>
+        <tr><th>Точек траектории</th><td>${ms.points_collected ?? '—'}</td></tr>
         <tr><th>Кликов</th><td>${ms.clicks ?? '—'}</td></tr>
         <tr><th>Скроллов</th><td>${ms.scroll_events ?? '—'}</td></tr>
-        <tr><th>«Телепортов»</th><td class="${(ms.teleport_count ?? 0) > 0 ? 'orange' : ''}">${ms.teleport_count ?? '—'}</td></tr>
-        <tr><th>Прямые сегменты</th><td>${ms.straight_line_ratio !== undefined ? (ms.straight_line_ratio * 100).toFixed(1) + '%' : '—'}</td></tr>
+        <tr><th>«Телепортов» курсора</th><td class="${(ms.teleport_count ?? 0) > 0 ? 'orange' : ''}">${ms.teleport_count ?? '—'}</td></tr>
+        <tr><th>Доля прямых сегментов</th><td>${ms.straight_line_ratio !== undefined ? (ms.straight_line_ratio * 100).toFixed(1) + '%' : '—'}</td></tr>
       </table></div>
-      <div style="margin-top:10px;font-size:11.5px;color:var(--ink-muted)">Траектория:</div>
+      <div style="margin-top:10px;font-size:11.5px;color:var(--ink-muted)">Траектория курсора (упрощённая):</div>
       ${svgMousePathMini(ms.path_sample)}
     </div>
   </div>`;
 
+  /* Когнитивный профиль */
   const cogEntries = Object.entries(cog);
-  html += `<h4>🧩 Когнитивный профиль</h4>`;
+  html += `<h4>🧩 Когнитивный профиль по полям ответа</h4>`;
   if (cogEntries.length === 0) {
     html += '<p class="empty-state">Нет данных</p>';
   } else {
-    html += '<div class="table-wrap"><table><thead><tr><th>Поле</th><th>Слов</th><th>Чтение</th><th>До 1-го символа</th><th>Правок</th><th>Флаги</th></tr></thead><tbody>';
+    html += '<div class="table-wrap"><table><thead><tr><th>Поле</th><th>Слов в условии</th><th>Оценка чтения</th><th>До 1-го символа</th><th>Правок</th><th>Флаги</th></tr></thead><tbody>';
     cogEntries.forEach(([field, f]) => {
       html += `<tr>
         <td><code>${field}</code></td>
@@ -2401,22 +2469,23 @@ function renderAnalyticsBlockHtml(report) {
         <td>${f.est_reading_ms ?? '—'} мс</td>
         <td>${f.focus_to_first_key_ms ?? '—'} мс</td>
         <td>${f.corrections ?? 0}</td>
-        <td>${f.instant_answer ? '<span class="badge badge-danger">мгновенно</span>' : ''}${f.skipped_reading ? ' <span class="badge badge-warn">пропуск чтения?</span>' : ''}</td>
+        <td>${f.instant_answer ? '<span class="badge badge-danger">мгновенный ответ</span>' : ''}${f.skipped_reading ? ' <span class="badge badge-warn">пропустил чтение?</span>' : ''}</td>
       </tr>`;
     });
     html += '</tbody></table></div>';
   }
 
+  /* Темпоральная + контекстная + honeypot в 3 колонки */
   const idlePeriods = temporal.idle_periods ?? [];
   const quickAnswers = temporal.quick_answers ?? [];
   html += `<div class="form-grid" style="grid-template-columns:1fr 1fr 1fr;margin-top:20px">
     <div>
-      <h4 style="margin-top:0">💤 Простои (> 60 сек)</h4>
+      <h4 style="margin-top:0">💤 Простои (&gt; 60 сек)</h4>
       ${idlePeriods.length === 0 ? '<p class="empty-state">Не зафиксированы</p>' :
         '<div class="table-wrap"><table><thead><tr><th>С</th><th>Длит.</th></tr></thead><tbody>' +
         idlePeriods.map(p => `<tr><td>${new Date(p.from).toLocaleTimeString('ru-RU')}</td><td>${p.seconds} сек</td></tr>`).join('') +
         '</tbody></table></div>'}
-      ${quickAnswers.length ? `<p style="margin-top:10px;font-size:12px" class="orange">⚡ Быстрых ответов: ${quickAnswers.length}</p>` : ''}
+      ${quickAnswers.length ? `<p style="margin-top:10px;font-size:12px" class="orange">⚡ Быстрых ответов подряд: ${quickAnswers.length}</p>` : ''}
     </div>
     <div>
       <h4 style="margin-top:0">🖥️ Контекст сессии</h4>
@@ -2427,8 +2496,8 @@ function renderAnalyticsBlockHtml(report) {
       </table></div>
     </div>
     <div>
-      <h4 style="margin-top:0">🍯 Honeypot</h4>
-      ${hp.length === 0 ? '<p class="green" style="margin:0">✅ Чисто</p>' :
+      <h4 style="margin-top:0">🍯 Honeypot-ловушки</h4>
+      ${hp.length === 0 ? '<p class="green" style="margin:0">✅ Не срабатывали</p>' :
         '<div class="table-wrap"><table><thead><tr><th>Поле</th><th>Время</th></tr></thead><tbody>' +
         hp.map(t => `<tr><td>${t.name}</td><td>${new Date(t.ts).toLocaleTimeString('ru-RU')}</td></tr>`).join('') +
         '</tbody></table></div>'}
@@ -2438,6 +2507,10 @@ function renderAnalyticsBlockHtml(report) {
   return html;
 }
 
+/* ── Отрисовка дашборда по результатам пакетной проверки ── */
+/* ══════════════════════════════════════════════════════════
+   ── ДЕТЕКЦИЯ ПЛАГИАТА (сходство ответов между курсантами) ──
+   ══════════════════════════════════════════════════════════ */
 function answerSimilarity(repA, repB) {
   const aT = repA?.answers?.tasks ?? {}, bT = repB?.answers?.tasks ?? {};
   const aQ = repA?.answers?.tests ?? {}, bQ = repB?.answers?.tests ?? {};
@@ -2447,7 +2520,7 @@ function answerSimilarity(repA, repB) {
   new Set([...Object.keys(aT), ...Object.keys(bT)]).forEach(k => {
     const av = (aT[k] ?? '').toString().trim().toLowerCase();
     const bv = (bT[k] ?? '').toString().trim().toLowerCase();
-    if (!av && !bv) return;
+    if (!av && !bv) return;              // оба пустых — не учитываем
     total++;
     if (av && av === bv) match++;
   });
@@ -2474,6 +2547,9 @@ function findPlagiarismPairs(ok, threshold) {
   return pairs.sort((x, y) => y.sim - x.sim);
 }
 
+/* ══════════════════════════════════════════════════════════
+   ── СОВПАДЕНИЯ УСТРОЙСТВ («кто чьим устройством пользовался») ──
+   ══════════════════════════════════════════════════════════ */
 function findDeviceCollisions(ok) {
   const byDevice = {}, byVisitor = {};
   ok.forEach(r => {
@@ -2482,20 +2558,27 @@ function findDeviceCollisions(ok) {
     if (dId) (byDevice[dId] = byDevice[dId] || []).push(r);
     if (vId) (byVisitor[vId] = byVisitor[vId] || []).push(r);
   });
-  const groups = new Map();
+  const groups = new Map(); // key: комбинация участников, чтобы не дублировать
   Object.values(byDevice).filter(g => g.length > 1).forEach(g => {
     groups.set(g.map(x => x._i).sort().join(','), { members: g, matchType: 'Device ID + Visitor ID' });
   });
   Object.values(byVisitor).filter(g => g.length > 1).forEach(g => {
     const key = g.map(x => x._i).sort().join(',');
-    if (!groups.has(key)) groups.set(key, { members: g, matchType: 'Visitor ID' });
+    if (!groups.has(key)) groups.set(key, { members: g, matchType: 'Visitor ID (FingerprintJS)' });
   });
   return [...groups.values()];
 }
 
+/* ══════════════════════════════════════════════════════════
+   ── ТЕПЛОВАЯ КАРТА ВРЕМЕНИ ПО ЗАДАНИЯМ ──
+   ══════════════════════════════════════════════════════════ */
 function buildTimeHeatmapHtml(ok) {
-  if (ok.length === 0) return '<p class="empty-state">Нет данных</p>';
+  if (ok.length === 0) return '<p class="empty-state">Нет данных для построения карты</p>';
 
+  /* Ключи полей берём из фактических данных (не зашиты числом) — работает для
+     любого ПЗ с любым количеством задач/тестов, если он использует привычную
+     схему имён "task-N" / "task-N-M" / "q-N"; для иной схемы имён — просто
+     показываем сам ключ, обрезанный до разумной длины. */
   const keySet = new Set();
   ok.forEach(r => {
     const ft = r.report?.footprint?.field_timings ?? {};
@@ -2518,10 +2601,10 @@ function buildTimeHeatmapHtml(ok) {
     if (m) return 'З' + (parseInt(m[1], 10) + 1) + (m[2] !== undefined ? (subLetters[parseInt(m[2], 10)] || ('.' + m[2])) : '');
     const mq = k.match(/^q-(\d+)$/);
     if (mq) return 'Т' + (parseInt(mq[1], 10) + 1);
-    return k.length > 7 ? k.slice(0, 7) : k;
+    return k.length > 7 ? k.slice(0, 7) : k; // нестандартная схема имён полей
   });
 
-  if (fieldOrder.length === 0) return '<p class="empty-state">Нет таймингов</p>';
+  if (fieldOrder.length === 0) return '<p class="empty-state">В отчётах нет данных о таймингах полей</p>';
 
   const rows = ok.map(r => {
     const ft = r.report?.footprint?.field_timings ?? {};
@@ -2548,6 +2631,7 @@ function buildTimeHeatmapHtml(ok) {
     html += '</tr>';
   });
   html += '</tbody></table></div>';
+  html += '<p style="margin-top:12px;font-size:12px;color:var(--ink-muted)">Цвет ячейки — время (сек), потраченное на поле, относительно максимума в группе по этому же полю. Подозрительно короткое время часто указывает на вставку готового ответа, подозрительно долгое — на поиск решения в сети.</p>';
   return html;
 }
 
@@ -2602,6 +2686,7 @@ function renderDashboard(results) {
     gradeCounts[g]++;
   });
 
+  /* Гистограмма распределения баллов — шаг подстраивается под фактический максимум ПЗ */
   const binCount = 8;
   const binStep = Math.max(1, Math.ceil(batchMaxScore / binCount));
   const scoreBins = Array.from({ length: binCount }, (_, i) => {
@@ -2613,6 +2698,7 @@ function renderDashboard(results) {
     scoreBins[bin].value++;
   });
 
+  /* Средний балл по группам */
   const groupAgg = {};
   scored.forEach(r => {
     const g = r.report.meta.group || '—';
@@ -2629,6 +2715,9 @@ function renderDashboard(results) {
   const totalDevtools = ok.reduce((s, r) => s + (r.riskAnalysis.devtoolsCount || 0), 0);
   const totalCopyBlocked = ok.reduce((s, r) => s + (r.riskAnalysis.copyBlockedCount || 0), 0);
 
+  /* Синхронизировано с База.html: агрегаты по новому блоку report.analytics
+     (см. analyzeRisks). withAnalytics — сколько отчётов вообще содержат
+     этот блок (старые отчёты его не имеют — считаем честно, не подменяя нулями). */
   const withAnalytics = ok.filter(r => r.riskAnalysis.hasAnalytics);
   const totalHoneypot = ok.reduce((s, r) => s + (r.riskAnalysis.honeypotCount || 0), 0);
   const totalTeleports = ok.reduce((s, r) => s + (r.riskAnalysis.teleportCount || 0), 0);
@@ -2644,28 +2733,31 @@ function renderDashboard(results) {
   const deviceCollisions = findDeviceCollisions(ok);
 
   let html = '';
+
+  /* — СТАТ-СТРИП — */
   html += `
     <div class="glass-card">
       <h3>📊 Общая аналитика по группе</h3>
       <div class="stat-strip">
-        <div class="stat-box"><span class="stat-val">${results.length}</span><span class="stat-lbl">Отчётов</span></div>
-        <div class="stat-box"><span class="stat-val" style="color:var(--success)">${avgScore}</span><span class="stat-lbl">Ср. балл</span></div>
+        <div class="stat-box"><span class="stat-val">${results.length}</span><span class="stat-lbl">Отчётов загружено</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:${avgScore !== '—' && (avgScore / batchMaxScore) >= 0.8125 ? 'var(--success)' : 'var(--primary)'}">${avgScore}</span><span class="stat-lbl">Средний балл</span></div>
         <div class="stat-box"><span class="stat-val" style="color:var(--success)">${passRate}%</span><span class="stat-lbl">Успеваемость</span></div>
         <div class="stat-box"><span class="stat-val" style="color:var(--danger)">${riskCounts.high}</span><span class="stat-lbl">Высокий риск</span></div>
-        <div class="stat-box"><span class="stat-val">${avgDuration}м</span><span class="stat-lbl">Ср. время</span></div>
-        <div class="stat-box"><span class="stat-val">${uniqueDevices}</span><span class="stat-lbl">Устройств</span></div>
+        <div class="stat-box"><span class="stat-val">${avgDuration}${avgDuration !== '—' ? ' мин' : ''}</span><span class="stat-lbl">Среднее время</span></div>
+        <div class="stat-box"><span class="stat-val">${uniqueDevices}</span><span class="stat-lbl">Уникальных устройств</span></div>
         <div class="stat-box"><span class="stat-val" style="color:${chainFailCount > 0 ? 'var(--danger)' : 'var(--success)'}">${chainFailCount}</span><span class="stat-lbl">Цепочка нарушена</span></div>
-        <div class="stat-box"><span class="stat-val" style="color:${plagiarismPairs.length > 0 ? 'var(--danger)' : 'var(--success)'}">${plagiarismPairs.length}</span><span class="stat-lbl">Сходство ответов</span></div>
-        <div class="stat-box"><span class="stat-val" style="color:${deviceCollisions.length > 0 ? 'var(--danger)' : 'var(--success)'}">${deviceCollisions.length}</span><span class="stat-lbl">Совпадений ПК</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:${plagiarismPairs.length > 0 ? 'var(--danger)' : 'var(--success)'}">${plagiarismPairs.length}</span><span class="stat-lbl">Пар с совпадением ответов</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:${deviceCollisions.length > 0 ? 'var(--danger)' : 'var(--success)'}">${deviceCollisions.length}</span><span class="stat-lbl">Совпадений устройств</span></div>
         <div class="stat-box"><span class="stat-val" style="color:${totalHoneypot > 0 ? 'var(--danger)' : 'var(--success)'}">${totalHoneypot}</span><span class="stat-lbl">Honeypot-срабатываний</span></div>
-        <div class="stat-box"><span class="stat-val">${withAnalytics.length}/${ok.length}</span><span class="stat-lbl">С аналитикой</span></div>
-        ${errored.length ? `<div class="stat-box"><span class="stat-val" style="color:var(--warn)">${errored.length}</span><span class="stat-lbl">Не прочитано</span></div>` : ''}
+        <div class="stat-box"><span class="stat-val" style="color:${withAnalytics.length < ok.length ? 'var(--warn)' : 'var(--ink-strong)'}">${withAnalytics.length}/${ok.length}</span><span class="stat-lbl">С расширенной аналитикой</span></div>
+        ${errored.length ? `<div class="stat-box"><span class="stat-val" style="color:var(--warn)">${errored.length}</span><span class="stat-lbl">Не распознано</span></div>` : ''}
       </div>
     </div>`;
 
+  /* — ДИАГРАММЫ — */
   html += `
     <div class="glass-card">
-      <h3>📈 Диаграммы</h3>
+      <h3>📈 Диаграммы по группе</h3>
       <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr">
         <div>
           <h4 style="margin-top:0">Распределение риска</h4>
@@ -2694,34 +2786,36 @@ function renderDashboard(results) {
           ])}
         </div>
         <div>
-          <h4 style="margin-top:0">Нарушения</h4>
+          <h4 style="margin-top:0">Нарушения по типам (сумма)</h4>
           ${barChartHtml([
             { label: 'Уходы с вкладки', value: totalAway, color: 'var(--primary)' },
             { label: 'Вставки (paste)', value: totalPaste, color: 'var(--warn)' },
             { label: 'Попытки скриншота', value: totalScreenshot, color: 'var(--danger)' },
             { label: 'Попытки DevTools', value: totalDevtools, color: 'var(--accent)' },
-            { label: 'Копирование блок.', value: totalCopyBlocked, color: 'var(--warn)' }
+            { label: 'Копирование текста заблокировано', value: totalCopyBlocked, color: 'var(--warn)' }
           ])}
         </div>
       </div>
     </div>`;
 
+  /* — АНАЛИТИКА ПОВЕДЕНИЯ ПО ГРУППЕ (синхронизировано с новым блоком report.analytics в База.html) — */
   html += `
     <div class="glass-card">
-      <h3>🧠 Поведенческая аналитика по группе</h3>
+      <h3>🧠 Поведенческая аналитика по группе (report.analytics)</h3>
+      <p style="margin-bottom:14px;font-size:12px;color:var(--ink-muted)">Данные доступны для ${withAnalytics.length} из ${ok.length} отчётов (старые отчёты База.html этого блока не содержат).</p>
       <div class="form-grid" style="grid-template-columns:1fr 1fr">
         <div>
-          <h4 style="margin-top:0">Поведенческие сигналы (сумма)</h4>
+          <h4 style="margin-top:0">Поведенческие сигналы (сумма/кол-во курсантов)</h4>
           ${barChartHtml([
             { label: 'Механический набор (курсантов)', value: machineTypingCount, color: 'var(--accent)' },
-            { label: '«Телепорты» мыши (сумма)', value: totalTeleports, color: 'var(--warn)' },
-            { label: 'Honeypot (сумма)', value: totalHoneypot, color: 'var(--danger)' },
-            { label: 'Быстрых ответов (сумма)', value: totalQuickAnswers, color: 'var(--warn)' },
+            { label: '«Телепорты» курсора (сумма)', value: totalTeleports, color: 'var(--warn)' },
+            { label: 'Honeypot-срабатываний (сумма)', value: totalHoneypot, color: 'var(--danger)' },
+            { label: 'Быстрых ответов подряд (сумма)', value: totalQuickAnswers, color: 'var(--warn)' },
             { label: 'Мгновенных ответов (сумма)', value: totalInstantAnswers, color: 'var(--primary)' }
           ])}
         </div>
         <div>
-          <h4 style="margin-top:0">Клиентский индекс подозрительности (средний)</h4>
+          <h4 style="margin-top:0">Клиентский «индекс подозрительности» (среднее по группе)</h4>
           ${(() => {
             const suspVals = withAnalytics.map(r => r.report?.analytics?.suspicion?.score).filter(v => typeof v === 'number');
             if (!suspVals.length) return '<p class="empty-state">Нет данных</p>';
@@ -2729,36 +2823,38 @@ function renderDashboard(results) {
             const highSusp = suspVals.filter(v => v >= 56).length;
             return `<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
               ${svgSuspicionGaugeMini(avgSusp, avgSusp >= 56 ? 'высокий' : avgSusp >= 26 ? 'средний' : 'низкий')}
-              <div style="font-size:13px;color:var(--ink-muted)">Курсантов с высоким индексом (≥56): <b>${highSusp}</b> из ${suspVals.length}</div>
+              <div style="font-size:13px;color:var(--ink-muted)">Курсантов с высоким клиентским индексом (≥56): <b style="color:var(--ink-strong)">${highSusp}</b> из ${suspVals.length}</div>
             </div>`;
           })()}
         </div>
       </div>
     </div>`;
 
+  /* — ГИСТОГРАММА БАЛЛОВ И СРЕДНИЙ БАЛЛ ПО ГРУППАМ — */
   html += `
     <div class="glass-card">
       <h3>📊 Распределение баллов и группы</h3>
       <div class="form-grid" style="grid-template-columns:1fr 1fr">
         <div>
-          <h4 style="margin-top:0">Гистограмма баллов</h4>
+          <h4 style="margin-top:0">Гистограмма баллов (${scored.length} проверено)</h4>
           ${scored.length ? barChartHtml(scoreBins.map((b, i) => ({ ...b, color: i >= 6 ? 'var(--success)' : i >= 4 ? 'var(--primary)' : i >= 2 ? 'var(--warn)' : 'var(--danger)' }))) : '<p class="empty-state">Нет проверенных работ</p>'}
         </div>
         <div>
-          <h4 style="margin-top:0">Средний балл по группам</h4>
+          <h4 style="margin-top:0">Средний балл по группам (${groupAverages.length})</h4>
           ${groupAverages.length ? barChartHtml(groupAverages.map(g => ({ ...g, color: (g.value / batchMaxScore) >= 0.8125 ? 'var(--success)' : (g.value / batchMaxScore) >= 0.6875 ? 'var(--primary)' : 'var(--warn)' }))) : '<p class="empty-state">Нет проверенных работ</p>'}
         </div>
       </div>
     </div>`;
 
+  /* — ЦЕЛОСТНОСТЬ ЦЕПОЧЕК СОБЫТИЙ — */
   html += `
     <div class="glass-card">
       <h3>🔗 Верификация цепочки событий</h3>`;
   if (chainFailCount === 0) {
-    html += `<p class="green">✅ У всех ${ok.length} отчётов блокчейн-цепочка целостна</p>`;
+    html += `<p class="green">✅ У всех ${ok.length} отчётов блокчейн-цепочка событий целостна — данные не подделаны</p>`;
   } else {
-    html += `<p class="red" style="margin-bottom:12px">❌ Обнаружено отчётов с нарушенной цепочкой: <b>${chainFailCount}</b></p>`;
-    html += '<div class="table-wrap"><table><thead><tr><th>ФИО</th><th>Файл</th><th>Нарушение на #</th><th>Причина</th></tr></thead><tbody>';
+    html += `<p class="red" style="margin-bottom:12px">❌ Обнаружено отчётов с нарушенной цепочкой: <b>${chainFailCount}</b> — данные могли быть отредактированы после формирования</p>`;
+    html += '<div class="table-wrap"><table><thead><tr><th>ФИО</th><th>Файл</th><th>Нарушение на событии #</th><th>Причина</th></tr></thead><tbody>';
     ok.filter(r => !r.chainCheck.ok).forEach(r => {
       html += `<tr>
         <td style="font-weight:600;color: var(--ink-strong)">${r.report?.meta?.fio ?? '—'}</td>
@@ -2771,12 +2867,14 @@ function renderDashboard(results) {
   }
   html += `</div>`;
 
+  /* — ДЕТЕКЦИЯ ПЛАГИАТА — */
   html += `
     <div class="glass-card">
       <h3>🕵️ Детекция плагиата (сходство ответов)</h3>
-      <p style="margin-bottom:14px">Показаны пары с совпадением ≥ 75%.</p>`;
+      <p style="margin-bottom:14px">Сравнение ответов на практические задачи и тесты между всеми парами курсантов. Показаны пары с совпадением ≥ 75%.
+      <b style="color:var(--warn)">Важно:</b> у практических задач один правильный числовой ответ — совпадение верных ответов ожидаемо и само по себе не доказывает списывание; обращайте больше внимания на пары с высоким совпадением при <i>низком</i> балле или совпадением ошибочных ответов.</p>`;
   if (plagiarismPairs.length === 0) {
-    html += `<p class="green">✅ Высоких совпадений не обнаружено</p>`;
+    html += `<p class="green">✅ Пар с подозрительно высоким совпадением ответов не обнаружено</p>`;
   } else {
     html += '<div class="table-wrap"><table><thead><tr><th>Курсант A</th><th>Курсант B</th><th>Совпадение</th><th>Баллы (A / B)</th><th></th></tr></thead><tbody>';
     plagiarismPairs.forEach(p => {
@@ -2797,14 +2895,16 @@ function renderDashboard(results) {
   }
   html += `</div>`;
 
+  /* — СОВПАДЕНИЯ УСТРОЙСТВ («кто чьим устройством пользовался») — */
   html += `
     <div class="glass-card">
       <h3>🖥️ Совпадения устройств</h3>
-      <p style="margin-bottom:14px">Совпадение означает использование одного и того же физического ПК.</p>`;
+      <p style="margin-bottom:14px">Сопоставление device fingerprint (canvas/audio/WebGL-хэш) и Visitor ID между отчётами. Совпадение означает, что отчёты сформированы <b>с одного и того же физического устройства/браузерного профиля</b> — либо один курсант выполнял работу за другого, либо один человек отправил несколько отчётов под разными именами.</p>`;
   if (deviceCollisions.length === 0) {
-    html += `<p class="green">✅ Совпадений устройств не обнаружено</p>`;
+    html += `<p class="green">✅ Совпадений устройств между разными курсантами не обнаружено</p>`;
   } else {
     deviceCollisions.forEach(group => {
+      const names = group.members.map(m => m.report?.meta?.fio ?? m.fileName);
       html += `
         <div style="border:1px solid color-mix(in srgb, var(--danger) 30%, transparent);background:color-mix(in srgb, var(--danger) 6%, transparent);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:12px">
           <div style="margin-bottom:8px"><span class="badge badge-danger">${group.matchType}</span></div>
@@ -2819,12 +2919,14 @@ function renderDashboard(results) {
   }
   html += `</div>`;
 
+  /* — ТЕПЛОВАЯ КАРТА ВРЕМЕНИ ПО ЗАДАНИЯМ — */
   html += `
     <div class="glass-card">
       <h3>🌡️ Тепловая карта времени по заданиям</h3>
       ${buildTimeHeatmapHtml(ok)}
     </div>`;
 
+  /* — ТАБЛИЦА ПО КУРСАНТАМ (сортируемая) — */
   html += `
     <div class="glass-card">
       <div class="result-header" style="margin-bottom:16px">
@@ -2834,6 +2936,7 @@ function renderDashboard(results) {
           Скачать сводный CSV
         </button>
       </div>
+      <p style="margin:-6px 0 14px;font-size:12px;color:var(--ink-muted)">💡 Кликните по заголовку колонки, чтобы отсортировать</p>
       <div class="table-wrap"><table>
         <thead id="batchTableHead"><tr>
           <th data-sort="n" onclick="sortBatchTable('n')" style="cursor:pointer">#</th>
@@ -2871,11 +2974,11 @@ function renderDashboard(results) {
     const riskLabel = r.riskAnalysis.level === 'high' ? 'Высокий' : r.riskAnalysis.level === 'medium' ? 'Средний' : 'Низкий';
     const ra = r.riskAnalysis;
     const flagIcons = [
-      ra.honeypotCount > 0 ? '<span title="Honeypot">🍯</span>' : '',
-      ra.machineTypingFlag ? '<span title="Робот-печать">🤖</span>' : '',
-      ra.teleportCount > 0 ? '<span title="Телепорты">🖱️</span>' : '',
-      ra.instantAnswerCount > 0 ? '<span title="Мгновенно">⚡</span>' : '',
-      !ra.hasAnalytics ? '<span title="Нет аналитики" style="opacity:.4">•</span>' : ''
+      ra.honeypotCount > 0 ? '<span title="Honeypot-ловушка сработала">🍯</span>' : '',
+      ra.machineTypingFlag ? '<span title="Механический ритм набора">🤖</span>' : '',
+      ra.teleportCount > 0 ? '<span title="Резкие прыжки курсора">🖱️</span>' : '',
+      ra.instantAnswerCount > 0 ? '<span title="Мгновенные ответы">⚡</span>' : '',
+      !ra.hasAnalytics ? '<span title="Отчёт старого формата — нет расширенной аналитики" style="opacity:.4">•</span>' : ''
     ].filter(Boolean).join(' ') || '<span style="opacity:.35">—</span>';
     return {
       sortVals: { n: n, fio: (meta.fio ?? '').toLowerCase(), score: sv ?? -1, risk: r.riskAnalysis.score, integrity: r.chainCheck.ok ? 1 : 0 },
@@ -2886,7 +2989,7 @@ function renderDashboard(results) {
         <td><span class="badge-grp">${meta.group ?? '—'}</span></td>
         <td>${meta.task ?? '—'}</td>
         <td>${sv !== null && sv !== undefined ? sv + ' / ' + maxSv : '—'}</td>
-        <td>${grade ? `<span class="grade-badge grade-${grade}">${grade}</span>` : '—'}</td>
+        <td>${grade ? `<span class="grade-badge grade-${grade}">${grade}</span>` : '<span class="empty-state" style="padding:0">—</span>'}</td>
         <td><span class="badge ${riskBadge}">${riskLabel}</span> <b style="color:var(--ink-muted);font-size:11px">${r.riskAnalysis.score}</b></td>
         <td>${r.chainCheck.ok ? '<span class="green">✅ OK</span>' : '<span class="red">❌ нарушена</span>'}</td>
         <td style="font-size:14px">${flagIcons}</td>
@@ -2895,6 +2998,7 @@ function renderDashboard(results) {
     };
   });
 
+
   batchSortState = { key: null, dir: 1 };
   document.getElementById('batchDashboard').innerHTML = html;
   renderBatchTableBody();
@@ -2902,17 +3006,19 @@ function renderDashboard(results) {
   document.getElementById('batchDashboard').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+/* Открыть детальный отчёт по конкретному курсанту из пакетной таблицы */
 function showBatchDetail(i) {
   const r = batchResults[i];
-  if (!r || r.error) { alert('❌ Ошибка файла: ' + (r?.error ?? 'неизвестно')); return; }
+  if (!r || r.error) { alert('❌ Этот файл не удалось разобрать: ' + (r?.error ?? 'неизвестная ошибка')); return; }
   renderSingleReport(r.report, r.chainCheck, r.riskAnalysis);
   const resEl = document.getElementById('verifyResult');
   resEl.style.display = 'block';
   resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+/* Скачать сводный CSV по всей пачке отчётов */
 function downloadBatchCSV() {
-  const rows = ['Файл;ФИО;Группа;Задание;Балл;Максимум;Оценка;Риск;Риск_балл;Длительность_мин;Кол-во_рисков;Целостность;Device_ID;Honeypot;Механический_набор;Телепорты;Быстрых_ответов;Мгновенных_ответов;Клиентский_индекс'];
+  const rows = ['Файл;ФИО;Группа;Задание;Балл;Максимум;Оценка;Риск;Риск_балл;Длительность_мин;Кол-во_рисков;Целостность_цепочки;Device_ID;Honeypot;Механический_набор;Телепорты_курсора;Быстрых_ответов;Мгновенных_ответов;Клиентский_индекс_подозрительности'];
   batchResults.forEach(r => {
     if (r.error) { rows.push(`${r.fileName};ОШИБКА;;;;;;;;;;;${r.error};;;;;;`); return; }
     const meta = r.report?.meta ?? {};
@@ -2930,7 +3036,10 @@ function downloadBatchCSV() {
   a.click();
 }
 
-/* ── АВТОЗАГРУЗКА ── */
+/* ── АВТОЗАГРУЗКА ОТЧЁТА ИЗ URL (#r=...) ──
+   Срабатывает, если открыть эту страницу по ссылке из QR-кода ЭЦП-отчёта
+   (когда в База.html настроен VERIFIER_URL). Переключает на вкладку
+   «Проверка отчётов» и сразу запускает анализ. */
 (function autoLoadReportFromHash() {
   const hash = window.location.hash;
   if (!hash || !hash.startsWith('#r=')) return;
@@ -2943,12 +3052,19 @@ function downloadBatchCSV() {
       switchTab('tab-verify', document.getElementById('tabBtnVerify'));
       decodeReport(document.getElementById('btnDecode'));
     } catch (e) {
-      console.warn('Не удалось загрузить отчет из ссылки:', e);
+      console.warn('Не удалось автоматически загрузить отчёт из ссылки:', e);
     }
   });
 })();
 
-/* ── АВТОВСТАВКА КЛЮЧА ИЗ БУФЕРА ОБМЕНА ── */
+/* ── АВТОВСТАВКА ПРИВАТНОГО КЛЮЧА ИЗ БУФЕРА ОБМЕНА ──
+   По клику/фокусу на поле #privKeyJwk сразу читаем буфер обмена и
+   подставляем его содержимое — без Ctrl+V и лишних действий.
+   Срабатывает только если поле сейчас пустое (чтобы случайным кликом
+   не затереть уже вставленный вручную ключ), и только если браузер
+   разрешает чтение буфера (secure context — HTTPS или localhost;
+   на file:// или без разрешения просто молча ничего не делаем —
+   можно вставить как обычно, через Ctrl+V). */
 (function autoPastePrivateKeyOnClick() {
   const el = document.getElementById('privKeyJwk');
   if (!el) return;
@@ -2956,7 +3072,7 @@ function downloadBatchCSV() {
   let busy = false;
   async function tryAutoPaste() {
     if (busy) return;
-    if (el.value.trim()) return;
+    if (el.value.trim()) return; // уже что-то есть — не перетираем
     if (!navigator.clipboard || !navigator.clipboard.readText) return;
     busy = true;
     try {
@@ -2969,7 +3085,7 @@ function downloadBatchCSV() {
         setTimeout(() => { el.style.backgroundColor = ''; }, 900);
       }
     } catch (e) {
-      // Игнорируем ошибку чтения буфера обмена в незащищенном контексте
+      // Нет разрешения на чтение буфера обмена или небезопасный контекст — тихо игнорируем
     } finally {
       busy = false;
     }
