@@ -16,45 +16,66 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --primary: #00D4FF;
-    --primary-glow: rgba(0,212,255,0.25);
-    --accent: #7C3AED;
-    --accent-glow: rgba(124,58,237,0.25);
-    --bg: #0A0E1A;
+    /* ══ ТЁМНАЯ ТЕМА — редизайн по референсу «crypto wallet» ══
+       Индиго-фиолетовый акцент вместо неонового циана, приглушённые
+       семантические цвета (зелёный/красный/жёлтый), как в финансовых
+       приложениях: спокойный «стеклянный» тёмный интерфейс. */
+    --primary: #8B5CF6;
+    --primary-glow: rgba(139,92,246,0.30);
+    --accent: #3B82F6;
+    --accent-glow: rgba(59,130,246,0.28);
+    --bg: #09080F;
     --surface: rgba(255,255,255,0.045);
-    --surface-solid: #0d1424;
+    --surface-solid: #100E1C;
     --surface-hover: rgba(255,255,255,0.07);
-    --border: rgba(255,255,255,0.1);
-    --border-glow: rgba(0,212,255,0.3);
-    --ink: #E2E8F0;
-    --ink-muted: rgba(226,232,240,0.55);
+    --border: rgba(255,255,255,0.09);
+    --border-glow: rgba(124,92,252,0.32);
+    --ink: #E4E1F5;
+    --ink-muted: rgba(228,225,245,0.55);
     --ink-strong: #ffffff;
-    --success: #00FFB3;
-    --warn: #FFD700;
-    --danger: #FF6B6B;
+    --success: #34D399;
+    --warn: #FBBF24;
+    --danger: #F87171;
     --radius-md: 16px;
     --radius-lg: 24px;
-    --radius-xl: 32px;
-    --shadow-card: 0 8px 32px rgba(0,212,255,.12), 0 2px 8px rgba(124,58,237,.10);
-    --shadow-modal: 0 24px 64px rgba(0,212,255,.20), 0 8px 24px rgba(124,58,237,.18);
+    --radius-xl: 30px;
+    --shadow-card: 0 8px 32px rgba(76,60,180,.16), 0 2px 10px rgba(0,0,0,.35);
+    --shadow-modal: 0 24px 64px rgba(76,60,180,.24), 0 8px 24px rgba(0,0,0,.4);
     --font: 'Inter', sans-serif;
   }
 
-  /* ══ СВЕТЛАЯ ТЕМА ══ */
+  /* ══ СВЕТЛАЯ ТЕМА — редизайн в стиле Bauhaus (референс «Learning built with blocks») ══
+     Плоские блоки основных цветов, жёсткие чёрные обводки и офсетные
+     тени вместо мягкого свечения, жирная типографика. */
   [data-theme="light"] {
-    --bg: #F1F4F9;
-    --surface: rgba(20,30,55,0.04);
-    --surface-solid: #EEF1F7;
-    --surface-hover: rgba(20,30,55,0.075);
-    --border: rgba(20,30,55,0.13);
-    --border-glow: rgba(0,144,216,0.35);
-    --ink: #1E2436;
-    --ink-muted: rgba(30,36,54,0.62);
-    --ink-strong: #0B1220;
-    --shadow-card: 0 8px 28px rgba(30,41,59,.08), 0 2px 8px rgba(30,41,59,.05);
-    --shadow-modal: 0 24px 60px rgba(30,41,59,.14), 0 8px 24px rgba(30,41,59,.10);
+    --primary: #2A3EFF;
+    --primary-glow: rgba(42,62,255,0.18);
+    --accent: #111111;
+    --accent-glow: rgba(17,17,17,0.12);
+    --bg: #F3EEE3;
+    --surface: #FFFFFF;
+    --surface-solid: #FFFFFF;
+    --surface-hover: #F7F3EA;
+    --border: #111111;
+    --border-glow: rgba(17,17,17,0.35);
+    --ink: #1B1B1B;
+    --ink-muted: rgba(27,27,27,0.62);
+    --ink-strong: #0A0A0A;
+    --success: #1F9D55;
+    --warn: #F4C430;
+    --danger: #E13C2E;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+    --shadow-card: 4px 4px 0 #111111;
+    --shadow-modal: 6px 6px 0 #111111;
   }
-  [data-theme="light"] .blob { opacity: 0.10; }
+  [data-theme="light"] .blob { display: none; }
+  [data-theme="light"] .grid-noise {
+    background-image:
+      linear-gradient(rgba(17,17,17,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(17,17,17,0.045) 1px, transparent 1px);
+  }
   [data-theme="light"] body { background: var(--bg); }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -82,7 +103,7 @@
     opacity: 0.18;
     animation: blobFloat linear infinite;
   }
-  .blob-1 { width: 520px; height: 520px; background: radial-gradient(circle, #00D4FF 0%, #0066FF 60%, transparent 100%); top: -120px; left: -80px; animation-duration: 18s; animation-delay: 0s; }
+  .blob-1 { width: 520px; height: 520px; background: radial-gradient(circle, #8B5CF6 0%, #3B82F6 60%, transparent 100%); top: -120px; left: -80px; animation-duration: 18s; animation-delay: 0s; }
   .blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, #7C3AED 0%, #4F1DB5 60%, transparent 100%); top: 30%; right: -100px; animation-duration: 22s; animation-delay: -6s; }
   .blob-3 { width: 350px; height: 350px; background: radial-gradient(circle, #00FFB3 0%, #00A88F 60%, transparent 100%); bottom: 10%; left: 20%; animation-duration: 26s; animation-delay: -12s; }
   .blob-4 { width: 280px; height: 280px; background: radial-gradient(circle, #FF6B9D 0%, #C91B6E 60%, transparent 100%); bottom: 30%; right: 25%; animation-duration: 20s; animation-delay: -4s; }
@@ -99,8 +120,8 @@
   .grid-noise {
     position: fixed; inset: 0; pointer-events: none; z-index: 0;
     background-image:
-      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      linear-gradient(rgba(124,92,252,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,92,252,0.035) 1px, transparent 1px);
     background-size: 48px 48px;
   }
 
@@ -120,8 +141,8 @@
   }
   .header-badge {
     display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(0,212,255,0.12);
-    border: 1px solid rgba(0,212,255,0.3);
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
     border-radius: 9999px;
     padding: 6px 18px;
     font-size: 12px;
@@ -137,7 +158,7 @@
     font-weight: 900;
     line-height: 1.1;
     letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #fff 0%, #00D4FF 50%, #7C3AED 100%);
+    background: linear-gradient(135deg, var(--ink-strong) 0%, var(--primary) 50%, var(--accent) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -176,12 +197,25 @@
   .glass-card:nth-child(2) { animation-delay: .1s; }
   .glass-card:nth-child(3) { animation-delay: .2s; }
 
+  /* Светлая тема: убираем стекло/блюр — плоские карточки с чёрной
+     обводкой и жёсткой офсетной тенью (Bauhaus / neo-brutalist). */
+  [data-theme="light"] .glass-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--surface);
+    border: 2.5px solid var(--border);
+    box-shadow: var(--shadow-card);
+  }
+  [data-theme="light"] .glass-card::before { display: none; }
+
   /* ── DOODLE DECORATIONS ── */
   .doodle {
     position: absolute;
     opacity: 0.07;
     pointer-events: none;
+    stroke: var(--ink-strong) !important;
   }
+  [data-theme="light"] .doodle { opacity: 0.12; }
   .doodle-tl { top: 16px; left: 16px; }
   .doodle-tr { top: 16px; right: 16px; }
   .doodle-br { bottom: 16px; right: 16px; }
@@ -203,6 +237,14 @@
   .card-heading h2, .card-heading h3 {
     font-size: 20px; font-weight: 700; color: var(--ink-strong);
   }
+  [data-theme="light"] .page-title,
+  [data-theme="light"] .card-heading h2,
+  [data-theme="light"] .card-heading h3,
+  [data-theme="light"] .glass-card h3 {
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    font-weight: 900;
+  }
   .card-heading p { font-size: 13px; color: var(--ink-muted); margin-top: 2px; }
 
   /* ── FORM GRID ── */
@@ -220,24 +262,24 @@
     text-transform: uppercase; letter-spacing: .06em;
     color: var(--ink-muted);
   }
-  .field-hint { font-size: 11px; color: rgba(226,232,240,0.35); margin-top: 4px; }
-  .field-hint.warn { color: rgba(255,107,107,0.8); }
+  .field-hint { font-size: 11px; color: color-mix(in srgb, var(--ink) 35%, transparent); margin-top: 4px; }
+  .field-hint.warn { color: color-mix(in srgb, var(--danger) 80%, transparent); }
 
   /* Drag-and-drop зона пакетной загрузки */
   #batchDropZone { transition: background .2s, border-color .2s, box-shadow .2s; border-radius: var(--radius-md); }
   #batchDropZone.dropzone-active {
-    background: rgba(0,255,179,0.06);
-    box-shadow: 0 0 0 2px rgba(0,255,179,0.4) inset, 0 0 24px rgba(0,255,179,0.15);
+    background: color-mix(in srgb, var(--success) 6%, transparent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--success) 40%, transparent) inset, 0 0 24px color-mix(in srgb, var(--success) 15%, transparent);
   }
 
   /* Панель фильтров пакетного дашборда */
   .filters-bar {
     display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
-    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--ink-strong) 3%, transparent); border: 1px solid var(--border);
     border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 24px;
   }
   .filters-bar input, .filters-bar select {
-    background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--ink);
+    background: color-mix(in srgb, var(--ink-strong) 4%, transparent); border: 1px solid var(--border); color: var(--ink);
     padding: 8px 12px; border-radius: 8px; font-family: var(--font); font-size: 13px; outline: none;
   }
   .filters-bar input:focus, .filters-bar select:focus { border-color: var(--primary); }
@@ -245,7 +287,7 @@
 
   input[type="text"], input[type="password"], input[type="number"], textarea {
     width: 100%;
-    background: rgba(255,255,255,0.06);
+    background: color-mix(in srgb, var(--ink-strong) 6%, transparent);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 12px 16px;
@@ -259,9 +301,9 @@
   input:focus, textarea:focus {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px var(--primary-glow);
-    background: rgba(0,212,255,0.06);
+    background: color-mix(in srgb, var(--primary) 6%, transparent);
   }
-  input::placeholder, textarea::placeholder { color: rgba(226,232,240,0.25); }
+  input::placeholder, textarea::placeholder { color: color-mix(in srgb, var(--ink) 25%, transparent); }
 
   /* number input: hide spinners */
   input[type=number]::-webkit-inner-spin-button { opacity: .4; }
@@ -299,25 +341,45 @@
   }
 
   .btn-primary-neo {
-    background: linear-gradient(135deg, #00D4FF 0%, #0099CC 100%);
-    color: #0A0E1A;
-    box-shadow: 0 4px 20px rgba(0,212,255,0.45);
+    background: linear-gradient(135deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 65%, black) 100%);
+    color: #08070F;
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--primary) 45%, transparent);
   }
-  .btn-primary-neo:hover { filter: brightness(1.1); box-shadow: 0 6px 28px rgba(0,212,255,0.6); }
+  .btn-primary-neo:hover { filter: brightness(1.1); box-shadow: 0 6px 28px color-mix(in srgb, var(--primary) 60%, transparent); }
 
   .btn-success-neo {
-    background: linear-gradient(135deg, #00FFB3 0%, #00A88F 100%);
-    color: #0A0E1A;
-    box-shadow: 0 4px 16px rgba(0,255,179,0.35);
+    background: linear-gradient(135deg, var(--success) 0%, color-mix(in srgb, var(--success) 65%, black) 100%);
+    color: #08070F;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--success) 35%, transparent);
   }
   .btn-success-neo:hover { filter: brightness(1.08); }
 
   .btn-accent-neo {
-    background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 65%, black) 100%);
     color: var(--ink-strong);
-    box-shadow: 0 4px 16px rgba(124,58,237,0.4);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 40%, transparent);
   }
   .btn-accent-neo:hover { filter: brightness(1.1); }
+
+  /* Светлая тема: плоские neo-brutalist кнопки — заливка основным цветом,
+     жёсткая чёрная обводка, офсетная тень, лёгкий "прыжок" при наведении
+     вместо свечения (соответствует стилю референса Bauhaus). */
+  [data-theme="light"] .btn-primary-neo,
+  [data-theme="light"] .btn-success-neo,
+  [data-theme="light"] .btn-accent-neo {
+    border: 2.5px solid var(--border);
+    box-shadow: 4px 4px 0 #111111;
+    filter: none !important;
+  }
+  [data-theme="light"] .btn-primary-neo { background: var(--primary); color: #fff; }
+  [data-theme="light"] .btn-success-neo { background: var(--success); color: #fff; }
+  [data-theme="light"] .btn-accent-neo  { background: var(--warn);    color: #111; }
+  [data-theme="light"] .btn-primary-neo:hover,
+  [data-theme="light"] .btn-success-neo:hover,
+  [data-theme="light"] .btn-accent-neo:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #111111;
+  }
 
   /* Pulse on primary btn */
   .btn-pulse::after {
@@ -347,8 +409,8 @@
     margin-bottom: 24px;
   }
   .count-pill {
-    background: linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(124,58,237,0.2) 100%);
-    border: 1px solid rgba(0,212,255,0.3);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 20%, transparent) 0%, color-mix(in srgb, var(--accent) 20%, transparent) 100%);
+    border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
     border-radius: 9999px;
     padding: 4px 14px;
     font-size: 13px; font-weight: 700; color: var(--primary);
@@ -357,7 +419,7 @@
   .result-meta {
     font-size: 13px; color: var(--ink-muted); margin-bottom: 20px;
     padding: 12px 16px;
-    background: rgba(0,212,255,0.05);
+    background: color-mix(in srgb, var(--primary) 5%, transparent);
     border-left: 3px solid var(--primary);
     border-radius: 0 8px 8px 0;
   }
@@ -374,7 +436,7 @@
     font-size: 13px;
   }
   thead th {
-    background: rgba(0,212,255,0.08);
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
     color: var(--primary);
     font-weight: 700;
     font-size: 11px;
@@ -382,7 +444,7 @@
     letter-spacing: .08em;
     padding: 14px 16px;
     text-align: left;
-    border-bottom: 1px solid rgba(0,212,255,0.15);
+    border-bottom: 1px solid color-mix(in srgb, var(--primary) 15%, transparent);
     white-space: nowrap;
   }
   tbody tr {
@@ -397,7 +459,7 @@
     from { opacity: 0; transform: translateX(-16px); }
     to   { opacity: 1; transform: translateX(0); }
   }
-  tbody tr:hover td { background: rgba(0,212,255,0.04); }
+  tbody tr:hover td { background: color-mix(in srgb, var(--primary) 4%, transparent); }
   td {
     padding: 14px 16px;
     color: var(--ink);
@@ -410,7 +472,7 @@
   .token-cell {
     font-family: 'SFMono-Regular', 'Consolas', monospace;
     font-size: 10px;
-    color: rgba(0,212,255,0.85);
+    color: color-mix(in srgb, var(--primary) 85%, transparent);
     word-break: break-all;
     max-width: 320px;
     line-height: 1.5;
@@ -418,9 +480,9 @@
   }
   .token-shimmer {
     background: linear-gradient(90deg,
-      rgba(0,212,255,0.5) 0%,
-      rgba(124,58,237,0.5) 50%,
-      rgba(0,212,255,0.5) 100%);
+      color-mix(in srgb, var(--primary) 50%, transparent) 0%,
+      color-mix(in srgb, var(--accent) 50%, transparent) 50%,
+      color-mix(in srgb, var(--primary) 50%, transparent) 100%);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -434,31 +496,31 @@
 
   .badge-grp {
     display: inline-flex; align-items: center;
-    background: rgba(0,212,255,0.12);
-    border: 1px solid rgba(0,212,255,0.25);
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
     color: var(--primary);
     border-radius: 9999px;
     padding: 4px 12px;
     font-size: 12px; font-weight: 600;
   }
 
-  .exp-text { font-size: 12px; color: rgba(0,255,179,0.8); font-weight: 500; }
+  .exp-text { font-size: 12px; color: color-mix(in srgb, var(--success) 80%, transparent); font-weight: 500; }
 
   .copy-btn {
     display: inline-flex; align-items: center; justify-content: center;
     width: 36px; height: 36px;
-    background: rgba(0,212,255,0.1);
-    border: 1px solid rgba(0,212,255,0.2);
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
     border-radius: 10px;
     color: var(--primary);
     cursor: pointer;
     transition: background .2s, transform .15s;
     overflow: hidden; position: relative;
   }
-  .copy-btn:hover { background: rgba(0,212,255,0.2); transform: scale(1.08); }
+  .copy-btn:hover { background: color-mix(in srgb, var(--primary) 20%, transparent); transform: scale(1.08); }
   .copy-btn:active { transform: scale(0.93); }
   .copy-btn svg { width:16px; height:16px; }
-  .copy-btn.copied { background: rgba(0,255,179,0.15); border-color: rgba(0,255,179,0.35); color: #00FFB3; }
+  .copy-btn.copied { background: color-mix(in srgb, var(--success) 15%, transparent); border-color: color-mix(in srgb, var(--success) 35%, transparent); color: var(--success); }
 
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
@@ -477,17 +539,19 @@
   }
   .stat-box {
     flex: 1; min-width: 100px;
-    background: rgba(255,255,255,0.04);
+    background: color-mix(in srgb, var(--ink-strong) 4%, transparent);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 14px 16px;
     display: flex; flex-direction: column; gap: 4px;
   }
+  [data-theme="light"] .stat-box { border-width: 2px; }
   .stat-val { font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1; }
   .stat-lbl { font-size: 11px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .06em; }
 
   /* ── FLOATING PARTICLES ── */
   .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  [data-theme="light"] .particles { display: none; }
   .particle {
     position: absolute; width: 2px; height: 2px;
     border-radius: 50%; background: var(--primary);
@@ -515,7 +579,7 @@
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.25); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--primary) 25%, transparent); border-radius: 99px; }
 
   /* ══════════════════════════════════════════════
      ── ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ (ДЕНЬ/НОЧЬ) ──
@@ -536,6 +600,8 @@
   .theme-toggle:active { transform: scale(0.94); }
   .theme-toggle svg { width: 21px; height: 21px; }
   @media (max-width: 640px) { .theme-toggle { top: 12px; right: 12px; width: 40px; height: 40px; } }
+  [data-theme="light"] .theme-toggle { border-width: 2.5px; }
+  [data-theme="light"] .theme-toggle:hover { transform: scale(1.05); box-shadow: 2px 2px 0 #111111; }
 
   /* ══════════════════════════════════════════════
      ── TAB NAVIGATION ──
@@ -549,7 +615,7 @@
   .tab-btn {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 12px 26px;
-    background: rgba(255,255,255,0.04);
+    background: color-mix(in srgb, var(--ink-strong) 4%, transparent);
     border: 1px solid var(--border);
     border-radius: 9999px;
     color: var(--ink-muted);
@@ -561,13 +627,18 @@
     -webkit-tap-highlight-color: transparent;
   }
   .tab-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
-  .tab-btn:hover { background: rgba(255,255,255,0.08); color: var(--ink); }
+  .tab-btn:hover { background: var(--surface-hover); color: var(--ink); }
   .tab-btn:active { transform: scale(0.97); }
   .tab-btn.active {
     background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
     color: var(--ink-strong);
     border-color: transparent;
-    box-shadow: 0 4px 20px rgba(0,212,255,0.35);
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--primary) 35%, transparent);
+  }
+  [data-theme="light"] .tab-btn { border-width: 2px; }
+  [data-theme="light"] .tab-btn.active {
+    color: #fff;
+    box-shadow: 3px 3px 0 #111111;
   }
 
   .tab-panel { display: none; }
@@ -600,9 +671,10 @@
     border: 1px solid;
     animation: fadeUp .5s ease both;
   }
-  .risk-low  { background: rgba(0,255,179,0.08);  border-color: rgba(0,255,179,0.3);  color: var(--success); }
-  .risk-med  { background: rgba(255,215,0,0.08);   border-color: rgba(255,215,0,0.3);  color: var(--warn); }
-  .risk-high { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.35); color: var(--danger); }
+  .risk-low  { background: color-mix(in srgb, var(--success) 8%, transparent); border-color: color-mix(in srgb, var(--success) 30%, transparent); color: var(--success); }
+  .risk-med  { background: color-mix(in srgb, var(--warn) 8%, transparent);    border-color: color-mix(in srgb, var(--warn) 30%, transparent);    color: var(--warn); }
+  .risk-high { background: color-mix(in srgb, var(--danger) 8%, transparent); border-color: color-mix(in srgb, var(--danger) 35%, transparent); color: var(--danger); }
+  [data-theme="light"] .risk-banner { border-width: 2.5px; }
 
   .badge {
     display: inline-flex; align-items: center;
@@ -611,10 +683,10 @@
     font-size: 11px; font-weight: 700; letter-spacing: .02em;
     white-space: nowrap;
   }
-  .badge-danger { background: rgba(255,107,107,0.15); border: 1px solid rgba(255,107,107,0.35); color: var(--danger); }
-  .badge-warn   { background: rgba(255,215,0,0.12);   border: 1px solid rgba(255,215,0,0.3);   color: var(--warn); }
-  .badge-ok     { background: rgba(0,255,179,0.12);   border: 1px solid rgba(0,255,179,0.3);   color: var(--success); }
-  .badge-info   { background: rgba(0,212,255,0.12);   border: 1px solid rgba(0,212,255,0.3);   color: var(--primary); }
+  .badge-danger { background: color-mix(in srgb, var(--danger) 15%, transparent); border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent); color: var(--danger); }
+  .badge-warn   { background: color-mix(in srgb, var(--warn) 12%, transparent);   border: 1px solid color-mix(in srgb, var(--warn) 30%, transparent);   color: var(--warn); }
+  .badge-ok     { background: color-mix(in srgb, var(--success) 12%, transparent); border: 1px solid color-mix(in srgb, var(--success) 30%, transparent); color: var(--success); }
+  .badge-info   { background: color-mix(in srgb, var(--primary) 12%, transparent); border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent); color: var(--primary); }
 
   .score-ring {
     width: 112px; height: 112px;
@@ -623,9 +695,10 @@
     flex-direction: column;
     margin: 0 auto 16px;
     border: 3px solid var(--primary);
-    background: radial-gradient(circle, rgba(0,212,255,0.12), rgba(124,58,237,0.08));
-    box-shadow: 0 0 0 8px rgba(0,212,255,0.08), 0 4px 24px rgba(0,212,255,0.2);
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 12%, transparent), color-mix(in srgb, var(--accent) 8%, transparent));
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--primary) 8%, transparent), 0 4px 24px color-mix(in srgb, var(--primary) 20%, transparent);
   }
+  [data-theme="light"] .score-ring { box-shadow: 4px 4px 0 #111111; border-width: 3px; }
   .score-val { font-size: 2em; font-weight: 900; color: var(--ink-strong); line-height: 1; }
   .score-max { font-size: .7em; color: var(--ink-muted); }
 
@@ -637,17 +710,32 @@
     font-size: .9em;
     letter-spacing: .03em;
   }
-  .grade-5 { background: rgba(0,255,179,0.15);   color: var(--success); border: 1px solid rgba(0,255,179,0.35); }
-  .grade-4 { background: rgba(0,212,255,0.15);   color: var(--primary); border: 1px solid rgba(0,212,255,0.35); }
-  .grade-3 { background: rgba(255,215,0,0.15);   color: var(--warn);    border: 1px solid rgba(255,215,0,0.35); }
-  .grade-2 { background: rgba(255,107,107,0.15); color: var(--danger);  border: 1px solid rgba(255,107,107,0.35); }
+  .grade-5 { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success); border: 1px solid color-mix(in srgb, var(--success) 35%, transparent); }
+  .grade-4 { background: color-mix(in srgb, var(--primary) 15%, transparent); color: var(--primary); border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); }
+  .grade-3 { background: color-mix(in srgb, var(--warn) 15%, transparent);    color: var(--warn);    border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); }
+  .grade-2 { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger);  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent); }
+
+  /* Светлая тема: бейджи/оценки — сплошная заливка цветом с чёрной
+     обводкой вместо бледного полупрозрачного чипа (как плашки "DONE" и
+     счётчики дней в референсе Bauhaus — насыщенные плотные блоки). */
+  [data-theme="light"] .badge { border-width: 2px; font-weight: 800; }
+  [data-theme="light"] .badge-danger { background: var(--danger);  border-color: var(--border); color: #fff; }
+  [data-theme="light"] .badge-warn   { background: var(--warn);    border-color: var(--border); color: #111; }
+  [data-theme="light"] .badge-ok     { background: var(--success); border-color: var(--border); color: #fff; }
+  [data-theme="light"] .badge-info   { background: var(--primary); border-color: var(--border); color: #fff; }
+  [data-theme="light"] .grade-badge  { border-width: 2px; font-weight: 900; }
+  [data-theme="light"] .grade-5 { background: var(--success); color: #fff; border-color: var(--border); }
+  [data-theme="light"] .grade-4 { background: var(--primary); color: #fff; border-color: var(--border); }
+  [data-theme="light"] .grade-3 { background: var(--warn);    color: #111; border-color: var(--border); }
+  [data-theme="light"] .grade-2 { background: var(--danger);  color: #fff; border-color: var(--border); }
+  [data-theme="light"] .badge-grp { border-width: 2px; font-weight: 700; }
 
   .empty-state { text-align: center; color: var(--ink-muted); padding: 20px; }
 
   .formula-tag {
     display: inline-block;
-    background: rgba(124,58,237,0.15);
-    border: 1px solid rgba(124,58,237,0.3);
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
     color: var(--accent);
     padding: 2px 8px;
     border-radius: 6px;
@@ -657,8 +745,8 @@
   }
 
   .hl-paste {
-    background: rgba(255,215,0,0.1);
-    border: 1px solid rgba(255,215,0,0.3);
+    background: color-mix(in srgb, var(--warn) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--warn) 30%, transparent);
     color: var(--warn);
     padding: 2px 8px;
     border-radius: 6px;
@@ -667,16 +755,16 @@
   .hash-mono {
     font-family: 'SFMono-Regular', 'Consolas', monospace;
     font-size: 11px;
-    color: rgba(0,212,255,0.75);
+    color: color-mix(in srgb, var(--primary) 75%, transparent);
     word-break: break-all;
   }
 
   .code-log {
-    background: rgba(255,255,255,0.03);
+    background: color-mix(in srgb, var(--ink-strong) 3%, transparent);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 18px;
-    color: rgba(0,255,179,0.85);
+    color: color-mix(in srgb, var(--success) 85%, transparent);
     font-family: 'SFMono-Regular', 'Consolas', monospace;
     font-size: 11px;
     white-space: pre-wrap;
@@ -756,7 +844,7 @@
     </svg>
 
     <div class="card-heading">
-      <div class="card-icon" style="background:linear-gradient(135deg,#7C3AED 0%,#00D4FF 100%)">
+      <div class="card-icon" style="background:linear-gradient(135deg,var(--accent) 0%,var(--primary) 100%)">
         <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
           <circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6M15.5 7.5L19 11l-3.5 3.5-3.5-3.5z"/>
         </svg>
@@ -781,10 +869,14 @@
     </div>
 
     <div class="field" id="pubKeyBlock" style="display:none;margin-top:6px">
-      <label>Публичный ключ (JWK) — вставьте один раз в База.html</label>
+      <label>Публичный ключ (JWK) — подставьте в База.html</label>
       <textarea id="pubKeyJwk" rows="3" readonly></textarea>
-      <span class="field-hint">Откройте файл База.html → найдите строку <code>const TEACHER_PUBLIC_KEY_JWK = null;</code> в начале <code>&lt;script&gt;</code> → замените <code>null</code> на скопированный ниже объект. Один и тот же публичный ключ подходит для всех последующих партий токенов, подписанных этим приватным ключом — вставлять его нужно только один раз.</span>
+      <span class="field-hint">Проще всего нажать «Опубликовать публичный ключ» ниже — скачается файл <code>public-key.json</code>, который нужно положить РЯДОМ с файлом База.html на сервере (при открытии через http(s) он подхватится сам, редактировать код не нужно). Альтернативный способ — скопировать ключ кнопкой ниже и вручную вставить его в строку <code>let TEACHER_PUBLIC_KEY_JWK = ...</code> в начале <code>&lt;script&gt;</code> файла База.html. Один и тот же публичный ключ подходит для всех последующих партий токенов, подписанных этим приватным ключом.</span>
       <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-success-neo" style="padding:10px 20px;font-size:13px" onclick="downloadPublicKeyJson(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Опубликовать публичный ключ
+        </button>
         <button class="btn btn-accent-neo" style="padding:10px 20px;font-size:13px" onclick="copyPubKey(this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
           Скопировать публичный ключ
@@ -880,7 +972,7 @@
 
     <div data-node-id="n72" class="result-header">
       <div data-node-id="n73" class="card-heading" style="margin-bottom:0">
-        <div data-node-id="n74" class="card-icon" style="background:linear-gradient(135deg,#00FFB3,#00A88F)">
+        <div data-node-id="n74" class="card-icon" style="background:linear-gradient(135deg,var(--success) 0%,color-mix(in srgb, var(--success) 65%, black) 100%)">
           <svg data-node-id="n75" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
             <polyline data-node-id="n76" points="9 11 12 14 22 4"/><path data-node-id="n77" d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
           </svg>
@@ -904,11 +996,11 @@
         <span data-node-id="n88" class="stat-lbl">Группа</span>
       </div>
       <div data-node-id="n89" class="stat-box">
-        <span data-node-id="n90" class="stat-val" id="statTask" style="font-size:18px;color:#00FFB3">—</span>
+        <span data-node-id="n90" class="stat-val" id="statTask" style="font-size:18px;color:var(--success)">—</span>
         <span data-node-id="n91" class="stat-lbl">Задание</span>
       </div>
       <div data-node-id="n92" class="stat-box">
-        <span data-node-id="n93" class="stat-val" id="statTTL" style="font-size:18px;color:#FFD700">—</span>
+        <span data-node-id="n93" class="stat-val" id="statTTL" style="font-size:18px;color:var(--warn)">—</span>
         <span data-node-id="n94" class="stat-lbl">Часов</span>
       </div>
     </div>
@@ -991,7 +1083,7 @@
       </svg>
 
       <div class="card-heading">
-        <div class="card-icon" style="background:linear-gradient(135deg,#00FFB3 0%,#00A88F 100%)">
+        <div class="card-icon" style="background:linear-gradient(135deg,var(--success) 0%,color-mix(in srgb, var(--success) 65%, black) 100%)">
           <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
             <path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/>
           </svg>
@@ -1042,6 +1134,12 @@
     <div id="verifyResult" style="display:none">
 
       <div id="riskBanner"></div>
+      <div style="margin:12px 0 20px;text-align:right">
+        <button class="btn btn-success-neo" style="padding:10px 20px;font-size:13px" onclick="downloadStandaloneAnalyticsReport()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          📊 Скачать аналитический HTML-отчёт
+        </button>
+      </div>
 
       <div class="glass-card" id="summary"></div>
       <div class="glass-card" id="scoreCard"></div>
@@ -1050,6 +1148,7 @@
       <div class="glass-card" id="screenshots"></div>
       <div class="glass-card" id="fpBlock"></div>
       <div class="glass-card" id="timings"></div>
+      <div class="glass-card" id="analyticsBlock"></div>
       <div class="glass-card" id="answers"></div>
 
       <div class="glass-card">
@@ -1067,7 +1166,7 @@
 /* ── PARTICLES ── */
 (function spawnParticles() {
   const container = document.getElementById('particles');
-  const colors = ['#00D4FF', '#7C3AED', '#00FFB3', '#FFD700'];
+  const colors = ['#8B5CF6', '#3B82F6', '#34D399', '#FBBF24'];
   for (let i = 0; i < 28; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
@@ -1183,6 +1282,37 @@ function copyPubKey(btn) {
   }).catch(() => alert('Не удалось скопировать — выделите текст вручную'));
 }
 
+/* ── ПУБЛИКАЦИЯ ПУБЛИЧНОГО КЛЮЧА (public-key.json) ──
+   Формирует файл public-key.json из уже сгенерированного публичного JWK-
+   ключа. Этот файл нужно положить РЯДОМ с файлом База.html на сервере —
+   при открытии страницы через http(s) она сама подхватит ключ оттуда
+   (см. ensurePublicKeyLoaded() в База.html), редактировать код не нужно. */
+function downloadPublicKeyJson(btn) {
+  const val = document.getElementById('pubKeyJwk').value;
+  if (!val) { alert('Сначала сгенерируйте пару ключей.'); return; }
+  let parsed;
+  try {
+    parsed = JSON.parse(val);
+  } catch (e) {
+    alert('❌ Публичный ключ повреждён — сгенерируйте пару заново.');
+    return;
+  }
+  if (!parsed || parsed.kty !== 'EC' || !parsed.crv || !parsed.x || !parsed.y) {
+    alert('❌ Это не похоже на корректный JWK-ключ ECDSA P-256.');
+    return;
+  }
+  const json = JSON.stringify(parsed, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'public-key.json';
+  a.click();
+
+  const orig = btn.innerHTML;
+  btn.innerHTML = '✅ public-key.json скачан';
+  setTimeout(() => { btn.innerHTML = orig; }, 2200);
+}
+
 /* ── GENERATE ── */
 async function generateAll(btn) {
   const names = document.getElementById('students').value
@@ -1235,7 +1365,7 @@ async function generateAll(btn) {
       <td style="font-weight:600;color: var(--ink-strong)">${fio}</td>
       <td><span class="badge-grp">${grp}</span></td>
       <td><span class="exp-text">${expDate}</span></td>
-      <td class="token-cell"><span class="token-shimmer">${token.slice(0, 40)}…</span><br><span style="-webkit-text-fill-color:rgba(226,232,240,0.45);font-size:9px">${token.slice(40, 80)}…</span></td>
+      <td class="token-cell"><span class="token-shimmer">${token.slice(0, 40)}…</span><br><span style="-webkit-text-fill-color:color-mix(in srgb, var(--ink) 45%, transparent);font-size:9px">${token.slice(40, 80)}…</span></td>
       <td>
         <button class="copy-btn" title="Скопировать токен" onclick="copyToken(this, '${safeToken}')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
@@ -1308,8 +1438,8 @@ function downloadCSV(btn) {
 function shakeInput(id) {
   const el = document.getElementById(id);
   el.style.animation = 'none';
-  el.style.borderColor = '#ff6b6b';
-  el.style.boxShadow = '0 0 0 3px rgba(255,107,107,0.25)';
+  el.style.borderColor = 'var(--danger)';
+  el.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--danger) 25%, transparent)';
   el.animate([
     { transform: 'translateX(0)' },
     { transform: 'translateX(-8px)' },
@@ -1502,6 +1632,67 @@ function analyzeRisks(report, chainOk) {
     score += 30;
   }
 
+  /* ══════════════════════════════════════════════════════════
+     СИНХРОНИЗАЦИЯ С БАЗА.HTML (п. «расширь пакетную проверку»):
+     новые отчёты База.html содержат блок report.analytics —
+     клиентскую поведенческую телеметрию (keystroke/mouse/cognitive/
+     temporal/contextual/honeypot). Старые отчёты этого блока не имеют —
+     все проверки ниже поэтому защищены от undefined и просто не
+     добавляют риск, если данных нет (обратная совместимость). ═══ */
+  const an = report?.analytics;
+  let machineTypingFlag = false, teleportCount = 0, honeypotCount = 0,
+      quickAnswerCount = 0, skippedReadingCount = 0, instantAnswerCount = 0,
+      idleTotalSec = 0;
+
+  if (an) {
+    if (an.keystroke?.machine_like) {
+      machineTypingFlag = true;
+      risks.push({ type: 'machine_typing', level: 'medium', text: 'Механически равномерный ритм набора текста (низкий коэфф. вариации интервалов между клавишами)' });
+      score += 15;
+    }
+
+    teleportCount = an.mouse?.teleport_count ?? 0;
+    if (teleportCount > 0) {
+      const pts = Math.min(20, teleportCount * 5);
+      risks.push({ type: 'mouse_teleport', level: teleportCount >= 4 ? 'high' : 'medium',
+        text: `Резкие «прыжки» курсора мыши: ${teleportCount} раз (возможное переключение окна/экрана)` });
+      score += pts;
+    }
+
+    honeypotCount = an.honeypot?.length ?? 0;
+    if (honeypotCount > 0) {
+      risks.push({ type: 'honeypot', level: 'high', text: `Сработала скрытая honeypot-ловушка: ${honeypotCount} раз (признак автоматизированного заполнения)` });
+      score += Math.min(30, honeypotCount * 30);
+    }
+
+    quickAnswerCount = an.temporal?.quick_answers?.length ?? 0;
+    if (quickAnswerCount > 2) {
+      risks.push({ type: 'quick_answers', level: 'medium', text: `Серия быстрых ответов подряд (<2 сек между полями): ${quickAnswerCount} раз` });
+      score += 10;
+    }
+
+    const cogVals = Object.values(an.cognitive ?? {});
+    skippedReadingCount = cogVals.filter(f => f?.skipped_reading).length;
+    instantAnswerCount  = cogVals.filter(f => f?.instant_answer).length;
+    if (instantAnswerCount > 0) {
+      risks.push({ type: 'instant_answer', level: instantAnswerCount >= 3 ? 'medium' : 'low',
+        text: `Мгновенные ответы без времени на прочтение условия: ${instantAnswerCount} поле(й)` });
+      score += Math.min(15, instantAnswerCount * 5);
+    } else if (skippedReadingCount > 0) {
+      risks.push({ type: 'skipped_reading', level: 'low', text: `Ответ дан заметно быстрее оценочного времени прочтения условия: ${skippedReadingCount} поле(й)` });
+      score += 5;
+    }
+
+    idleTotalSec = (an.temporal?.idle_periods ?? []).reduce((s, p) => s + (p.seconds || 0), 0);
+    // Простои сами по себе не добавляем в риск-балл (законная причина — обдумывание),
+    // но передаём дальше для информационного отображения в сводке/дашборде.
+
+    if (an.contextual?.multiMonitorSuspected) {
+      risks.push({ type: 'multi_monitor', level: 'low', text: 'Эвристический признак второго монитора (окно вне границ основного экрана)' });
+      score += 5;
+    }
+  }
+
   let level = 'low';
   if (score >= 60) level = 'high';
   else if (score >= 25) level = 'medium';
@@ -1509,7 +1700,10 @@ function analyzeRisks(report, chainOk) {
   return {
     risks, level, score, awayCount, pasteCount,
     screenshotCount: screenshotEvents.length, devtoolsCount: devtoolsEvents.length,
-    copyBlockedCount: copyBlockedEvents.length, durationMin: durMin
+    copyBlockedCount: copyBlockedEvents.length, durationMin: durMin,
+    machineTypingFlag, teleportCount, honeypotCount, quickAnswerCount,
+    skippedReadingCount, instantAnswerCount, idleTotalSec,
+    hasAnalytics: !!an
   };
 }
 
@@ -1566,12 +1760,168 @@ async function handleSingleFile(event) {
 
 /* Заполняет единый блок #verifyResult данными конкретного отчёта
    (используется и ручным вводом, и переходом «Подробно» из пакетного дашборда) */
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+/* Текущий отображаемый отчёт — используется кнопкой «Скачать аналитический HTML-отчёт» */
+let currentReport = null, currentChainCheck = null, currentRiskAnalysis = null;
+
+/* ══════════════════════════════════════════════════════════
+   АВТОНОМНЫЙ АНАЛИТИЧЕСКИЙ HTML-ОТЧЁТ (скачивается из платформы)
+   Синхронизировано со стилем аналитического отчёта из База.html, но
+   ДОПОЛНИТЕЛЬНО включает независимый риск-анализ самой платформы
+   (analyzeRisks) и проверку целостности блокчейн-цепочки — то есть
+   строго больше информации, чем самоэкспорт из База.html.
+   Полностью автономный файл: инлайн CSS, без CDN и без сети.
+   ══════════════════════════════════════════════════════════ */
+function buildStandaloneAnalyticsHtml(report, chainCheck, riskAnalysis) {
+  const meta = report?.meta ?? {};
+  const an = report?.analytics ?? null;
+  const susp = an?.suspicion ?? { score: 0, level: '—', breakdown: [] };
+  const keyStats = report?.footprint?.key_stats ?? {};
+
+  const riskRows = riskAnalysis.risks.map(r => `<tr><td>${esc(r.text)}</td><td><span class="badge badge-${r.level === 'high' ? 'danger' : r.level === 'medium' ? 'warn' : 'ok'}">${esc(r.level)}</span></td></tr>`).join('')
+    || '<tr><td colspan="2" style="text-align:center;color:#18a558">Платформа не выявила рисков</td></tr>';
+
+  const suspRows = (susp.breakdown || []).map(b => `<tr><td>${esc(b.label)}</td><td style="text-align:right;font-weight:700">+${b.points}</td></tr>`).join('')
+    || '<tr><td colspan="2" style="text-align:center;color:#18a558">Клиентский код не обнаружил признаков</td></tr>';
+
+  const cogRows = Object.entries(an?.cognitive ?? {}).map(([field, f]) => `
+    <tr><td>${esc(field)}</td><td>${f.task_words ?? '—'}</td><td>${f.est_reading_ms ?? '—'} мс</td>
+    <td>${f.focus_to_first_key_ms ?? '—'} мс</td><td>${f.corrections ?? 0}</td>
+    <td>${f.instant_answer ? '<span class="badge badge-danger">мгновенный</span>' : ''} ${f.skipped_reading ? '<span class="badge badge-warn">пропустил чтение?</span>' : ''}</td></tr>`
+  ).join('') || '<tr><td colspan="6" style="text-align:center;color:#94a3b8">нет данных</td></tr>';
+
+  const violRows = (report?.blockchain?.chain ?? [])
+    .filter(e => e.severity === 'WARN' || e.severity === 'ERROR')
+    .map(e => `<tr><td>${esc(new Date(e.ts).toLocaleString('ru-RU'))}</td><td>${esc(e.event.type)}</td><td>${esc(e.severity)}</td></tr>`)
+    .join('') || '<tr><td colspan="3" style="text-align:center;color:#94a3b8">нарушений не зафиксировано</td></tr>';
+
+  const wpmPoints = Object.entries(keyStats).map(([ts, v]) => ({ ts, v: v?.wpm })).filter(p => typeof p.v === 'number').slice(-40);
+
+  function svgGauge(score, level, color) {
+    const r = 70, cx = 90, cy = 90, circumference = Math.PI * r;
+    const offset = circumference * (1 - Math.max(0, Math.min(100, score || 0)) / 100);
+    return `<svg viewBox="0 0 180 110" width="200" height="122">
+      <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="#e8ecf0" stroke-width="16" stroke-linecap="round"/>
+      <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="${color}" stroke-width="16" stroke-linecap="round" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
+      <text x="${cx}" y="${cy-8}" text-anchor="middle" font-size="28" font-weight="800" fill="${color}">${score}</text>
+      <text x="${cx}" y="${cy+14}" text-anchor="middle" font-size="11" fill="#5a6b7a">риск: ${esc(level)}</text>
+    </svg>`;
+  }
+
+  function svgLine(points) {
+    if (!points.length) return '<div style="font-size:.85em;color:#94a3b8;padding:16px 0;text-align:center">Недостаточно данных</div>';
+    const w = 500, h = 130, pad = 20;
+    const maxY = Math.max(1, ...points.map(p => p.v)), minY = Math.min(0, ...points.map(p => p.v));
+    const scaleX = (w - pad * 2) / Math.max(1, points.length - 1);
+    const scaleY = (h - pad * 2) / Math.max(1, (maxY - minY));
+    const d = points.map((p, i) => (i === 0 ? 'M' : 'L') + (pad + i * scaleX).toFixed(1) + ' ' + (h - pad - (p.v - minY) * scaleY).toFixed(1)).join(' ');
+    return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}"><path d="${d}" fill="none" stroke="#1a6cf7" stroke-width="2.5"/></svg>`;
+  }
+
+  function svgPath(sample) {
+    if (!sample || !sample.length) return '<div style="font-size:.85em;color:#94a3b8;padding:16px 0;text-align:center">Недостаточно данных</div>';
+    const w = 300, h = 190;
+    const xs = sample.map(p => p.x), ys = sample.map(p => p.y);
+    const minX = Math.min(...xs), maxX = Math.max(...xs, minX + 1), minY = Math.min(...ys), maxY = Math.max(...ys, minY + 1);
+    const norm = (v, mn, mx, size) => ((v - mn) / (mx - mn)) * (size - 20) + 10;
+    const d = sample.map((p, i) => (i === 0 ? 'M' : 'L') + norm(p.x, minX, maxX, w).toFixed(1) + ' ' + norm(p.y, minY, maxY, h).toFixed(1)).join(' ');
+    return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="200" style="background:#f8fafc;border-radius:8px;border:1px solid #e8ecf0"><path d="${d}" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.8"/></svg>`;
+  }
+
+  return `<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"><title>Аналитический отчёт (платформа) — ${esc(meta.fio)}</title>
+<style>
+  * { box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f4f6f9; color:#0d1b2a; margin:0; padding:28px; }
+  .wrap { max-width:980px; margin:0 auto; }
+  h1 { font-size:1.5em; margin:0 0 4px; }
+  .sub { color:#5a6b7a; margin-bottom:24px; }
+  .disclaimer { background:#fff8e1; border:1px solid #f5d98a; border-radius:8px; padding:12px 16px; font-size:.86em; color:#7a5c00; margin-bottom:24px; }
+  .card { background:#fff; border:1px solid #e8ecf0; border-radius:12px; padding:20px 22px; margin-bottom:20px; }
+  .card h2 { font-size:1.05em; margin:0 0 14px; color:#0d52c8; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .meta-table td { padding:4px 8px; font-size:.9em; }
+  .meta-table td:first-child { color:#5a6b7a; }
+  table.data { width:100%; border-collapse:collapse; font-size:.86em; }
+  table.data th, table.data td { padding:7px 10px; border-bottom:1px solid #eef1f4; text-align:left; }
+  table.data th { color:#5a6b7a; font-weight:600; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:99px; font-size:.78em; font-weight:700; margin-right:4px; }
+  .badge-warn { background:#fff3cd; color:#7a5c00; }
+  .badge-danger { background:#fde2e2; color:#b02a37; }
+  .badge-ok { background:#e6f7ee; color:#18a558; }
+  .flex-center { display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+  @media (max-width:720px) { .grid2 { grid-template-columns:1fr; } }
+</style></head>
+<body><div class="wrap">
+  <h1>📊 Аналитический отчёт по практическому заданию</h1>
+  <div class="sub">Сформирован «Платформой контроля ПЗ» на основе JSON-отчёта курсанта. Файл автономен — не требует сети.</div>
+  <div class="disclaimer">⚠️ Показатели ниже — эвристические индикаторы для приоритизации ручной проверки преподавателем. Это не автоматическое доказательство списывания.</div>
+
+  <div class="card"><h2>Основные сведения</h2>
+    <table class="meta-table">
+      <tr><td>ФИО:</td><td><b>${esc(meta.fio)}</b></td></tr>
+      <tr><td>Группа:</td><td>${esc(meta.group)}</td></tr>
+      <tr><td>Вариант:</td><td>${esc(meta.var)}</td></tr>
+      <tr><td>Начало / конец:</td><td>${meta.start ? esc(new Date(meta.start).toLocaleString('ru-RU')) : '—'} — ${meta.end ? esc(new Date(meta.end).toLocaleString('ru-RU')) : '—'}</td></tr>
+      <tr><td>Балл:</td><td>${meta.score !== null && meta.score !== undefined ? meta.score + ' / ' + (meta.max_score ?? 16) : 'не проверено'}</td></tr>
+      <tr><td>Суммарное отсутствие на вкладке:</td><td>${esc(meta.total_away)}</td></tr>
+      <tr><td>Целостность блокчейн-цепочки:</td><td>${chainCheck.ok ? '<span class="badge badge-ok">✅ не нарушена</span>' : `<span class="badge badge-danger">❌ нарушена на #${chainCheck.brokenAt}</span>`}</td></tr>
+    </table>
+  </div>
+
+  <div class="grid2">
+    <div class="card"><h2>🛡️ Независимый риск-анализ платформы</h2>
+      <div class="flex-center">${svgGauge(riskAnalysis.score, riskAnalysis.level, riskAnalysis.level === 'high' ? '#dc3545' : riskAnalysis.level === 'medium' ? '#d97706' : '#18a558')}</div>
+      <table class="data"><thead><tr><th>Фактор</th><th>Уровень</th></tr></thead><tbody>${riskRows}</tbody></table>
+    </div>
+    <div class="card"><h2>🧠 Самооценка клиента (из отчёта)</h2>
+      <div class="flex-center">${svgGauge(susp.score, susp.level, susp.score >= 56 ? '#dc3545' : susp.score >= 26 ? '#d97706' : '#18a558')}</div>
+      <table class="data"><thead><tr><th>Фактор</th><th style="text-align:right">Баллы</th></tr></thead><tbody>${suspRows}</tbody></table>
+    </div>
+  </div>
+
+  <div class="card"><h2>⌨️ Динамика набора текста (WPM в динамике сессии)</h2>${svgLine(wpmPoints)}</div>
+
+  <div class="grid2">
+    <div class="card"><h2>🖱️ Траектория мыши</h2>${svgPath(an?.mouse?.path_sample)}</div>
+    <div class="card"><h2>⛔ Нарушения / события журнала</h2>
+      <table class="data"><thead><tr><th>Время</th><th>Событие</th><th>Уровень</th></tr></thead><tbody>${violRows}</tbody></table>
+    </div>
+  </div>
+
+  <div class="card"><h2>🧩 Когнитивный профиль по полям ответа</h2>
+    <table class="data"><thead><tr><th>Поле</th><th>Слов</th><th>Оценка чтения</th><th>До 1-го символа</th><th>Правок</th><th>Флаги</th></tr></thead><tbody>${cogRows}</tbody></table>
+  </div>
+
+  ${!an ? '<div class="disclaimer">Этот отчёт сформирован старой версией База.html — блок расширенной клиентской аналитики (keystroke/mouse/cognitive) в нём отсутствует; выше показан только независимый риск-анализ платформы.</div>' : ''}
+</div></body></html>`;
+}
+
+function downloadStandaloneAnalyticsReport() {
+  if (!currentReport) { alert('Сначала декодируйте отчёт.'); return; }
+  const html = buildStandaloneAnalyticsHtml(currentReport, currentChainCheck, currentRiskAnalysis);
+  const blob = new Blob([html], { type: 'text/html' });
+  const fio = (currentReport?.meta?.fio || 'unknown').replace(/[^a-zA-Z0-9_а-яА-Я-]+/g, '_');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'pz-analytics-platform_' + fio + '_' + new Date().toISOString().replace(/[:.]/g, '-') + '.html';
+  a.click();
+}
+
 function renderSingleReport(report, chainCheck, riskAnalysis) {
   const chain = report?.blockchain?.chain ?? [];
   const meta = report?.meta ?? {};
   const footprint = report?.footprint ?? {};
   const fp = report?.fingerprint ?? {};
   const answers = report?.answers ?? {};
+
+  // Запоминаем текущий отчёт/анализ — нужно для «Скачать аналитический HTML-отчёт»
+  currentReport = report;
+  currentChainCheck = chainCheck;
+  currentRiskAnalysis = riskAnalysis;
 
   /* — РИСК-БАННЕР — */
   const riskEl = document.getElementById('riskBanner');
@@ -1784,6 +2134,9 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
   }
   document.getElementById('timings').innerHTML = tHtml;
 
+  /* — РАСШИРЕННАЯ АНАЛИТИКА (report.analytics — синхронизировано с База.html) — */
+  document.getElementById('analyticsBlock').innerHTML = renderAnalyticsBlockHtml(report);
+
   /* — ОТВЕТЫ — */
   let aHtml = '<h3>📝 Ответы курсанта</h3>';
 
@@ -1956,10 +2309,10 @@ function svgDonut(segments, size) {
     offset += dash;
   });
   return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="flex-shrink:0">
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="${sw}"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="color-mix(in srgb, var(--ink-strong) 8%, transparent)" stroke-width="${sw}"/>
     ${circles}
     <text x="${cx}" y="${cy - 2}" text-anchor="middle" style="fill:var(--ink-strong)" font-size="${size*0.16}" font-weight="900" font-family="Inter,sans-serif">${total}</text>
-    <text x="${cx}" y="${cy + size*0.12}" text-anchor="middle" fill="rgba(226,232,240,0.55)" font-size="${size*0.07}" font-family="Inter,sans-serif">отчётов</text>
+    <text x="${cx}" y="${cy + size*0.12}" text-anchor="middle" fill="var(--ink-muted)" font-size="${size*0.07}" font-family="Inter,sans-serif">отчётов</text>
   </svg>`;
 }
 
@@ -1980,11 +2333,178 @@ function barChartHtml(items) {
       <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-muted);margin-bottom:5px">
         <span>${it.label}</span><b style="color: var(--ink-strong)">${it.value}</b>
       </div>
-      <div style="height:10px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden">
+      <div style="height:10px;background:color-mix(in srgb, var(--ink-strong) 8%, transparent);border-radius:99px;overflow:hidden">
         <div style="height:100%;width:${pct}%;background:${it.color};border-radius:99px"></div>
       </div>
     </div>`;
   }).join('');
+}
+
+/* ══════════════════════════════════════════════════════════
+   ── РАСШИРЕННАЯ АНАЛИТИКА ПОВЕДЕНИЯ (report.analytics) ──
+   Синхронизировано со структурой, которую формирует База.html:
+   keystroke / mouse / cognitive / temporal / contextual / honeypot /
+   suspicion. Все секции защищены от отсутствия данных (старые отчёты
+   без этого блока просто показывают заглушку, а не падают с ошибкой).
+   ══════════════════════════════════════════════════════════ */
+function svgSuspicionGaugeMini(score, level) {
+  score = Math.max(0, Math.min(100, score || 0));
+  const color = score >= 56 ? 'var(--danger)' : (score >= 26 ? 'var(--warn)' : 'var(--success)');
+  const r = 60, cx = 78, cy = 78;
+  const circumference = Math.PI * r;
+  const offset = circumference * (1 - score / 100);
+  return `
+  <svg viewBox="0 0 156 96" width="190" height="118">
+    <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="color-mix(in srgb, var(--ink-strong) 10%, transparent)" stroke-width="14" stroke-linecap="round"/>
+    <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="${color}" stroke-width="14" stroke-linecap="round"
+      stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
+    <text x="${cx}" y="${cy-8}" text-anchor="middle" font-size="26" font-weight="800" fill="${color}" font-family="Inter,sans-serif">${score}</text>
+    <text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="11" fill="var(--ink-muted)" font-family="Inter,sans-serif">риск: ${level ?? '—'}</text>
+  </svg>`;
+}
+
+function svgMousePathMini(pathSample) {
+  const w = 280, h = 170;
+  if (!pathSample || !pathSample.length) return '<p class="empty-state" style="margin:0">Недостаточно данных о движении мыши</p>';
+  const xs = pathSample.map(p => p.x), ys = pathSample.map(p => p.y);
+  const minX = Math.min(...xs), maxX = Math.max(...xs, minX + 1);
+  const minY = Math.min(...ys), maxY = Math.max(...ys, minY + 1);
+  const norm = (v, mn, mx, size) => ((v - mn) / (mx - mn)) * (size - 16) + 8;
+  const d = pathSample.map((p, i) => {
+    const x = norm(p.x, minX, maxX, w), y = norm(p.y, minY, maxY, h);
+    return (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1);
+  }).join(' ');
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="180" style="background:color-mix(in srgb, var(--ink-strong) 3%, transparent);border-radius:var(--radius-md);border:1px solid var(--border)">
+    <path d="${d}" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.85"/>
+  </svg>`;
+}
+
+function svgWpmLineMini(keyStats) {
+  const points = Object.entries(keyStats || {}).map(([ts, v]) => v?.wpm).filter(v => typeof v === 'number').slice(-40);
+  if (!points.length) return '<p class="empty-state" style="margin:0">Нет данных WPM</p>';
+  const w = 280, h = 110, pad = 14;
+  const maxY = Math.max(1, ...points), minY = Math.min(0, ...points);
+  const scaleX = (w - pad * 2) / Math.max(1, points.length - 1);
+  const scaleY = (h - pad * 2) / Math.max(1, (maxY - minY));
+  const d = points.map((v, i) => {
+    const x = pad + i * scaleX, y = h - pad - (v - minY) * scaleY;
+    return (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1);
+  }).join(' ');
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="110">
+    <path d="${d}" fill="none" stroke="var(--primary)" stroke-width="2"/>
+  </svg>`;
+}
+
+function renderAnalyticsBlockHtml(report) {
+  const an = report?.analytics;
+  if (!an) {
+    return `<h3>🧠 Расширенная поведенческая аналитика</h3>
+      <p class="empty-state">Этот отчёт сформирован более старой версией База.html — блок <code>analytics</code> (keystroke/mouse/cognitive/temporal/contextual/honeypot) в нём отсутствует.</p>`;
+  }
+
+  const ks = an.keystroke ?? {};
+  const ms = an.mouse ?? {};
+  const cog = an.cognitive ?? {};
+  const temporal = an.temporal ?? {};
+  const ctx = an.contextual ?? {};
+  const hp = an.honeypot ?? [];
+  const susp = an.suspicion ?? { score: 0, level: '—', breakdown: [] };
+  const keyStats = report?.footprint?.key_stats ?? {};
+
+  let html = '<h3>🧠 Расширенная поведенческая аналитика (клиентская телеметрия из отчёта)</h3>';
+  html += `<p style="margin-bottom:16px;font-size:12.5px;color:var(--ink-muted)">⚠️ Все показатели ниже — эвристические индикаторы, посчитанные в браузере курсанта и включённые в его же отчёт. Это вспомогательный материал для ручной проверки, а не независимое доказательство — сверяйте с риск-баллом платформы выше и с содержанием ответов.</p>`;
+
+  /* Самооценка клиента (suspicion, встроенная в отчёт) */
+  html += `<div class="form-grid" style="grid-template-columns:200px 1fr;align-items:center;margin-bottom:20px">
+    <div style="display:flex;justify-content:center">${svgSuspicionGaugeMini(susp.score, susp.level)}</div>
+    <div>
+      <h4 style="margin-top:0">Самооценка клиента («индекс подозрительности» из самого отчёта)</h4>
+      ${susp.breakdown && susp.breakdown.length ? `
+        <div class="table-wrap"><table><thead><tr><th>Фактор (по мнению клиентского кода)</th><th style="text-align:right">Баллы</th></tr></thead><tbody>
+          ${susp.breakdown.map(b => `<tr><td>${b.label}</td><td style="text-align:right"><b>+${b.points}</b></td></tr>`).join('')}
+        </tbody></table></div>` : '<p class="green" style="margin:0">Клиентский код не обнаружил явных эвристических признаков</p>'}
+    </div>
+  </div>`;
+
+  /* Keystroke + Mouse рядом */
+  html += `<div class="form-grid" style="grid-template-columns:1fr 1fr;margin-bottom:20px">
+    <div>
+      <h4 style="margin-top:0">⌨️ Динамика набора текста</h4>
+      <div class="table-wrap"><table>
+        <tr><th>Нажатий</th><td>${ks.total_keys ?? '—'}</td></tr>
+        <tr><th>Ср. удержание клавиши</th><td>${ks.avg_hold_ms ?? '—'} мс</td></tr>
+        <tr><th>Ср. интервал между клавишами</th><td>${ks.avg_flight_ms ?? '—'} мс</td></tr>
+        <tr><th>Коэфф. вариации ритма</th><td>${ks.flight_cv ?? '—'}</td></tr>
+        <tr><th>Backspace / длина ввода</th><td>${ks.backspace_rate !== undefined ? (ks.backspace_rate * 100).toFixed(1) + '%' : '—'}</td></tr>
+        <tr><th>Механический ритм</th><td>${ks.machine_like ? '<span class="badge badge-danger">да</span>' : '<span class="badge badge-ok">нет</span>'}</td></tr>
+      </table></div>
+      <div style="margin-top:10px;font-size:11.5px;color:var(--ink-muted)">Скорость печати (WPM) в динамике сессии:</div>
+      ${svgWpmLineMini(keyStats)}
+    </div>
+    <div>
+      <h4 style="margin-top:0">🖱️ Динамика мыши</h4>
+      <div class="table-wrap"><table>
+        <tr><th>Точек траектории</th><td>${ms.points_collected ?? '—'}</td></tr>
+        <tr><th>Кликов</th><td>${ms.clicks ?? '—'}</td></tr>
+        <tr><th>Скроллов</th><td>${ms.scroll_events ?? '—'}</td></tr>
+        <tr><th>«Телепортов» курсора</th><td class="${(ms.teleport_count ?? 0) > 0 ? 'orange' : ''}">${ms.teleport_count ?? '—'}</td></tr>
+        <tr><th>Доля прямых сегментов</th><td>${ms.straight_line_ratio !== undefined ? (ms.straight_line_ratio * 100).toFixed(1) + '%' : '—'}</td></tr>
+      </table></div>
+      <div style="margin-top:10px;font-size:11.5px;color:var(--ink-muted)">Траектория курсора (упрощённая):</div>
+      ${svgMousePathMini(ms.path_sample)}
+    </div>
+  </div>`;
+
+  /* Когнитивный профиль */
+  const cogEntries = Object.entries(cog);
+  html += `<h4>🧩 Когнитивный профиль по полям ответа</h4>`;
+  if (cogEntries.length === 0) {
+    html += '<p class="empty-state">Нет данных</p>';
+  } else {
+    html += '<div class="table-wrap"><table><thead><tr><th>Поле</th><th>Слов в условии</th><th>Оценка чтения</th><th>До 1-го символа</th><th>Правок</th><th>Флаги</th></tr></thead><tbody>';
+    cogEntries.forEach(([field, f]) => {
+      html += `<tr>
+        <td><code>${field}</code></td>
+        <td>${f.task_words ?? '—'}</td>
+        <td>${f.est_reading_ms ?? '—'} мс</td>
+        <td>${f.focus_to_first_key_ms ?? '—'} мс</td>
+        <td>${f.corrections ?? 0}</td>
+        <td>${f.instant_answer ? '<span class="badge badge-danger">мгновенный ответ</span>' : ''}${f.skipped_reading ? ' <span class="badge badge-warn">пропустил чтение?</span>' : ''}</td>
+      </tr>`;
+    });
+    html += '</tbody></table></div>';
+  }
+
+  /* Темпоральная + контекстная + honeypot в 3 колонки */
+  const idlePeriods = temporal.idle_periods ?? [];
+  const quickAnswers = temporal.quick_answers ?? [];
+  html += `<div class="form-grid" style="grid-template-columns:1fr 1fr 1fr;margin-top:20px">
+    <div>
+      <h4 style="margin-top:0">💤 Простои (&gt; 60 сек)</h4>
+      ${idlePeriods.length === 0 ? '<p class="empty-state">Не зафиксированы</p>' :
+        '<div class="table-wrap"><table><thead><tr><th>С</th><th>Длит.</th></tr></thead><tbody>' +
+        idlePeriods.map(p => `<tr><td>${new Date(p.from).toLocaleTimeString('ru-RU')}</td><td>${p.seconds} сек</td></tr>`).join('') +
+        '</tbody></table></div>'}
+      ${quickAnswers.length ? `<p style="margin-top:10px;font-size:12px" class="orange">⚡ Быстрых ответов подряд: ${quickAnswers.length}</p>` : ''}
+    </div>
+    <div>
+      <h4 style="margin-top:0">🖥️ Контекст сессии</h4>
+      <div class="table-wrap"><table>
+        <tr><th>Resize окна</th><td>${(ctx.resizeEvents ?? []).length}</td></tr>
+        <tr><th>Смена масштаба</th><td>${(ctx.zoomChanges ?? []).length}</td></tr>
+        <tr><th>Второй монитор</th><td>${ctx.multiMonitorSuspected ? '<span class="badge badge-warn">возможно</span>' : 'нет'}</td></tr>
+      </table></div>
+    </div>
+    <div>
+      <h4 style="margin-top:0">🍯 Honeypot-ловушки</h4>
+      ${hp.length === 0 ? '<p class="green" style="margin:0">✅ Не срабатывали</p>' :
+        '<div class="table-wrap"><table><thead><tr><th>Поле</th><th>Время</th></tr></thead><tbody>' +
+        hp.map(t => `<tr><td>${t.name}</td><td>${new Date(t.ts).toLocaleTimeString('ru-RU')}</td></tr>`).join('') +
+        '</tbody></table></div>'}
+    </div>
+  </div>`;
+
+  return html;
 }
 
 /* ── Отрисовка дашборда по результатам пакетной проверки ── */
@@ -2106,7 +2626,7 @@ function buildTimeHeatmapHtml(ok) {
     html += `<tr><td style="position:sticky;left:0;background:var(--surface-solid);padding:6px 12px;white-space:nowrap;color: var(--ink-strong);font-weight:600;border-bottom:1px solid var(--border)">${r.fio}</td>`;
     r.vals.forEach((v, ci) => {
       const alpha = Math.min(0.92, v / colMax[ci]);
-      html += `<td style="text-align:center;padding:6px 2px;border-bottom:1px solid rgba(255,255,255,0.04);background:rgba(0,212,255,${alpha.toFixed(2)});color:${alpha > 0.5 ? 'var(--ink-strong)' : 'var(--ink-muted)'}">${v || '·'}</td>`;
+      html += `<td style="text-align:center;padding:6px 2px;border-bottom:1px solid var(--border);background:color-mix(in srgb, var(--primary) ${Math.round(alpha * 100)}%, transparent);color:${alpha > 0.5 ? '#fff' : 'var(--ink-muted)'}">${v || '·'}</td>`;
     });
     html += '</tr>';
   });
@@ -2185,7 +2705,7 @@ function renderDashboard(results) {
     (groupAgg[g] = groupAgg[g] || []).push(r.report.meta.score);
   });
   const groupAverages = Object.entries(groupAgg)
-    .map(([g, vals]) => ({ label: g, value: +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1), color: '#00D4FF' }))
+    .map(([g, vals]) => ({ label: g, value: +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1), color: 'var(--primary)' }))
     .sort((a, b) => a.label.localeCompare(b.label));
 
   const chainFailCount = ok.filter(r => !r.chainCheck.ok).length;
@@ -2194,6 +2714,16 @@ function renderDashboard(results) {
   const totalScreenshot = ok.reduce((s, r) => s + (r.riskAnalysis.screenshotCount || 0), 0);
   const totalDevtools = ok.reduce((s, r) => s + (r.riskAnalysis.devtoolsCount || 0), 0);
   const totalCopyBlocked = ok.reduce((s, r) => s + (r.riskAnalysis.copyBlockedCount || 0), 0);
+
+  /* Синхронизировано с База.html: агрегаты по новому блоку report.analytics
+     (см. analyzeRisks). withAnalytics — сколько отчётов вообще содержат
+     этот блок (старые отчёты его не имеют — считаем честно, не подменяя нулями). */
+  const withAnalytics = ok.filter(r => r.riskAnalysis.hasAnalytics);
+  const totalHoneypot = ok.reduce((s, r) => s + (r.riskAnalysis.honeypotCount || 0), 0);
+  const totalTeleports = ok.reduce((s, r) => s + (r.riskAnalysis.teleportCount || 0), 0);
+  const machineTypingCount = ok.filter(r => r.riskAnalysis.machineTypingFlag).length;
+  const totalQuickAnswers = ok.reduce((s, r) => s + (r.riskAnalysis.quickAnswerCount || 0), 0);
+  const totalInstantAnswers = ok.reduce((s, r) => s + (r.riskAnalysis.instantAnswerCount || 0), 0);
 
   const durations = ok.map(r => r.riskAnalysis.durationMin).filter(d => d > 0);
   const avgDuration = durations.length ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : '—';
@@ -2218,6 +2748,8 @@ function renderDashboard(results) {
         <div class="stat-box"><span class="stat-val" style="color:${chainFailCount > 0 ? 'var(--danger)' : 'var(--success)'}">${chainFailCount}</span><span class="stat-lbl">Цепочка нарушена</span></div>
         <div class="stat-box"><span class="stat-val" style="color:${plagiarismPairs.length > 0 ? 'var(--danger)' : 'var(--success)'}">${plagiarismPairs.length}</span><span class="stat-lbl">Пар с совпадением ответов</span></div>
         <div class="stat-box"><span class="stat-val" style="color:${deviceCollisions.length > 0 ? 'var(--danger)' : 'var(--success)'}">${deviceCollisions.length}</span><span class="stat-lbl">Совпадений устройств</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:${totalHoneypot > 0 ? 'var(--danger)' : 'var(--success)'}">${totalHoneypot}</span><span class="stat-lbl">Honeypot-срабатываний</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:${withAnalytics.length < ok.length ? 'var(--warn)' : 'var(--ink-strong)'}">${withAnalytics.length}/${ok.length}</span><span class="stat-lbl">С расширенной аналитикой</span></div>
         ${errored.length ? `<div class="stat-box"><span class="stat-val" style="color:var(--warn)">${errored.length}</span><span class="stat-lbl">Не распознано</span></div>` : ''}
       </div>
     </div>`;
@@ -2231,15 +2763,15 @@ function renderDashboard(results) {
           <h4 style="margin-top:0">Распределение риска</h4>
           <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
             ${svgDonut([
-              { label: 'Низкий', value: riskCounts.low, color: '#00FFB3' },
-              { label: 'Средний', value: riskCounts.medium, color: '#FFD700' },
-              { label: 'Высокий', value: riskCounts.high, color: '#FF6B6B' }
+              { label: 'Низкий', value: riskCounts.low, color: 'var(--success)' },
+              { label: 'Средний', value: riskCounts.medium, color: 'var(--warn)' },
+              { label: 'Высокий', value: riskCounts.high, color: 'var(--danger)' }
             ], 130)}
             <div style="flex:1;min-width:120px">
               ${legendList([
-                { label: 'Низкий риск', value: riskCounts.low, color: '#00FFB3' },
-                { label: 'Средний риск', value: riskCounts.medium, color: '#FFD700' },
-                { label: 'Высокий риск', value: riskCounts.high, color: '#FF6B6B' }
+                { label: 'Низкий риск', value: riskCounts.low, color: 'var(--success)' },
+                { label: 'Средний риск', value: riskCounts.medium, color: 'var(--warn)' },
+                { label: 'Высокий риск', value: riskCounts.high, color: 'var(--danger)' }
               ])}
             </div>
           </div>
@@ -2247,21 +2779,53 @@ function renderDashboard(results) {
         <div>
           <h4 style="margin-top:0">Оценки (${scored.length} проверено)</h4>
           ${barChartHtml([
-            { label: 'Отлично (5)', value: gradeCounts['5'], color: '#00FFB3' },
-            { label: 'Хорошо (4)', value: gradeCounts['4'], color: '#00D4FF' },
-            { label: 'Удовл. (3)', value: gradeCounts['3'], color: '#FFD700' },
-            { label: 'Неудовл. (2)', value: gradeCounts['2'], color: '#FF6B6B' }
+            { label: 'Отлично (5)', value: gradeCounts['5'], color: 'var(--success)' },
+            { label: 'Хорошо (4)', value: gradeCounts['4'], color: 'var(--primary)' },
+            { label: 'Удовл. (3)', value: gradeCounts['3'], color: 'var(--warn)' },
+            { label: 'Неудовл. (2)', value: gradeCounts['2'], color: 'var(--danger)' }
           ])}
         </div>
         <div>
           <h4 style="margin-top:0">Нарушения по типам (сумма)</h4>
           ${barChartHtml([
-            { label: 'Уходы с вкладки', value: totalAway, color: '#00D4FF' },
-            { label: 'Вставки (paste)', value: totalPaste, color: '#FFD700' },
-            { label: 'Попытки скриншота', value: totalScreenshot, color: '#FF6B6B' },
-            { label: 'Попытки DevTools', value: totalDevtools, color: '#7C3AED' },
-            { label: 'Копирование текста заблокировано', value: totalCopyBlocked, color: '#FF9F43' }
+            { label: 'Уходы с вкладки', value: totalAway, color: 'var(--primary)' },
+            { label: 'Вставки (paste)', value: totalPaste, color: 'var(--warn)' },
+            { label: 'Попытки скриншота', value: totalScreenshot, color: 'var(--danger)' },
+            { label: 'Попытки DevTools', value: totalDevtools, color: 'var(--accent)' },
+            { label: 'Копирование текста заблокировано', value: totalCopyBlocked, color: 'var(--warn)' }
           ])}
+        </div>
+      </div>
+    </div>`;
+
+  /* — АНАЛИТИКА ПОВЕДЕНИЯ ПО ГРУППЕ (синхронизировано с новым блоком report.analytics в База.html) — */
+  html += `
+    <div class="glass-card">
+      <h3>🧠 Поведенческая аналитика по группе (report.analytics)</h3>
+      <p style="margin-bottom:14px;font-size:12px;color:var(--ink-muted)">Данные доступны для ${withAnalytics.length} из ${ok.length} отчётов (старые отчёты База.html этого блока не содержат).</p>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr">
+        <div>
+          <h4 style="margin-top:0">Поведенческие сигналы (сумма/кол-во курсантов)</h4>
+          ${barChartHtml([
+            { label: 'Механический набор (курсантов)', value: machineTypingCount, color: 'var(--accent)' },
+            { label: '«Телепорты» курсора (сумма)', value: totalTeleports, color: 'var(--warn)' },
+            { label: 'Honeypot-срабатываний (сумма)', value: totalHoneypot, color: 'var(--danger)' },
+            { label: 'Быстрых ответов подряд (сумма)', value: totalQuickAnswers, color: 'var(--warn)' },
+            { label: 'Мгновенных ответов (сумма)', value: totalInstantAnswers, color: 'var(--primary)' }
+          ])}
+        </div>
+        <div>
+          <h4 style="margin-top:0">Клиентский «индекс подозрительности» (среднее по группе)</h4>
+          ${(() => {
+            const suspVals = withAnalytics.map(r => r.report?.analytics?.suspicion?.score).filter(v => typeof v === 'number');
+            if (!suspVals.length) return '<p class="empty-state">Нет данных</p>';
+            const avgSusp = Math.round(suspVals.reduce((a, b) => a + b, 0) / suspVals.length);
+            const highSusp = suspVals.filter(v => v >= 56).length;
+            return `<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+              ${svgSuspicionGaugeMini(avgSusp, avgSusp >= 56 ? 'высокий' : avgSusp >= 26 ? 'средний' : 'низкий')}
+              <div style="font-size:13px;color:var(--ink-muted)">Курсантов с высоким клиентским индексом (≥56): <b style="color:var(--ink-strong)">${highSusp}</b> из ${suspVals.length}</div>
+            </div>`;
+          })()}
         </div>
       </div>
     </div>`;
@@ -2273,11 +2837,11 @@ function renderDashboard(results) {
       <div class="form-grid" style="grid-template-columns:1fr 1fr">
         <div>
           <h4 style="margin-top:0">Гистограмма баллов (${scored.length} проверено)</h4>
-          ${scored.length ? barChartHtml(scoreBins.map((b, i) => ({ ...b, color: i >= 6 ? '#00FFB3' : i >= 4 ? '#00D4FF' : i >= 2 ? '#FFD700' : '#FF6B6B' }))) : '<p class="empty-state">Нет проверенных работ</p>'}
+          ${scored.length ? barChartHtml(scoreBins.map((b, i) => ({ ...b, color: i >= 6 ? 'var(--success)' : i >= 4 ? 'var(--primary)' : i >= 2 ? 'var(--warn)' : 'var(--danger)' }))) : '<p class="empty-state">Нет проверенных работ</p>'}
         </div>
         <div>
           <h4 style="margin-top:0">Средний балл по группам (${groupAverages.length})</h4>
-          ${groupAverages.length ? barChartHtml(groupAverages.map(g => ({ ...g, color: (g.value / batchMaxScore) >= 0.8125 ? '#00FFB3' : (g.value / batchMaxScore) >= 0.6875 ? '#00D4FF' : '#FFD700' }))) : '<p class="empty-state">Нет проверенных работ</p>'}
+          ${groupAverages.length ? barChartHtml(groupAverages.map(g => ({ ...g, color: (g.value / batchMaxScore) >= 0.8125 ? 'var(--success)' : (g.value / batchMaxScore) >= 0.6875 ? 'var(--primary)' : 'var(--warn)' }))) : '<p class="empty-state">Нет проверенных работ</p>'}
         </div>
       </div>
     </div>`;
@@ -2342,7 +2906,7 @@ function renderDashboard(results) {
     deviceCollisions.forEach(group => {
       const names = group.members.map(m => m.report?.meta?.fio ?? m.fileName);
       html += `
-        <div style="border:1px solid rgba(255,107,107,.3);background:rgba(255,107,107,.06);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:12px">
+        <div style="border:1px solid color-mix(in srgb, var(--danger) 30%, transparent);background:color-mix(in srgb, var(--danger) 6%, transparent);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:12px">
           <div style="margin-bottom:8px"><span class="badge badge-danger">${group.matchType}</span></div>
           <div style="display:flex;flex-wrap:wrap;gap:10px">
             ${group.members.map(m => `
@@ -2383,6 +2947,7 @@ function renderDashboard(results) {
           <th>Оценка</th>
           <th data-sort="risk" onclick="sortBatchTable('risk')" style="cursor:pointer">Риск-балл</th>
           <th data-sort="integrity" onclick="sortBatchTable('integrity')" style="cursor:pointer">Целостность</th>
+          <th>Флаги</th>
           <th></th>
         </tr></thead>
         <tbody id="batchTableBody"></tbody>
@@ -2396,7 +2961,7 @@ function renderDashboard(results) {
         rowHtml: `<tr>
           <td>${n + 1}</td>
           <td style="max-width:200px;overflow-wrap:break-word">${r.fileName}</td>
-          <td colspan="6"><span class="badge badge-danger">Ошибка разбора</span> ${r.error}</td>
+          <td colspan="7"><span class="badge badge-danger">Ошибка разбора</span> ${r.error}</td>
           <td>—</td>
         </tr>`
       };
@@ -2407,6 +2972,14 @@ function renderDashboard(results) {
     const grade = (sv === null || sv === undefined) ? null : gradeInfo(sv, maxSv).num;
     const riskBadge = r.riskAnalysis.level === 'high' ? 'badge-danger' : r.riskAnalysis.level === 'medium' ? 'badge-warn' : 'badge-ok';
     const riskLabel = r.riskAnalysis.level === 'high' ? 'Высокий' : r.riskAnalysis.level === 'medium' ? 'Средний' : 'Низкий';
+    const ra = r.riskAnalysis;
+    const flagIcons = [
+      ra.honeypotCount > 0 ? '<span title="Honeypot-ловушка сработала">🍯</span>' : '',
+      ra.machineTypingFlag ? '<span title="Механический ритм набора">🤖</span>' : '',
+      ra.teleportCount > 0 ? '<span title="Резкие прыжки курсора">🖱️</span>' : '',
+      ra.instantAnswerCount > 0 ? '<span title="Мгновенные ответы">⚡</span>' : '',
+      !ra.hasAnalytics ? '<span title="Отчёт старого формата — нет расширенной аналитики" style="opacity:.4">•</span>' : ''
+    ].filter(Boolean).join(' ') || '<span style="opacity:.35">—</span>';
     return {
       sortVals: { n: n, fio: (meta.fio ?? '').toLowerCase(), score: sv ?? -1, risk: r.riskAnalysis.score, integrity: r.chainCheck.ok ? 1 : 0 },
       rowHtml: `<tr>
@@ -2419,6 +2992,7 @@ function renderDashboard(results) {
         <td>${grade ? `<span class="grade-badge grade-${grade}">${grade}</span>` : '<span class="empty-state" style="padding:0">—</span>'}</td>
         <td><span class="badge ${riskBadge}">${riskLabel}</span> <b style="color:var(--ink-muted);font-size:11px">${r.riskAnalysis.score}</b></td>
         <td>${r.chainCheck.ok ? '<span class="green">✅ OK</span>' : '<span class="red">❌ нарушена</span>'}</td>
+        <td style="font-size:14px">${flagIcons}</td>
         <td><button class="copy-btn" style="width:auto;padding:0 12px;height:32px;font-size:11px;font-weight:700" onclick="showBatchDetail(${r._i})">Подробно</button></td>
       </tr>`
     };
@@ -2444,14 +3018,16 @@ function showBatchDetail(i) {
 
 /* Скачать сводный CSV по всей пачке отчётов */
 function downloadBatchCSV() {
-  const rows = ['Файл;ФИО;Группа;Задание;Балл;Максимум;Оценка;Риск;Риск_балл;Длительность_мин;Кол-во_рисков;Целостность_цепочки;Device_ID'];
+  const rows = ['Файл;ФИО;Группа;Задание;Балл;Максимум;Оценка;Риск;Риск_балл;Длительность_мин;Кол-во_рисков;Целостность_цепочки;Device_ID;Honeypot;Механический_набор;Телепорты_курсора;Быстрых_ответов;Мгновенных_ответов;Клиентский_индекс_подозрительности'];
   batchResults.forEach(r => {
-    if (r.error) { rows.push(`${r.fileName};ОШИБКА;;;;;;;;;;;${r.error}`); return; }
+    if (r.error) { rows.push(`${r.fileName};ОШИБКА;;;;;;;;;;;${r.error};;;;;;`); return; }
     const meta = r.report?.meta ?? {};
     const sv = meta.score;
     const maxSv = meta.max_score ?? 16;
     const grade = (sv === null || sv === undefined) ? '—' : gradeInfo(sv, maxSv).num;
-    rows.push(`${r.fileName};${meta.fio ?? '—'};${meta.group ?? '—'};${meta.task ?? '—'};${sv ?? '—'};${maxSv};${grade};${r.riskAnalysis.level};${r.riskAnalysis.score};${r.riskAnalysis.durationMin || ''};${r.riskAnalysis.risks.length};${r.chainCheck.ok ? 'OK' : 'НАРУШЕНА'};${r.report?.fingerprint?.deviceID ?? ''}`);
+    const ra = r.riskAnalysis;
+    const clientSuspicion = r.report?.analytics?.suspicion?.score ?? '';
+    rows.push(`${r.fileName};${meta.fio ?? '—'};${meta.group ?? '—'};${meta.task ?? '—'};${sv ?? '—'};${maxSv};${grade};${ra.level};${ra.score};${ra.durationMin || ''};${ra.risks.length};${r.chainCheck.ok ? 'OK' : 'НАРУШЕНА'};${r.report?.fingerprint?.deviceID ?? ''};${ra.honeypotCount ?? 0};${ra.machineTypingFlag ? 'да' : 'нет'};${ra.teleportCount ?? 0};${ra.quickAnswerCount ?? 0};${ra.instantAnswerCount ?? 0};${clientSuspicion}`);
   });
   const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
