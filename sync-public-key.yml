@@ -1,0 +1,44 @@
+name: Sync public-key.json to Practical-work01
+
+# Запускается автоматически при каждом изменении public-key.json в этом
+# репозитории (check-key) и копирует свежий файл в репозиторий База.html
+# (Practical-work01) — коммитом от имени github-actions[bot].
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public-key.json'
+  workflow_dispatch: {} # + кнопка "Run workflow" вручную, если нужно синхронизировать без нового коммита
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout check-key (источник)
+        uses: actions/checkout@v4
+        with:
+          path: source
+
+      - name: Checkout Practical-work01 (назначение)
+        uses: actions/checkout@v4
+        with:
+          repository: daniilzhmurko-web/Practical-work01
+          # Секрет создаётся один раз, см. инструкцию ниже.
+          token: ${{ secrets.TARGET_REPO_TOKEN }}
+          path: target
+
+      - name: Скопировать public-key.json
+        run: cp source/public-key.json target/public-key.json
+
+      - name: Закоммитить и запушить, если файл изменился
+        run: |
+          cd target
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public-key.json
+          if git diff --cached --quiet; then
+            echo "public-key.json не изменился — коммит не нужен."
+          else
+            git commit -m "chore: sync public-key.json from check-key (auto)"
+            git push
+          fi
