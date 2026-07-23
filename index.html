@@ -871,8 +871,12 @@
     <div class="field" id="pubKeyBlock" style="display:none;margin-top:6px">
       <label>Публичный ключ (JWK) — подставьте в База.html</label>
       <textarea id="pubKeyJwk" rows="3" readonly></textarea>
-      <span class="field-hint">Проще всего нажать «Опубликовать публичный ключ» ниже — скачается файл <code>public-key.json</code>, который нужно положить РЯДОМ с файлом База.html на сервере (при открытии через http(s) он подхватится сам, редактировать код не нужно). Альтернативный способ — скопировать ключ кнопкой ниже и вручную вставить его в строку <code>let TEACHER_PUBLIC_KEY_JWK = ...</code> в начале <code>&lt;script&gt;</code> файла База.html. Один и тот же публичный ключ подходит для всех последующих партий токенов, подписанных этим приватным ключом.</span>
+      <span class="field-hint">Если настроен сервер ключа (см. KEY_SERVER_URL ниже в коде) — нажмите «📡 Отправить на сервер», и База.html подхватит новый ключ автоматически при следующем открытии, ничего вручную переносить не нужно. Без сервера — нажмите «Опубликовать публичный ключ», скачается файл <code>public-key.json</code>, который нужно положить РЯДОМ с файлом База.html. Либо скопируйте ключ кнопкой и вставьте вручную в строку <code>let TEACHER_PUBLIC_KEY_JWK = ...</code> в начале <code>&lt;script&gt;</code> файла База.html.</span>
       <div class="btn-row" style="margin-top:10px">
+        <button class="btn btn-primary-neo" style="padding:10px 20px;font-size:13px" onclick="publishKeyToServer(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          📡 Отправить на сервер
+        </button>
         <button class="btn btn-success-neo" style="padding:10px 20px;font-size:13px" onclick="downloadPublicKeyJson(this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           Опубликовать публичный ключ
@@ -882,6 +886,7 @@
           Скопировать публичный ключ
         </button>
       </div>
+      <div id="keyServerStatus" style="margin-top:8px;font-size:.85em;min-height:1.3em"></div>
     </div>
   </div>
 
@@ -1282,6 +1287,68 @@ function copyPubKey(btn) {
   }).catch(() => alert('Не удалось скопировать — выделите текст вручную'));
 }
 
+/* ============================================================
+   СЕРВЕР ПУБЛИЧНОГО КЛЮЧА (Flask на PythonAnywhere, см. app.py)
+   ------------------------------------------------------------
+   Заполните после деплоя сервера (инструкция — README_DEPLOY.md):
+   KEY_SERVER_URL    — адрес вашего приложения на PythonAnywhere
+   KEY_SERVER_SECRET — тот же секрет, что в UPDATE_SECRET в app.py
+
+   ЧЕСТНОЕ ОГРАНИЧЕНИЕ: секрет ниже виден в исходном коде этой страницы —
+   иначе кнопка не смогла бы его отправить. Он не защищает от того, кто
+   открыл код страницы Платформы, а защищает только от случайных/чужих
+   запросов на сервер извне. Если это неприемлемо — ограничьте доступ к
+   самой странице Платформы паролем на уровне хостинга. */
+const KEY_SERVER_URL = '';    // ← например: 'https://ваш_логин.pythonanywhere.com'
+const KEY_SERVER_SECRET = ''; // ← тот же секрет, что в app.py (UPDATE_SECRET)
+
+async function publishKeyToServer(btn) {
+  const statusEl = document.getElementById('keyServerStatus');
+  const val = document.getElementById('pubKeyJwk').value;
+  if (!val) { alert('Сначала сгенерируйте пару ключей.'); return; }
+
+  if (!KEY_SERVER_URL) {
+    if (statusEl) {
+      statusEl.textContent = '⚠️ Сервер ключа не настроен (пуст KEY_SERVER_URL в коде) — разверните app.py на PythonAnywhere по инструкции README_DEPLOY.md, впишите адрес и секрет в начале <script>, затем повторите.';
+      statusEl.style.color = '#b45309';
+    }
+    return;
+  }
+
+  let jwk;
+  try {
+    jwk = JSON.parse(val);
+  } catch (e) {
+    if (statusEl) { statusEl.textContent = '❌ Публичный ключ повреждён — сгенерируйте пару заново.'; statusEl.style.color = '#e03d3d'; }
+    return;
+  }
+
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  if (statusEl) { statusEl.textContent = '📡 Отправка на сервер…'; statusEl.style.color = '#0891b2'; }
+
+  try {
+    const resp = await fetch(KEY_SERVER_URL.replace(/\/$/, '') + '/update-key', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret: KEY_SERVER_SECRET, jwk })
+    });
+    const data = await resp.json().catch(() => null);
+
+    if (resp.ok && data && data.success) {
+      if (statusEl) { statusEl.textContent = '✅ Ключ отправлен на сервер — База.html подхватит его автоматически.'; statusEl.style.color = '#18a558'; }
+    } else {
+      throw new Error((data && data.message) || ('HTTP ' + resp.status));
+    }
+  } catch (e) {
+    console.warn('Не удалось отправить ключ на сервер:', e);
+    if (statusEl) { statusEl.textContent = '❌ Не удалось отправить на сервер (' + e.message + ') — используйте кнопку «Опубликовать публичный ключ» ниже как запасной вариант.'; statusEl.style.color = '#e03d3d'; }
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
+}
+
 /* ── ПУБЛИКАЦИЯ ПУБЛИЧНОГО КЛЮЧА (public-key.json) ──
    Формирует файл public-key.json из уже сгенерированного публичного JWK-
    ключа. Этот файл нужно положить РЯДОМ с файлом База.html на сервере —
@@ -1569,6 +1636,13 @@ function analyzeRisks(report, chainOk) {
   if (screenshotEvents.length > 0) {
     risks.push({ type: 'screenshot', level: 'high', text: `Попытки скриншота: ${screenshotEvents.length}` });
     score += 40;
+  }
+
+  const screenshotHeuristicEvents = chain.filter(e => e?.event?.type === 'POSSIBLE_SCREENSHOT_HEURISTIC');
+  if (screenshotHeuristicEvents.length > 0) {
+    risks.push({ type: 'screenshot_heuristic', level: 'low',
+      text: `Возможные скриншоты (эвристика, не доказательство): ${screenshotHeuristicEvents.length}` });
+    score += Math.min(15, screenshotHeuristicEvents.length * 5);
   }
 
   const devtoolsEvents = chain.filter(e => e?.event?.desc?.includes('DevTools') || e?.event?.type === 'VIOLATION');
@@ -1991,7 +2065,7 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
 
   /* — НАРУШЕНИЯ — */
   const violationEvents = chain.filter(e =>
-    ['TAB_LEFT', 'WINDOW_BLUR', 'PASTE_DETECTED', 'VIOLATION', 'SCREENSHOT_ATTEMPT', 'PAGE_CLOSE_ATTEMPT', 'COPY_BLOCKED'].includes(e?.event?.type)
+    ['TAB_LEFT', 'WINDOW_BLUR', 'PASTE_DETECTED', 'VIOLATION', 'SCREENSHOT_ATTEMPT', 'POSSIBLE_SCREENSHOT_HEURISTIC', 'PAGE_CLOSE_ATTEMPT', 'COPY_BLOCKED'].includes(e?.event?.type)
   );
 
   let vHtml = '<h3>⚠️ Нарушения и подозрительные события</h3>';
@@ -2002,7 +2076,7 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
     violationEvents.forEach((v, idx) => {
       const type = v?.event?.type;
       const badgeClass = type === 'VIOLATION' || type === 'SCREENSHOT_ATTEMPT' ? 'badge-danger'
-        : type === 'PASTE_DETECTED' || type === 'COPY_BLOCKED' ? 'badge-warn' : 'badge-info';
+        : type === 'PASTE_DETECTED' || type === 'COPY_BLOCKED' || type === 'POSSIBLE_SCREENSHOT_HEURISTIC' ? 'badge-warn' : 'badge-info';
       const label = {
         TAB_LEFT: 'Уход с вкладки',
         TAB_RETURNED: 'Возвращение на вкладку',
@@ -2013,6 +2087,7 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
         COPY_BLOCKED: 'ПОПЫТКА КОПИРОВАНИЯ ТЕКСТА ЗАДАНИЯ',
         VIOLATION: 'НАРУШЕНИЕ',
         SCREENSHOT_ATTEMPT: 'ПОПЫТКА СКРИНШОТА',
+        POSSIBLE_SCREENSHOT_HEURISTIC: 'ВОЗМОЖНЫЙ СКРИНШОТ (эвристика)',
         PAGE_CLOSE_ATTEMPT: 'Попытка закрыть страницу',
         FORMULA_EVAL: 'Формула'
       }[type] || type;
@@ -2026,6 +2101,8 @@ function renderSingleReport(report, chainCheck, riskAnalysis) {
         details = v.event.desc ?? 'Попытка скопировать текст условия задачи/вопроса была заблокирована';
       } else if (type === 'SCREENSHOT_ATTEMPT') {
         details = `Метод: ${v.event.method ?? '—'}`;
+      } else if (type === 'POSSIBLE_SCREENSHOT_HEURISTIC') {
+        details = (v.event.desc ?? 'Короткая потеря фокуса окна') + ' <i style="opacity:.7">(не доказательство — PrintScreen физически не перехватывается на большинстве систем, это лишь косвенный признак)</i>';
       } else if (type === 'TAB_LEFT') {
         details = 'Курсант покинул вкладку задания';
       } else if (type === 'TAB_RETURNED') {
@@ -2898,22 +2975,40 @@ function renderDashboard(results) {
   /* — СОВПАДЕНИЯ УСТРОЙСТВ («кто чьим устройством пользовался») — */
   html += `
     <div class="glass-card">
-      <h3>🖥️ Совпадения устройств</h3>
-      <p style="margin-bottom:14px">Сопоставление device fingerprint (canvas/audio/WebGL-хэш) и Visitor ID между отчётами. Совпадение означает, что отчёты сформированы <b>с одного и того же физического устройства/браузерного профиля</b> — либо один курсант выполнял работу за другого, либо один человек отправил несколько отчётов под разными именами.</p>`;
+      <h3>🖥️ Сравнение устройств (footprint) между курсантами</h3>
+      <p style="margin-bottom:14px">Сопоставление device fingerprint (canvas/audio/WebGL-хэш) и Visitor ID между отчётами. Совпадение означает, что отчёты сформированы <b>с одного и того же физического устройства/браузерного профиля</b> — либо один курсант выполнял работу за другого, либо один человек отправил несколько отчётов под разными именами. Отдельно выделены случаи, когда совпадение — <b>между разными учебными группами</b>, это особенно подозрительно.</p>`;
   if (deviceCollisions.length === 0) {
     html += `<p class="green">✅ Совпадений устройств между разными курсантами не обнаружено</p>`;
   } else {
-    deviceCollisions.forEach(group => {
-      const names = group.members.map(m => m.report?.meta?.fio ?? m.fileName);
+    deviceCollisions.forEach((group, gi) => {
+      const distinctGroups = new Set(group.members.map(m => m.report?.meta?.group ?? '—'));
+      const crossGroup = distinctGroups.size > 1;
       html += `
-        <div style="border:1px solid color-mix(in srgb, var(--danger) 30%, transparent);background:color-mix(in srgb, var(--danger) 6%, transparent);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:12px">
-          <div style="margin-bottom:8px"><span class="badge badge-danger">${group.matchType}</span></div>
-          <div style="display:flex;flex-wrap:wrap;gap:10px">
-            ${group.members.map(m => `
-              <button class="copy-btn" style="width:auto;padding:0 14px;height:32px;font-size:12px;font-weight:700" onclick="showBatchDetail(${m._i})">
-                ${m.report?.meta?.fio ?? m.fileName}
-              </button>`).join('')}
+        <div style="margin-bottom:18px">
+          <div style="margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span class="badge badge-danger">Группа совпадения #${gi + 1} · ${group.matchType}</span>
+            ${crossGroup ? '<span class="badge badge-danger">⚠️ РАЗНЫЕ УЧЕБНЫЕ ГРУППЫ</span>' : '<span class="badge badge-warn">одна учебная группа</span>'}
           </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>ФИО</th><th>Учебная группа</th><th>Device ID</th><th>Visitor ID</th><th>Время сдачи</th><th>Балл</th><th></th></tr></thead>
+            <tbody>
+              ${group.members.map(m => {
+                const meta = m.report?.meta ?? {};
+                const fp = m.report?.fingerprint ?? {};
+                const dId = (fp.deviceID ?? '—').toString();
+                const vId = (fp.visitorId ?? '—').toString();
+                return `<tr>
+                  <td style="font-weight:600;color: var(--ink-strong)">${meta.fio ?? m.fileName}</td>
+                  <td><span class="badge-grp">${meta.group ?? '—'}</span></td>
+                  <td class="hash-mono">${dId.slice(0, 16)}${dId.length > 16 ? '…' : ''}</td>
+                  <td class="hash-mono">${vId.slice(0, 16)}${vId.length > 16 ? '…' : ''}</td>
+                  <td>${meta.end ? new Date(meta.end).toLocaleString('ru-RU') : '—'}</td>
+                  <td>${meta.score ?? '—'} / ${meta.max_score ?? '—'}</td>
+                  <td><button class="copy-btn" style="width:auto;padding:0 12px;height:30px;font-size:11px;font-weight:700" onclick="showBatchDetail(${m._i})">Подробно</button></td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table></div>
         </div>`;
     });
   }
