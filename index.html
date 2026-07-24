@@ -308,6 +308,23 @@
   /* number input: hide spinners */
   input[type=number]::-webkit-inner-spin-button { opacity: .4; }
 
+  /* ── ПЕРЕКЛЮЧАТЕЛЬ (email-уведомления и т.п.) ── */
+  .switch { position: relative; display: inline-block; width: 46px; height: 26px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch-slider {
+    position: absolute; cursor: pointer; inset: 0;
+    background: color-mix(in srgb, var(--ink-strong) 12%, transparent);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    transition: background .2s;
+  }
+  .switch-slider::before {
+    content: ""; position: absolute; height: 18px; width: 18px; left: 3px; top: 3px;
+    background: var(--ink-strong); border-radius: 50%; transition: transform .2s;
+  }
+  .switch input:checked + .switch-slider { background: var(--success); border-color: transparent; }
+  .switch input:checked + .switch-slider::before { transform: translateX(20px); background: #fff; }
+
   /* ── BUTTONS ── */
   .btn-row {
     display: flex; flex-wrap: wrap; gap: 12px;
@@ -890,6 +907,38 @@
     </div>
   </div>
 
+  <!-- ══ EMAIL-УВЕДОМЛЕНИЯ (настройки сервера) ══ -->
+  <div class="glass-card" data-component="email-settings">
+    <h3>📧 Email-уведомления об отчётах ПЗ</h3>
+    <p style="margin-bottom:14px">Сервер (app.py на PythonAnywhere) сохраняет каждый отчёт в папку <code>reports/</code> и, если включено ниже, дополнительно рассылает его на указанные адреса. Настройки применяются сразу для всех новых отчётов — их не нужно менять на каждое ПЗ.</p>
+
+    <div class="field" style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <label class="switch">
+        <input type="checkbox" id="emailNotifyEnabled">
+        <span class="switch-slider"></span>
+      </label>
+      <span id="emailNotifyEnabledLabel" style="font-weight:600">Уведомления выключены</span>
+    </div>
+
+    <div class="field">
+      <label>Email-адреса получателей (через запятую или с новой строки — можно несколько)</label>
+      <textarea id="emailNotifyRecipients" rows="3" placeholder="danis1982@list.ru, another@example.com"></textarea>
+      <span class="field-hint">Каждый отчёт (JSON) будет прислан на ВСЕ перечисленные адреса сразу.</span>
+    </div>
+
+    <div class="btn-row" style="margin-top:10px">
+      <button class="btn btn-primary-neo" style="padding:10px 20px;font-size:13px" onclick="loadEmailConfig(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M4 4v6h6M20 20v-6h-6M4.5 9a8 8 0 0113.3-3.4L20 9M4 15l2.2 3.4A8 8 0 0019.5 15"/></svg>
+        Загрузить текущие настройки с сервера
+      </button>
+      <button class="btn btn-success-neo" style="padding:10px 20px;font-size:13px" onclick="saveEmailConfig(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+        Сохранить настройки на сервере
+      </button>
+    </div>
+    <div id="emailConfigStatus" style="margin-top:8px;font-size:.85em;min-height:1.3em"></div>
+  </div>
+
   <!-- ══ MAIN FORM CARD ══ -->
   <div data-node-id="n16" class="glass-card" data-component="form-card">
 
@@ -928,7 +977,7 @@
       <div data-node-id="n38" class="field">
         <label data-node-id="n39">Список курсантов (ФИО)</label>
         <textarea data-node-id="n40" id="students" rows="9"
-          placeholder="   Иванов Игорь Петрович&#10;   Старостенко Игорь Николаевич&#10;   Сидоров Алексей Михайлович&#10;   Резвов Денис Святославович&#10;..."></textarea>
+          placeholder="Иванов Иван Иванович&#10;Петров Петр Петрович&#10;Сидоров Сидор Сидорович&#10;Козлов Алексей Дмитриевич&#10;..."></textarea>
         <span data-node-id="n41" class="field-hint">По одному ФИО на строку — можно вставить столбец из Excel</span>
       </div>
 
@@ -936,7 +985,7 @@
       <div data-node-id="n42" style="display:flex;flex-direction:column;gap:18px">
         <div data-node-id="n43" class="field">
           <label data-node-id="n44">Группа</label>
-          <input data-node-id="n45" type="text" id="grp" value="1229">
+          <input data-node-id="n45" type="text" id="grp" value="ИБ-21">
         </div>
         <div data-node-id="n46" class="field">
           <label data-node-id="n47">Номер задания</label>
@@ -1299,8 +1348,8 @@ function copyPubKey(btn) {
    открыл код страницы Платформы, а защищает только от случайных/чужих
    запросов на сервер извне. Если это неприемлемо — ограничьте доступ к
    самой странице Платформы паролем на уровне хостинга. */
-const KEY_SERVER_URL = 'https://danis19820703.pythonanywhere.com';
-   const KEY_SERVER_SECRET = 'kX9mQ2wP7vL4nR8zT3jF6hY1sD5ckX9mQ2wP7vL4nR8zT3jF6hY1sD5ckX9mQ2wP7vL4nR8zT3jF6hY1sD5c';
+const KEY_SERVER_URL = 'https://danis19820703.pythonanywhere.com';    // ← например: 'https://ваш_логин.pythonanywhere.com'
+const KEY_SERVER_SECRET = 'kX9mQ2wP7vL4nR8zT3jF6hY1sD5ckX9mQ2wP7vL4nR8zT3jF6hY1sD5ckX9mQ2wP7vL4nR8zT3jF6hY1sD5c'; // ← тот же секрет, что в app.py (UPDATE_SECRET)
 
 async function publishKeyToServer(btn) {
   const statusEl = document.getElementById('keyServerStatus');
@@ -1343,6 +1392,89 @@ async function publishKeyToServer(btn) {
   } catch (e) {
     console.warn('Не удалось отправить ключ на сервер:', e);
     if (statusEl) { statusEl.textContent = '❌ Не удалось отправить на сервер (' + e.message + ') — используйте кнопку «Опубликовать публичный ключ» ниже как запасной вариант.'; statusEl.style.color = '#e03d3d'; }
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
+}
+
+/* ============================================================
+   НАСТРОЙКИ EMAIL-УВЕДОМЛЕНИЙ (см. п.2 замечаний)
+   ------------------------------------------------------------
+   Читает/пишет /email-config и /update-email-config на том же сервере,
+   что и ключ (KEY_SERVER_URL). Список получателей и переключатель
+   вкл/выкл хранятся на сервере (email-config.json), а не в этом HTML —
+   так что все, кто откроет Платформу, увидят одни и те же настройки
+   после загрузки с сервера. */
+(function wireEmailSwitchLabel() {
+  const chk = document.getElementById('emailNotifyEnabled');
+  const label = document.getElementById('emailNotifyEnabledLabel');
+  if (!chk || !label) return;
+  chk.addEventListener('change', () => {
+    label.textContent = chk.checked ? 'Уведомления включены' : 'Уведомления выключены';
+  });
+})();
+
+async function loadEmailConfig(btn) {
+  const statusEl = document.getElementById('emailConfigStatus');
+  if (!KEY_SERVER_URL) {
+    if (statusEl) { statusEl.textContent = '⚠️ Сервер не настроен (пуст KEY_SERVER_URL в коде).'; statusEl.style.color = '#b45309'; }
+    return;
+  }
+  const orig = btn ? btn.innerHTML : null;
+  if (btn) btn.disabled = true;
+  if (statusEl) { statusEl.textContent = '⏳ Загрузка настроек с сервера…'; statusEl.style.color = '#0891b2'; }
+  try {
+    const resp = await fetch(KEY_SERVER_URL.replace(/\/$/, '') + '/email-config', { cache: 'no-store' });
+    const data = await resp.json();
+    document.getElementById('emailNotifyEnabled').checked = !!data.enabled;
+    document.getElementById('emailNotifyEnabledLabel').textContent = data.enabled ? 'Уведомления включены' : 'Уведомления выключены';
+    document.getElementById('emailNotifyRecipients').value = (data.recipients || []).join(', ');
+    if (statusEl) { statusEl.textContent = '✅ Настройки загружены с сервера.'; statusEl.style.color = '#18a558'; }
+  } catch (e) {
+    console.warn('Не удалось загрузить настройки email:', e);
+    if (statusEl) { statusEl.textContent = '❌ Не удалось загрузить настройки (' + e.message + ').'; statusEl.style.color = '#e03d3d'; }
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = orig; }
+  }
+}
+
+async function saveEmailConfig(btn) {
+  const statusEl = document.getElementById('emailConfigStatus');
+  if (!KEY_SERVER_URL) {
+    if (statusEl) { statusEl.textContent = '⚠️ Сервер не настроен (пуст KEY_SERVER_URL в коде) — разверните app.py по инструкции README_DEPLOY.md.'; statusEl.style.color = '#b45309'; }
+    return;
+  }
+  const enabled = document.getElementById('emailNotifyEnabled').checked;
+  const raw = document.getElementById('emailNotifyRecipients').value;
+  const recipients = raw.split(/[,;\n]/).map(s => s.trim()).filter(s => s.includes('@'));
+
+  if (enabled && recipients.length === 0) {
+    if (statusEl) { statusEl.textContent = '⚠️ Уведомления включены, но не указано ни одного корректного email-адреса.'; statusEl.style.color = '#b45309'; }
+    return;
+  }
+
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  if (statusEl) { statusEl.textContent = '📡 Сохранение настроек на сервере…'; statusEl.style.color = '#0891b2'; }
+
+  try {
+    const resp = await fetch(KEY_SERVER_URL.replace(/\/$/, '') + '/update-email-config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret: KEY_SERVER_SECRET, enabled, recipients })
+    });
+    const data = await resp.json().catch(() => null);
+
+    if (resp.ok && data && data.success) {
+      document.getElementById('emailNotifyRecipients').value = recipients.join(', ');
+      if (statusEl) { statusEl.textContent = '✅ Настройки сохранены (' + (enabled ? 'включено, получателей: ' + recipients.length : 'выключено') + ').'; statusEl.style.color = '#18a558'; }
+    } else {
+      throw new Error((data && data.message) || ('HTTP ' + resp.status));
+    }
+  } catch (e) {
+    console.warn('Не удалось сохранить настройки email:', e);
+    if (statusEl) { statusEl.textContent = '❌ Не удалось сохранить настройки (' + e.message + ').'; statusEl.style.color = '#e03d3d'; }
   } finally {
     btn.disabled = false;
     btn.innerHTML = orig;
@@ -3200,6 +3332,13 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 document.querySelectorAll('.glass-card').forEach(el => observer.observe(el));
+
+// Тихая фоновая подгрузка текущих настроек email-уведомлений с сервера,
+// чтобы переключатель сразу показывал актуальное состояние при открытии
+// страницы (без необходимости жать «Загрузить» руками).
+if (typeof KEY_SERVER_URL !== 'undefined' && KEY_SERVER_URL) {
+  loadEmailConfig(null);
+}
 </script>
 </body>
 </html>
